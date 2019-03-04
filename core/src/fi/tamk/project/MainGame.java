@@ -10,7 +10,7 @@ public class MainGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 
-	//pasin versio
+	//pasin versio 1.2
 	
 	@Override
 	public void create () {
