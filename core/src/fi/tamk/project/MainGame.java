@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MainGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
+
+	//pasin versio
 	
 	@Override
 	public void create () {
