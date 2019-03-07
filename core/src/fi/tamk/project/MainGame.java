@@ -18,10 +18,15 @@ public class MainGame extends Game {
 	final int SCREEN_HEIGHT = 216;
 
 	OrthographicCamera camera;
+    GameScreen gameScreen;
 
 
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public GameScreen getGameScreen() {
+        return gameScreen;
     }
 
     @Override
@@ -30,8 +35,8 @@ public class MainGame extends Game {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        GameScreen startScreen = new GameScreen(this);
-        setScreen(startScreen);
+        gameScreen = new GameScreen(this);
+        setScreen(gameScreen);
 	}
 
 	@Override

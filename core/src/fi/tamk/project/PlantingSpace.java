@@ -1,8 +1,12 @@
 package fi.tamk.project;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 public class PlantingSpace extends Actor {
 
@@ -10,8 +14,11 @@ public class PlantingSpace extends Actor {
     boolean usable;
     Texture plantingSpaceTexture;
 
+    boolean openWindow;
+
     public PlantingSpace() {
         setPlantingSpaceTexture();
+        addListener(new PlayerListener());
     }
 
     public Texture getPlantingSpaceTexture() {
@@ -35,5 +42,15 @@ public class PlantingSpace extends Actor {
                 0,0,
                 plantingSpaceTexture.getWidth(), plantingSpaceTexture.getHeight(),
                 false, false);
+    }
+
+    class PlayerListener extends InputListener{
+
+        @Override
+        public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
+            openWindow = true;
+            return false;
+        }
     }
 }
