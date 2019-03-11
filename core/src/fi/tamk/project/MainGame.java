@@ -19,6 +19,7 @@ public class MainGame extends Game {
 
 	OrthographicCamera camera;
     GameScreen gameScreen;
+    ChoosePlantScreen choosePlantScreen;
 
 
     public SpriteBatch getBatch() {
@@ -29,6 +30,10 @@ public class MainGame extends Game {
         return gameScreen;
     }
 
+    public ChoosePlantScreen getChoosePlantScreen() {
+        return choosePlantScreen;
+    }
+
     @Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -36,7 +41,9 @@ public class MainGame extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         gameScreen = new GameScreen(this);
-        setScreen(gameScreen);
+        choosePlantScreen = new ChoosePlantScreen(this);
+        //setScreen(gameScreen);
+        setScreen(choosePlantScreen);
 	}
 
 	@Override

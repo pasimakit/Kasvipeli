@@ -7,24 +7,36 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class Flowers extends Actor {
+public class Flowers extends Actor implements Plant {
 
     Texture flowerTexture;
     int growthTime;
 
+    boolean plantChosen;
+
     public Flowers() {
-        setFlowerTexture();
+        setTexture();
         addListener(new Flowers.PlayerListener());
     }
 
-    public void setFlowerTexture() {
+    public void setTexture() {
         flowerTexture = new Texture("flower16.png");
     }
 
+    @Override
+    public void setGrowthTime() {
+
+    }
+
+    @Override
+    public void setValue() {
+
+    }
+    @Override
     public void act(float delta){
         super.act(delta);
     }
-
+    @Override
     public void draw(Batch batch, float alpha){
         batch.draw(flowerTexture,this.getX(), this.getY(),
                 this.getOriginX(), this.getOriginY(),
@@ -41,6 +53,8 @@ public class Flowers extends Actor {
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
+            plantChosen = true;
+            Gdx.app.log("", ""+plantChosen);
             return false;
         }
     }

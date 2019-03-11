@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -28,16 +26,21 @@ public class GameScreen implements Screen {
     int plantingSpaceAmount = 4;
     boolean windowOpen = false;
 
+    ChoosePlantScreen choosePlantScreen;
     Skin skin;
     Stage stage;
+    Window plantWindow;
 
     ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
+
+
 
     Flowers sunFlower;
 
     public GameScreen(MainGame game){
         this.game = game;
         batch = game.getBatch();
+        choosePlantScreen = game.getChoosePlantScreen();
     }
 
     @Override
@@ -50,13 +53,12 @@ public class GameScreen implements Screen {
             plantingSpaceList.add(new PlantingSpace());
         }
 
-        int plantingSpaceX = 0;
+        int plantingSpaceX = 30;
         for(PlantingSpace plantingSpace : plantingSpaceList){
-            plantingSpace.setBounds(plantingSpaceX, 0, 48, 48);
+            plantingSpace.setBounds(plantingSpaceX, 30, 32, 32);
             stage.addActor(plantingSpace);
-            plantingSpaceX+=60;
+            plantingSpaceX+=50;
         }
-
     }
 
     @Override
@@ -65,18 +67,17 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         for(PlantingSpace plantingSpace : plantingSpaceList){
-            if(plantingSpace.openWindow && !windowOpen){
+            if(plantingSpace.choosePlantWindow && !windowOpen){
                 pickPlantWindow();
-                plantingSpace.openWindow = false;
+                plantingSpace.choosePlantWindow = false;
+                game.setScreen(choosePlantScreen);
             }
         }
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
         batch.begin();
         batch.end();
-
     }
 
     @Override
@@ -105,22 +106,28 @@ public class GameScreen implements Screen {
     }
 
     public void pickPlantWindow(){
-        final Window plantWindow = new Window("Choose a flower to plant", skin);
+        plantWindow = new Window("Choose a flower to plant", skin);
+        windowOpen = true;
         TextButton closeButton = new TextButton("x", skin);
-        plantWindow.getTitleLabel().setFontScale(0.5f);
+        PlantingSpace chosenSpace = new PlantingSpace();
+
+        //tallentaa klikatun plantingspacen muuttujaan
+        for(PlantingSpace plantingSpace : plantingSpaceList){
+            if(plantingSpace.choosePlantWindow){
+                chosenSpace = plantingSpace;
+            }
+        }
 
         plantWindow.setSize(stage.getWidth()/1.1f, stage.getHeight()/1.1f);
         plantWindow.setPosition(stage.getWidth() / 20, stage.getHeight() / 20);
+        plantWindow.getTitleLabel().setFontScale(0.5f);
+        plantWindow.getTitleTable().add(closeButton).size(15, 15).padRight(0).padTop(0);
 
         sunFlower = new Flowers();
         sunFlower.setBounds(0,0, 16,16);
-
         plantWindow.add(sunFlower).left().expand().top().padTop(20).padLeft(20);
 
-        plantWindow.getTitleTable().add(closeButton).size(15, 15).padRight(0).padTop(0);
-
         stage.addActor(plantWindow);
-        windowOpen = true;
 
         closeButton.addListener (new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
@@ -131,9 +138,5 @@ public class GameScreen implements Screen {
                 windowOpen = false;
             }
         });
-    }
-
-    public void createFlowers(){
-
     }
 }

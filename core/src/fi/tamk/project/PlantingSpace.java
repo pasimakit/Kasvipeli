@@ -1,6 +1,5 @@
 package fi.tamk.project;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,7 +13,7 @@ public class PlantingSpace extends Actor {
     boolean usable;
     Texture plantingSpaceTexture;
 
-    boolean openWindow;
+    boolean choosePlantWindow;
 
     public PlantingSpace() {
         setPlantingSpaceTexture();
@@ -44,12 +43,17 @@ public class PlantingSpace extends Actor {
                 false, false);
     }
 
+    public void plantFlower(Flowers flower){
+        growthTime = flower.growthTime;
+        flower.setBounds(this.getX()+16, this.getY()+16, 16,16);
+    }
+
     class PlayerListener extends InputListener{
 
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
-            openWindow = true;
+            choosePlantWindow = true;
             return false;
         }
     }
