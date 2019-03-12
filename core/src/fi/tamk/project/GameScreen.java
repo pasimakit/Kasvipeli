@@ -23,7 +23,7 @@ public class GameScreen implements Screen {
     final int SCREEN_WIDTH = 256;
     final int SCREEN_HEIGHT = 144;
 
-    int plantingSpaceAmount = 4;
+    int maxPlantingSpaceAmount = 4;
     boolean windowOpen = false;
 
     ChoosePlantScreen choosePlantScreen;
@@ -32,8 +32,7 @@ public class GameScreen implements Screen {
     Window plantWindow;
 
     ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
-
-
+    public PlantingSpace chosenPlantingSpace;
 
     Flowers sunFlower;
 
@@ -49,8 +48,10 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"), new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
 
-        for(int i=0; i<plantingSpaceAmount; i++){
-            plantingSpaceList.add(new PlantingSpace());
+        if(maxPlantingSpaceAmount>plantingSpaceList.size()){
+            for (int i = 0; i < maxPlantingSpaceAmount; i++) {
+                plantingSpaceList.add(new PlantingSpace());
+            }
         }
 
         int plantingSpaceX = 30;
@@ -68,9 +69,16 @@ public class GameScreen implements Screen {
 
         for(PlantingSpace plantingSpace : plantingSpaceList){
             if(plantingSpace.choosePlantWindow && !windowOpen){
-                pickPlantWindow();
                 plantingSpace.choosePlantWindow = false;
-                game.setScreen(choosePlantScreen);
+                chosenPlantingSpace = plantingSpace;
+                game.setScreen(game.choosePlantScreen);
+            }
+        }
+
+        for(PlantingSpace plantingSpace : plantingSpaceList){
+            if(plantingSpace.plantedPlant != null){
+                plantingSpace.plantedPlant.setBounds(plantingSpace.getX()+8, plantingSpace.getY()+16, 16,16);
+                stage.addActor(plantingSpace.plantedPlant);
             }
         }
         stage.act(Gdx.graphics.getDeltaTime());

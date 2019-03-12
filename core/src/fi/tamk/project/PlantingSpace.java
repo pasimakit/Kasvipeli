@@ -10,10 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 public class PlantingSpace extends Actor {
 
     int growthTime;
-    boolean usable;
     Texture plantingSpaceTexture;
-
     boolean choosePlantWindow;
+    Flowers plantedPlant;
 
     public PlantingSpace() {
         setPlantingSpaceTexture();
@@ -43,16 +42,16 @@ public class PlantingSpace extends Actor {
                 false, false);
     }
 
-    public void plantFlower(Flowers flower){
+    public void setPlantedPlant(Flowers flower){
+        plantedPlant = flower;
         growthTime = flower.growthTime;
-        flower.setBounds(this.getX()+16, this.getY()+16, 16,16);
     }
 
     class PlayerListener extends InputListener{
 
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
+            Gdx.app.log("space_clicked", "touch started at (" + x + ", " + y + ")");
             choosePlantWindow = true;
             return false;
         }

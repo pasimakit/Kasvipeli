@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class Flowers extends Actor implements Plant {
+public class Flowers extends Actor implements Plant{
 
     Texture flowerTexture;
     int growthTime;
@@ -27,11 +27,21 @@ public class Flowers extends Actor implements Plant {
     public void setGrowthTime() {
 
     }
+    @Override
+    public int getGrowthTime(){
+
+        return growthTime;
+    }
 
     @Override
     public void setValue() {
 
     }
+    @Override
+    public void setLocation(float x, float y, int width, int height){
+        this.setBounds(x,y,width,height);
+    }
+
     @Override
     public void act(float delta){
         super.act(delta);
@@ -57,5 +67,9 @@ public class Flowers extends Actor implements Plant {
             Gdx.app.log("", ""+plantChosen);
             return false;
         }
+    }
+
+    public boolean isPlantChosen(){
+        return plantChosen;
     }
 }

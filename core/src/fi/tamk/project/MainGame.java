@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+
 
 public class MainGame extends Game {
 	SpriteBatch batch;
@@ -21,6 +19,7 @@ public class MainGame extends Game {
     GameScreen gameScreen;
     ChoosePlantScreen choosePlantScreen;
 
+    public int stepCount;
 
     public SpriteBatch getBatch() {
         return batch;
@@ -34,6 +33,11 @@ public class MainGame extends Game {
         return choosePlantScreen;
     }
 
+    public void receiveSteps(int stepCount) {
+        System.out.println("Steps: " + stepCount);
+        this.stepCount = stepCount;
+    }
+
     @Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -42,8 +46,9 @@ public class MainGame extends Game {
 
         gameScreen = new GameScreen(this);
         choosePlantScreen = new ChoosePlantScreen(this);
-        //setScreen(gameScreen);
-        setScreen(choosePlantScreen);
+
+        setScreen(gameScreen);
+        //setScreen(choosePlantScreen);
 	}
 
 	@Override

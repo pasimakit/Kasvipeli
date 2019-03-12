@@ -7,8 +7,11 @@ public interface Plant {
 
     void setTexture();
     void setGrowthTime();
+    int getGrowthTime();
     void setValue();
     void draw(Batch batch, float alpha);
     void act(float delta);
+    boolean isPlantChosen();
+    void setLocation(float x, float y, int width, int height);
 
 }
