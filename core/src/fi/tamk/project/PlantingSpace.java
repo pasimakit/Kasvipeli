@@ -11,8 +11,12 @@ public class PlantingSpace extends Actor {
 
     int growthTime;
     Texture plantingSpaceTexture;
-    boolean choosePlantWindow;
-    Flowers plantedPlant;
+    boolean choosePlantWindow, plantIsReady;
+
+    Flower plantedFlower;
+
+    //growthTime-=stepcounter<totalsteps
+
 
     public PlantingSpace() {
         setPlantingSpaceTexture();
@@ -41,18 +45,23 @@ public class PlantingSpace extends Actor {
                 plantingSpaceTexture.getWidth(), plantingSpaceTexture.getHeight(),
                 false, false);
     }
-
-    public void setPlantedPlant(Flowers flower){
-        plantedPlant = flower;
+    // Sijoitetaan kasvatuspaikkaan kukka
+    public void setPlantedFlower(Flower flower){
+        plantedFlower = flower;
         growthTime = flower.growthTime;
     }
-
+    //vahditaan koska kasvatuspaikkaa painetaan
     class PlayerListener extends InputListener{
-
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             Gdx.app.log("space_clicked", "touch started at (" + x + ", " + y + ")");
-            choosePlantWindow = true;
+            if(plantedFlower == null){
+                choosePlantWindow = true;
+            }else{
+                if(plantedFlower.growthTime<=0){
+                    plantIsReady = true;
+                }
+            }
             return false;
         }
     }

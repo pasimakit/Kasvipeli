@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
 
+import sun.security.provider.Sun;
+
 public class ChoosePlantScreen implements Screen {
 
     SpriteBatch batch;
@@ -32,10 +34,12 @@ public class ChoosePlantScreen implements Screen {
 
     GameScreen gameScreen;
 
-    ArrayList<Plant> plantList = new ArrayList<Plant>();
+    ArrayList<Flower> plantList = new ArrayList<Flower>();
 
-    Flowers flower;
-    public Plant chosenPlant;
+    Sunflower sunflower1;
+    Sunflower sunflower2;
+    Sunflower sunflower3;
+
 
     public ChoosePlantScreen(MainGame game) {
         this.game = game;
@@ -62,20 +66,36 @@ public class ChoosePlantScreen implements Screen {
             }
         });
 
-        flower = new Flowers();
-        flower.setBounds(5, SCREEN_HEIGHT-35,16,16);
-        plantList.add(flower);
-        stage.addActor(flower);
+
+        //luodaan valittavat kukat
+        sunflower1 = new Sunflower();
+        sunflower1.setBounds(85, SCREEN_HEIGHT-35, 16,16);
+        stage.addActor(sunflower1);
+        plantList.add(sunflower1);
+
+        sunflower2 = new Sunflower();
+        sunflower2.setBounds(125, SCREEN_HEIGHT-35, 16,16);
+        stage.addActor(sunflower2);
+        plantList.add(sunflower2);
+
+        sunflower3 = new Sunflower();
+        sunflower3.setBounds(165, SCREEN_HEIGHT-35, 16,16);
+        stage.addActor(sunflower3);
+        plantList.add(sunflower3);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.5f, 0.3f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setProjectionMatrix(game.camera.combined);
 
-        if(flower.isPlantChosen()){
-            game.getGameScreen().chosenPlantingSpace.setPlantedPlant(flower);
-            game.setScreen(game.getGameScreen());
+        //valitaan kukkanen arraylististä
+        for(Flower flower : plantList){
+            if(flower.isPlantChosen()){
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(flower);
+                game.setScreen(game.getGameScreen());
+            }
         }
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -106,6 +126,8 @@ public class ChoosePlantScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        batch.dispose();
+        skin.dispose();
     }
 }

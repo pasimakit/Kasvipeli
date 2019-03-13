@@ -7,43 +7,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class Flowers extends Actor implements Plant{
+public class Flower extends Actor {
 
-    Texture flowerTexture;
-    int growthTime;
+     Texture flowerTexture;
+     boolean plantChosen;
+     int growthTime;
+     int coinValue;
 
-    boolean plantChosen;
+     public Flower(){
+         addListener(new Flower.PlayerListener());
+     }
 
-    public Flowers() {
-        setTexture();
-        addListener(new Flowers.PlayerListener());
-    }
-
-    public void setTexture() {
-        flowerTexture = new Texture("flower16.png");
-    }
-
-    @Override
-    public void setGrowthTime() {
-
-    }
-    @Override
-    public int getGrowthTime(){
-
-        return growthTime;
-    }
-
-    @Override
-    public void setValue() {
-
-    }
-    @Override
-    public void setLocation(float x, float y, int width, int height){
-        this.setBounds(x,y,width,height);
-    }
-
-    @Override
+   @Override
     public void act(float delta){
+
         super.act(delta);
     }
     @Override
@@ -57,14 +34,12 @@ public class Flowers extends Actor implements Plant{
                 flowerTexture.getWidth(), flowerTexture.getHeight(),
                 false, false);
     }
-
+    //koska kukkaa painetaan
     class PlayerListener extends InputListener {
-
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.log("Example", "touch started at (" + x + ", " + y + ")");
+            Gdx.app.log("flower", "chosen");
             plantChosen = true;
-            Gdx.app.log("", ""+plantChosen);
             return false;
         }
     }
@@ -72,4 +47,5 @@ public class Flowers extends Actor implements Plant{
     public boolean isPlantChosen(){
         return plantChosen;
     }
+
 }

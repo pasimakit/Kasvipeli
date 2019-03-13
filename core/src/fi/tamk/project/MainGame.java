@@ -1,12 +1,11 @@
 package fi.tamk.project;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 
 public class MainGame extends Game {
@@ -17,9 +16,12 @@ public class MainGame extends Game {
 
 	OrthographicCamera camera;
     GameScreen gameScreen;
-    ChoosePlantScreen choosePlantScreen;
 
-    public int stepCount;
+    BitmapFont font14;
+    BitmapFont font8;
+
+    int stepCount;
+    int coins;
 
     public SpriteBatch getBatch() {
         return batch;
@@ -29,9 +31,6 @@ public class MainGame extends Game {
         return gameScreen;
     }
 
-    public ChoosePlantScreen getChoosePlantScreen() {
-        return choosePlantScreen;
-    }
 
     public void receiveSteps(int stepCount) {
         System.out.println("Steps: " + stepCount);
@@ -43,13 +42,19 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
-
         gameScreen = new GameScreen(this);
-        choosePlantScreen = new ChoosePlantScreen(this);
-
         setScreen(gameScreen);
-        //setScreen(choosePlantScreen);
-	}
+
+        //fonts
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 14;
+        font14 = generator.generateFont(parameter);
+        parameter.size = 8;
+        font8 = generator.generateFont(parameter);
+        generator.dispose();
+
+    }
 
 	@Override
 	public void render () {
