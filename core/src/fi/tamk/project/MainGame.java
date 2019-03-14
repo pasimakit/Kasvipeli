@@ -20,7 +20,9 @@ public class MainGame extends Game {
     BitmapFont font14;
     BitmapFont font8;
 
-    int stepCount;
+    int stepCount; // renderissä
+    int oldStepCount;
+
     int coins;
 
     public SpriteBatch getBatch() {
@@ -33,7 +35,7 @@ public class MainGame extends Game {
 
 
     public void receiveSteps(int stepCount) {
-        System.out.println("Steps: " + stepCount);
+        System.out.println("Steps: " + stepCount + "old steps" + oldStepCount);
         this.stepCount = stepCount;
     }
 
@@ -58,6 +60,7 @@ public class MainGame extends Game {
 
 	@Override
 	public void render () {
+        oldStepCount = stepCount;
         super.render();
 	}
 	

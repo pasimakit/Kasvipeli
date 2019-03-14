@@ -50,6 +50,12 @@ public class PlantingSpace extends Actor {
         plantedFlower = flower;
         growthTime = flower.growthTime;
     }
+
+    public void updateGrowthTime(int steps){
+        growthTime-=steps;
+    }
+
+
     //vahditaan koska kasvatuspaikkaa painetaan
     class PlayerListener extends InputListener{
         @Override

@@ -79,6 +79,9 @@ public class GameScreen implements Screen {
             }
            //onko kukka kasvanut
             if(plantingSpace.plantedFlower != null) {
+                if(game.stepCount>game.oldStepCount){
+                    plantingSpace.updateGrowthTime(game.stepCount - game.oldStepCount);
+                }
                 if(plantingSpace.plantedFlower.growthTime <= 0 && plantingSpace.plantIsReady) {
                     game.coins += plantingSpace.plantedFlower.coinValue;
                     plantingSpace.plantedFlower = null;
