@@ -62,8 +62,9 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(game.camera.combined);
 
-        for(PlantingSpace plantingSpace : plantingSpaceList){
 
+
+        for(PlantingSpace plantingSpace : plantingSpaceList){
             //onko kasvatuspaikkaa klikattu
             if(plantingSpace.choosePlantWindow){
                 plantingSpace.choosePlantWindow = false;
@@ -72,29 +73,28 @@ public class GameScreen implements Screen {
                     game.setScreen(choosePlantScreen);
                 }
             }
-
+           //kukan sijoitus ja kasvaminen
             if(plantingSpace.plantedFlower != null) {
                 plantingSpace.plantedFlower.setBounds(plantingSpace.getX() + 8, plantingSpace.getY() + 16, 16, 16);
                 stage.addActor(plantingSpace.plantedFlower);
-            }
-           //onko kukka kasvanut
-            if(plantingSpace.plantedFlower != null) {
                 if(game.stepCount>game.oldStepCount){
-                    plantingSpace.updateGrowthTime(game.stepCount - game.oldStepCount);
+                    plantingSpace.plantedFlower.currentGrowthTime+=game.stepCount - game.oldStepCount;
                 }
                 if(plantingSpace.plantedFlower.growthTime <= 0 && plantingSpace.plantIsReady) {
                     game.coins += plantingSpace.plantedFlower.coinValue;
                     plantingSpace.plantedFlower = null;
                 }
+                batch.begin();
+                game.font14.draw(batch, "STEPS: ", plantingSpace.getX(), 0);
+                batch.end();
             }
-
         }
+        game.oldStepCount = game.stepCount;
         stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
 
-        batch.begin();
-        game.font14.draw(batch, "Steps: "+ game.stepCount, 50, SCREEN_HEIGHT-5);
-        batch.end();
+        //game.font14.draw(batch, "Steps: "+ game.stepCount, 50, SCREEN_HEIGHT-5);
+
+        stage.draw();
     }
 
     @Override

@@ -12,6 +12,7 @@ public class Flower extends Actor {
      Texture flowerTexture;
      boolean plantChosen;
      int growthTime;
+     int currentGrowthTime;
      int coinValue;
 
      public Flower(){

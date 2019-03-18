@@ -35,7 +35,7 @@ public class MainGame extends Game {
 
 
     public void receiveSteps(int stepCount) {
-        System.out.println("Steps: " + stepCount + "old steps" + oldStepCount);
+        //System.out.println("Steps: " + stepCount);
         this.stepCount = stepCount;
     }
 
@@ -60,7 +60,6 @@ public class MainGame extends Game {
 
 	@Override
 	public void render () {
-        oldStepCount = stepCount;
         super.render();
 	}
 	

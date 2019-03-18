@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 public class PlantingSpace extends Actor {
 
-    int growthTime;
     Texture plantingSpaceTexture;
     boolean choosePlantWindow, plantIsReady;
 
@@ -48,13 +47,7 @@ public class PlantingSpace extends Actor {
     // Sijoitetaan kasvatuspaikkaan kukka
     public void setPlantedFlower(Flower flower){
         plantedFlower = flower;
-        growthTime = flower.growthTime;
     }
-
-    public void updateGrowthTime(int steps){
-        growthTime-=steps;
-    }
-
 
     //vahditaan koska kasvatuspaikkaa painetaan
     class PlayerListener extends InputListener{
