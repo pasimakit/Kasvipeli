@@ -11,7 +11,7 @@ public class Sunflower extends Flower {
     public Sunflower(){
         flowerTexture = new Texture("seed1.png");
         addListener(new Sunflower.PlayerListener());
-        growthTime = 1000;
+        growthTime = 5;
         coinValue = 10;
     }
 
@@ -21,6 +21,10 @@ public class Sunflower extends Flower {
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             Gdx.app.log("sunflower", "chosen");
             plantChosen = true;
+
+            if(plantFinished){
+                plantHarvested = true;
+            }
             return false;
         }
     }

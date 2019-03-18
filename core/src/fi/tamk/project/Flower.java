@@ -1,22 +1,27 @@
 package fi.tamk.project;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Flower extends Actor {
 
      Texture flowerTexture;
-     boolean plantChosen;
+     boolean plantChosen, plantFinished, plantHarvested;
+
      int growthTime;
      int currentGrowthTime;
      int coinValue;
 
+    ProgressBar growthBar;
+
      public Flower(){
-         addListener(new Flower.PlayerListener());
+         setupGrowthBar();
      }
 
    @Override
@@ -36,17 +41,48 @@ public class Flower extends Actor {
                 false, false);
     }
     //koska kukkaa painetaan
-    class PlayerListener extends InputListener {
-        @Override
-        public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.log("flower", "chosen");
-            plantChosen = true;
-            return false;
-        }
-    }
 
     public boolean isPlantChosen(){
         return plantChosen;
     }
 
+    public void updateGrowthBar(PlantingSpace space){
+         growthBar.setBounds(space.getX(),space.getY()-20, 30,5);
+         growthBar.setValue((float)currentGrowthTime/growthTime);
+
+         if(currentGrowthTime>=growthTime){
+             plantFinished = true;
+         }
+         System.out.println("growthtime " + growthTime + " currentgrowthtime " + currentGrowthTime);
+    }
+
+    public void setupGrowthBar() {
+        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+
+        Pixmap pixmap = new Pixmap(30, 5, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.RED);
+        pixmap.fill();
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        progressBarStyle.background = drawable;
+
+        pixmap = new Pixmap(0, 5, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.GREEN);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        progressBarStyle.knob = drawable;
+
+        pixmap = new Pixmap(30, 5, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.GREEN);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        progressBarStyle.knobBefore = drawable;
+
+        growthBar = new ProgressBar(0.0f, 1.0f, 0.01f, false, progressBarStyle);
+    }
 }

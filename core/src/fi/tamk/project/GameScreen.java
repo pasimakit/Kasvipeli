@@ -2,11 +2,17 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
@@ -64,6 +70,7 @@ public class GameScreen implements Screen {
 
 
 
+
         for(PlantingSpace plantingSpace : plantingSpaceList){
             //onko kasvatuspaikkaa klikattu
             if(plantingSpace.choosePlantWindow){
@@ -76,24 +83,30 @@ public class GameScreen implements Screen {
            //kukan sijoitus ja kasvaminen
             if(plantingSpace.plantedFlower != null) {
                 plantingSpace.plantedFlower.setBounds(plantingSpace.getX() + 8, plantingSpace.getY() + 16, 16, 16);
+                plantingSpace.plantedFlower.setupGrowthBar();
                 stage.addActor(plantingSpace.plantedFlower);
+                stage.addActor(plantingSpace.plantedFlower.growthBar);
+                if(!plantingSpace.plantedFlower.plantHarvested){
+                    plantingSpace.plantedFlower.updateGrowthBar(plantingSpace);
+                }
                 if(game.stepCount>game.oldStepCount){
                     plantingSpace.plantedFlower.currentGrowthTime+=game.stepCount - game.oldStepCount;
                 }
-                if(plantingSpace.plantedFlower.growthTime <= 0 && plantingSpace.plantIsReady) {
+                if(plantingSpace.plantedFlower.plantFinished && plantingSpace.plantedFlower.plantHarvested) {
                     game.coins += plantingSpace.plantedFlower.coinValue;
+                    plantingSpace.plantedFlower.growthBar.remove();
+                    plantingSpace.plantedFlower.remove();
+                    plantingSpace.plantedFlower.growthBar = null;
                     plantingSpace.plantedFlower = null;
                 }
-                batch.begin();
-                game.font14.draw(batch, "STEPS: ", plantingSpace.getX(), 0);
-                batch.end();
             }
         }
         game.oldStepCount = game.stepCount;
         stage.act(Gdx.graphics.getDeltaTime());
-
-        //game.font14.draw(batch, "Steps: "+ game.stepCount, 50, SCREEN_HEIGHT-5);
-
+        batch.begin();
+        game.font14.draw(batch, "Steps: "+ game.stepCount, 20, SCREEN_HEIGHT-10);
+        game.font14.draw(batch, "Coins: " + game.coins, 10, 120);
+        batch.end();
         stage.draw();
     }
 
@@ -121,4 +134,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         stage.dispose();
     }
+
+
 }

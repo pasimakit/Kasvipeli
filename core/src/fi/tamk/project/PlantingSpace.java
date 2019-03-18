@@ -57,8 +57,9 @@ public class PlantingSpace extends Actor {
             if(plantedFlower == null){
                 choosePlantWindow = true;
             }else{
-                if(plantedFlower.growthTime<=0){
+                if(plantedFlower.plantFinished){
                     plantIsReady = true;
+                   // plantedFlower = null;
                 }
             }
             return false;
