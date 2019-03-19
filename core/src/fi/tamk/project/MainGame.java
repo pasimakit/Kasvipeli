@@ -17,9 +17,6 @@ public class MainGame extends Game {
 	OrthographicCamera camera;
     GameScreen gameScreen;
 
-    BitmapFont font14;
-    BitmapFont font8;
-
     int stepCount; // renderissä
     int oldStepCount;
 
@@ -35,7 +32,6 @@ public class MainGame extends Game {
 
 
     public void receiveSteps(int stepCount) {
-        //System.out.println("Steps: " + stepCount);
         this.stepCount = stepCount;
     }
 

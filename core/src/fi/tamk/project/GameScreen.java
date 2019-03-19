@@ -118,8 +118,8 @@ public class GameScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         batch.setProjectionMatrix(fonts.camera.combined);
         batch.begin();
-        fonts.mediumFont.draw(batch, "Steps: "+ game.stepCount, 50, 1050);
-        fonts.mediumFont.draw(batch, "Coins: " + game.coins, 400, 1050);
+        fonts.largeFont.draw(batch, "Steps: "+ game.stepCount, 50, 1050);
+        fonts.largeFont.draw(batch, "Coins: " + game.coins, 500, 1050);
         batch.end();
         batch.setProjectionMatrix(game.camera.combined);
         stage.draw();
