@@ -19,7 +19,6 @@ public class Sunflower extends Flower {
     class PlayerListener extends InputListener {
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.log("sunflower", "chosen");
             plantChosen = true;
 
             if(plantFinished){

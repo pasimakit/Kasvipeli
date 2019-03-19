@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 public class MainGame extends Game {
 	SpriteBatch batch;
 
-	final int SCREEN_WIDTH = 384;
-	final int SCREEN_HEIGHT = 216;
+	final int SCREEN_WIDTH = 256;
+	final int SCREEN_HEIGHT = 144;
 
 	OrthographicCamera camera;
     GameScreen gameScreen;
@@ -46,16 +46,6 @@ public class MainGame extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
         gameScreen = new GameScreen(this);
         setScreen(gameScreen);
-
-        //fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 14;
-        font14 = generator.generateFont(parameter);
-        parameter.size = 8;
-        font8 = generator.generateFont(parameter);
-        generator.dispose();
-
     }
 
 	@Override

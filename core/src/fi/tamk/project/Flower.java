@@ -47,13 +47,14 @@ public class Flower extends Actor {
     }
 
     public void updateGrowthBar(PlantingSpace space){
-         growthBar.setBounds(space.getX(),space.getY()-20, 30,5);
-         growthBar.setValue((float)currentGrowthTime/growthTime);
 
+         if(!plantHarvested) {
+             growthBar.setBounds(space.getX(), space.getY() - 20, 30, 5);
+             growthBar.setValue((float) currentGrowthTime / growthTime);
+         }
          if(currentGrowthTime>=growthTime){
              plantFinished = true;
          }
-         System.out.println("growthtime " + growthTime + " currentgrowthtime " + currentGrowthTime);
     }
 
     public void setupGrowthBar() {

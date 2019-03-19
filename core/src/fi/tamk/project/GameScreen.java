@@ -2,8 +2,10 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,6 +32,7 @@ public class GameScreen implements Screen {
     ChoosePlantScreen choosePlantScreen;
     Skin skin;
     Stage stage;
+    Fonts fonts;
 
     ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
     public PlantingSpace chosenPlantingSpace;
@@ -45,9 +48,14 @@ public class GameScreen implements Screen {
         choosePlantScreen = new ChoosePlantScreen(game);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"), new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
 
+        fonts = new Fonts();
+        fonts.createSmallFont();
+        fonts.createMediumFont();
+        fonts.createLargeFont();
+
         Gdx.input.setInputProcessor(stage);
 
-        //luodaan kasvatuspaikat
+        //luodaan kasvatuspaik
         if(maxPlantingSpaceAmount>plantingSpaceList.size()){
             for (int i = 0; i < maxPlantingSpaceAmount; i++) {
                 plantingSpaceList.add(new PlantingSpace());
@@ -59,6 +67,14 @@ public class GameScreen implements Screen {
             plantingSpace.setBounds(plantingSpaceX, 30, 32, 32);
             stage.addActor(plantingSpace);
             plantingSpaceX+=50;
+            if(plantingSpace.plantedFlower != null){
+                if(plantingSpace.plantedFlower.plantChosen) {
+                    plantingSpace.plantedFlower.setBounds(plantingSpace.getX() + 8, plantingSpace.getY() + 16, 16, 16);
+                    plantingSpace.plantedFlower.setupGrowthBar();
+                    stage.addActor(plantingSpace.plantedFlower);
+                    stage.addActor(plantingSpace.plantedFlower.growthBar);
+                }
+            }
         }
     }
 
@@ -66,9 +82,6 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(game.camera.combined);
-
-
 
 
         for(PlantingSpace plantingSpace : plantingSpaceList){
@@ -80,14 +93,14 @@ public class GameScreen implements Screen {
                     game.setScreen(choosePlantScreen);
                 }
             }
+
+
            //kukan sijoitus ja kasvaminen
             if(plantingSpace.plantedFlower != null) {
-                plantingSpace.plantedFlower.setBounds(plantingSpace.getX() + 8, plantingSpace.getY() + 16, 16, 16);
-                plantingSpace.plantedFlower.setupGrowthBar();
-                stage.addActor(plantingSpace.plantedFlower);
-                stage.addActor(plantingSpace.plantedFlower.growthBar);
+
                 if(!plantingSpace.plantedFlower.plantHarvested){
                     plantingSpace.plantedFlower.updateGrowthBar(plantingSpace);
+                    System.out.println("progress päivittyy" + plantingSpace.plantedFlower.growthBar);
                 }
                 if(game.stepCount>game.oldStepCount){
                     plantingSpace.plantedFlower.currentGrowthTime+=game.stepCount - game.oldStepCount;
@@ -103,10 +116,12 @@ public class GameScreen implements Screen {
         }
         game.oldStepCount = game.stepCount;
         stage.act(Gdx.graphics.getDeltaTime());
+        batch.setProjectionMatrix(fonts.camera.combined);
         batch.begin();
-        game.font14.draw(batch, "Steps: "+ game.stepCount, 20, SCREEN_HEIGHT-10);
-        game.font14.draw(batch, "Coins: " + game.coins, 10, 120);
+        fonts.mediumFont.draw(batch, "Steps: "+ game.stepCount, 50, 1050);
+        fonts.mediumFont.draw(batch, "Coins: " + game.coins, 400, 1050);
         batch.end();
+        batch.setProjectionMatrix(game.camera.combined);
         stage.draw();
     }
 
