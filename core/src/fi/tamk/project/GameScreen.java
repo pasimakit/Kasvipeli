@@ -11,9 +11,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -23,6 +26,7 @@ public class GameScreen implements Screen {
 
     SpriteBatch batch;
     final MainGame game;
+    Texture background;
 
     final int SCREEN_WIDTH = 256;
     final int SCREEN_HEIGHT = 144;
@@ -47,6 +51,7 @@ public class GameScreen implements Screen {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
         choosePlantScreen = new ChoosePlantScreen(game);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"), new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
+        background = new Texture("gamecanvas.png");
 
         fonts = new Fonts();
         fonts.createSmallFont();
@@ -76,6 +81,7 @@ public class GameScreen implements Screen {
                 }
             }
         }
+        createButtons();
     }
 
     @Override
@@ -116,10 +122,12 @@ public class GameScreen implements Screen {
         }
         game.oldStepCount = game.stepCount;
         stage.act(Gdx.graphics.getDeltaTime());
-        batch.setProjectionMatrix(fonts.camera.combined);
+        batch.setProjectionMatrix(game.camera.combined);
         batch.begin();
-        fonts.largeFont.draw(batch, "Steps: "+ game.stepCount, 50, 1050);
-        fonts.largeFont.draw(batch, "Coins: " + game.coins, 500, 1050);
+        batch.draw(background,0,0);
+        batch.setProjectionMatrix(fonts.camera.combined);
+        fonts.largeFont.draw(batch, "STEPS: "+ game.stepCount, 50, 1050);
+        fonts.largeFont.draw(batch, "COINS: " + game.coins, 500, 1050);
         batch.end();
         batch.setProjectionMatrix(game.camera.combined);
         stage.draw();
@@ -150,5 +158,21 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
+    public void createButtons(){
+        Texture marketButtonIdle = new Texture(Gdx.files.internal("button_market.png"));
+        Texture marketButtonPressed = new Texture(Gdx.files.internal("seed3.png"));
 
+        ImageButton marketButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(marketButtonIdle)),new TextureRegionDrawable(new TextureRegion(marketButtonPressed)));
+
+        marketButton.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT-25);
+        stage.addActor(marketButton);
+
+        marketButton.addListener (new ChangeListener() {
+            // This method is called whenever the actor is clicked. We override its behavior here.
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //game.setScreen(gameScreen);
+            }
+        });
+    }
 }
