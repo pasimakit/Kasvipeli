@@ -34,6 +34,8 @@ public class GameScreen implements Screen {
     int maxPlantingSpaceAmount = 4;
 
     ChoosePlantScreen choosePlantScreen;
+    MarketScreen marketScreen;
+
     Skin skin;
     Stage stage;
     Fonts fonts;
@@ -50,6 +52,7 @@ public class GameScreen implements Screen {
     public void show() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
         choosePlantScreen = new ChoosePlantScreen(game);
+        marketScreen = new MarketScreen(game);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"), new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
         background = new Texture("gamecanvas.png");
 
@@ -168,6 +171,22 @@ public class GameScreen implements Screen {
         stage.addActor(marketButton);
 
         marketButton.addListener (new ChangeListener() {
+            // This method is called whenever the actor is clicked. We override its behavior here.
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(marketScreen);
+            }
+        });
+
+        Texture settingsButtonIdle = new Texture(Gdx.files.internal("button_settings.png"));
+        Texture settingsButtonPressed = new Texture(Gdx.files.internal("seed2.png"));
+
+        ImageButton settingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)),new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
+
+        settingButton.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT-50);
+        stage.addActor(settingButton);
+
+        settingButton.addListener (new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
