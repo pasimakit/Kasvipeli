@@ -49,7 +49,7 @@ public class Flower extends Actor {
     public void updateGrowthBar(PlantingSpace space){
 
          if(!plantHarvested) {
-             growthBar.setBounds(space.getX(), space.getY() - 20, 30, 5);
+             growthBar.setBounds(space.getX() + 10, space.getY() - 5, 39, 5);
              growthBar.setValue((float) currentGrowthTime / growthTime);
          }
          if(currentGrowthTime>=growthTime){
@@ -60,24 +60,24 @@ public class Flower extends Actor {
     public void setupGrowthBar() {
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
 
-        Pixmap pixmap = new Pixmap(30, 5, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.RED);
+        Pixmap pixmap = new Pixmap(39, 5, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
         pixmap.fill();
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
 
         progressBarStyle.background = drawable;
 
-        pixmap = new Pixmap(0, 5, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
+        pixmap = new Pixmap(0, 3, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.rgb888(254,174, 52));
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();
 
         progressBarStyle.knob = drawable;
 
-        pixmap = new Pixmap(30, 5, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
+        pixmap = new Pixmap(37, 3, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.valueOf("#FEAE34"));
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         pixmap.dispose();

@@ -27,7 +27,7 @@ public class PlantingSpace extends Actor {
     }
 
     public void setPlantingSpaceTexture() {
-        plantingSpaceTexture = new Texture("plantingspace2.png");
+        plantingSpaceTexture = new Texture("flowerbed_shadow_bot.png");
     }
 
     public void act(float delta){
@@ -59,7 +59,6 @@ public class PlantingSpace extends Actor {
             }else{
                 if(plantedFlower.plantFinished){
                     plantIsReady = true;
-                   // plantedFlower = null;
                 }
             }
             return false;

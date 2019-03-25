@@ -70,14 +70,14 @@ public class GameScreen implements Screen {
             }
         }
         //sijoitetaan kasvatuspaikat
-        int plantingSpaceX = 30;
+        int plantingSpaceX = 21;
         for(PlantingSpace plantingSpace : plantingSpaceList){
-            plantingSpace.setBounds(plantingSpaceX, 30, 32, 32);
+            plantingSpace.setBounds(plantingSpaceX, 14, 58, 58);
             stage.addActor(plantingSpace);
-            plantingSpaceX+=50;
+            plantingSpaceX+=48;
             if(plantingSpace.plantedFlower != null){
                 if(plantingSpace.plantedFlower.plantChosen) {
-                    plantingSpace.plantedFlower.setBounds(plantingSpace.getX() + 8, plantingSpace.getY() + 16, 16, 16);
+                    plantingSpace.plantedFlower.setBounds(plantingSpaceX-20, plantingSpace.getY()+ 20, 16, 16);
                     plantingSpace.plantedFlower.setupGrowthBar();
                     stage.addActor(plantingSpace.plantedFlower);
                     stage.addActor(plantingSpace.plantedFlower.growthBar);
@@ -106,10 +106,8 @@ public class GameScreen implements Screen {
 
            //kukan sijoitus ja kasvaminen
             if(plantingSpace.plantedFlower != null) {
-
                 if(!plantingSpace.plantedFlower.plantHarvested){
                     plantingSpace.plantedFlower.updateGrowthBar(plantingSpace);
-                    System.out.println("progress päivittyy" + plantingSpace.plantedFlower.growthBar);
                 }
                 if(game.stepCount>game.oldStepCount){
                     plantingSpace.plantedFlower.currentGrowthTime+=game.stepCount - game.oldStepCount;
@@ -162,8 +160,8 @@ public class GameScreen implements Screen {
     }
 
     public void createButtons(){
-        Texture marketButtonIdle = new Texture(Gdx.files.internal("button_market.png"));
-        Texture marketButtonPressed = new Texture(Gdx.files.internal("seed3.png"));
+        Texture marketButtonIdle = new Texture(Gdx.files.internal("button_market_FLAT.png"));
+        Texture marketButtonPressed = new Texture(Gdx.files.internal("button_market_FLAT_PRESSED.png"));
 
         ImageButton marketButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(marketButtonIdle)),new TextureRegionDrawable(new TextureRegion(marketButtonPressed)));
 
@@ -178,8 +176,8 @@ public class GameScreen implements Screen {
             }
         });
 
-        Texture settingsButtonIdle = new Texture(Gdx.files.internal("button_settings.png"));
-        Texture settingsButtonPressed = new Texture(Gdx.files.internal("seed2.png"));
+        Texture settingsButtonIdle = new Texture(Gdx.files.internal("button_settings_FLAT.png"));
+        Texture settingsButtonPressed = new Texture(Gdx.files.internal("button_settings_FLAT_PRESSED.png"));
 
         ImageButton settingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)),new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
 

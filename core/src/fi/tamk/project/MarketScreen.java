@@ -87,7 +87,7 @@ public class MarketScreen implements Screen {
 
     public void createButtons(){
         Texture closeButtonIdle = new Texture(Gdx.files.internal("button_close.png"));
-        Texture closeButtonPressed = new Texture(Gdx.files.internal("seed2.png"));
+        Texture closeButtonPressed = new Texture(Gdx.files.internal("button_close_PRESSED.png"));
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
