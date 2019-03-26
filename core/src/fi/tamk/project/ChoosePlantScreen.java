@@ -38,11 +38,11 @@ public class ChoosePlantScreen implements Screen {
 
     GameScreen gameScreen;
 
-    ArrayList<Flower> plantList = new ArrayList<Flower>();
+    fastPlant lily;
+    mediumPlant carnivorousPlant;
+    slowPlant cactus;
 
-    Sunflower sunflower1;
-    Sunflower sunflower2;
-    Sunflower sunflower3;
+    Fonts fonts;
 
     //ASKELMÄÄRÄ JA RAHAMÄÄRÄ TULOSTUU OIKEESEN KOHTAAN
 
@@ -59,23 +59,25 @@ public class ChoosePlantScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         background = new Texture("background_plantmenu.png");
 
+        fonts = new Fonts();
+        fonts.createSmallFont();
+        fonts.createMediumFont();
+        fonts.createLargeFont();
+
         createButtons();
 
         //luodaan valittavat kukat
-        sunflower1 = new Sunflower();
-        sunflower1.setBounds(18, SCREEN_HEIGHT-55, 16,16);
-        stage.addActor(sunflower1);
-        plantList.add(sunflower1);
+        lily = new fastPlant(game.fastPlantTier);
+        lily.setBounds(30, SCREEN_HEIGHT-55, 30,30);
+        stage.addActor(lily);
 
-        sunflower2 = new Sunflower();
-        sunflower2.setBounds(90, SCREEN_HEIGHT-55, 16,16);
-        stage.addActor(sunflower2);
-        plantList.add(sunflower2);
+        carnivorousPlant = new mediumPlant(game.mediumPlantTier);
+        carnivorousPlant.setBounds(102, SCREEN_HEIGHT-55, 30,30);
+        stage.addActor(carnivorousPlant);
 
-        sunflower3 = new Sunflower();
-        sunflower3.setBounds(162, SCREEN_HEIGHT-55, 16,16);
-        stage.addActor(sunflower3);
-        plantList.add(sunflower3);
+        cactus = new slowPlant(game.slowPlantTier);
+        cactus.setBounds(174, SCREEN_HEIGHT-55, 30,30);
+        stage.addActor(cactus);
     }
 
     @Override
@@ -87,6 +89,13 @@ public class ChoosePlantScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         batch.begin();
         batch.draw(background,0,0);
+        batch.setProjectionMatrix(fonts.camera.combined);
+        fonts.mediumFont.draw(batch, ""+lily.growthTime, 300, 600);
+        fonts.mediumFont.draw(batch, ""+lily.coinValue, 300, 400);
+        fonts.mediumFont.draw(batch, ""+carnivorousPlant.growthTime, 850, 600);
+        fonts.mediumFont.draw(batch, ""+carnivorousPlant.coinValue, 850, 400);
+        fonts.mediumFont.draw(batch, ""+cactus.growthTime, 1400, 600);
+        fonts.mediumFont.draw(batch, ""+cactus.coinValue, 1400, 400);
         batch.end();
         stage.draw();
     }
@@ -147,8 +156,8 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                sunflower1.plantChosen = true;
-                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(sunflower1);
+                lily.plantChosen = true;
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(lily);
                 game.setScreen(gameScreen);
             }
         });
@@ -162,8 +171,8 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                sunflower2.plantChosen = true;
-                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(sunflower2);
+                carnivorousPlant.plantChosen = true;
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(carnivorousPlant);
                 game.setScreen(gameScreen);
             }
         });
@@ -177,8 +186,8 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                sunflower3.plantChosen = true;
-                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(sunflower3);
+                cactus.plantChosen = true;
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(cactus);
                 game.setScreen(gameScreen);
             }
         });

@@ -77,7 +77,7 @@ public class GameScreen implements Screen {
             plantingSpaceX+=48;
             if(plantingSpace.plantedFlower != null){
                 if(plantingSpace.plantedFlower.plantChosen) {
-                    plantingSpace.plantedFlower.setBounds(plantingSpaceX-20, plantingSpace.getY()+ 20, 16, 16);
+                    plantingSpace.plantedFlower.setBounds(plantingSpaceX-30, plantingSpace.getY()+ 20, 16, 16);
                     plantingSpace.plantedFlower.setupGrowthBar();
                     stage.addActor(plantingSpace.plantedFlower);
                     stage.addActor(plantingSpace.plantedFlower.growthBar);
@@ -108,6 +108,7 @@ public class GameScreen implements Screen {
             if(plantingSpace.plantedFlower != null) {
                 if(!plantingSpace.plantedFlower.plantHarvested){
                     plantingSpace.plantedFlower.updateGrowthBar(plantingSpace);
+                    plantingSpace.plantedFlower.updateTexture();
                 }
                 if(game.stepCount>game.oldStepCount){
                     plantingSpace.plantedFlower.currentGrowthTime+=game.stepCount - game.oldStepCount;

@@ -19,8 +19,10 @@ public class MainGame extends Game {
 
     int stepCount; // renderissä
     int oldStepCount;
-
     int coins;
+    int fastPlantTier = 1;
+    int mediumPlantTier = 1;
+    int slowPlantTier = 1;
 
     public SpriteBatch getBatch() {
         return batch;

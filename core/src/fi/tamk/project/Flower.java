@@ -9,14 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import java.util.ArrayList;
+
 public class Flower extends Actor {
 
      Texture flowerTexture;
+     //ArrayList<Texture> textureList = new ArrayList<Texture>();
+     Texture[] textureList = new Texture[3];
      boolean plantChosen, plantFinished, plantHarvested;
 
      int growthTime;
      int currentGrowthTime;
      int coinValue;
+     int currentTier;
 
     ProgressBar growthBar;
 
@@ -40,11 +45,6 @@ public class Flower extends Actor {
                 flowerTexture.getWidth(), flowerTexture.getHeight(),
                 false, false);
     }
-    //koska kukkaa painetaan
-
-    public boolean isPlantChosen(){
-        return plantChosen;
-    }
 
     public void updateGrowthBar(PlantingSpace space){
 
@@ -55,6 +55,16 @@ public class Flower extends Actor {
          if(currentGrowthTime>=growthTime){
              plantFinished = true;
          }
+    }
+
+    public void updateTexture(){
+        if((float)currentGrowthTime/growthTime > 0.1f){
+            flowerTexture = textureList[1];
+        }else if((float)currentGrowthTime/growthTime >= 1.0f){
+            flowerTexture = textureList[2];
+        }else{
+            flowerTexture = textureList[0];
+        }
     }
 
     public void setupGrowthBar() {
