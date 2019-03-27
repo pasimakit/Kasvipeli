@@ -11,7 +11,6 @@ public class fastPlant extends Flower {
         setupTextures();
         addListener(new fastPlant.PlayerListener());
         growthTime = 1000;
-        coinValue = 10;
     }
 
     public void setupTextures(){
@@ -19,10 +18,20 @@ public class fastPlant extends Flower {
             textureList[0] = new Texture("t1seed.png");
             textureList[1] = new Texture("t1stalk.png");
             textureList[2] = new Texture("t1finished.png");
+
+            coinValue = 10;
         }else if(currentTier == 2){
             textureList[0] = new Texture("t2seed.png");
             textureList[1] = new Texture("t2stalk.png");
             textureList[2] = new Texture("t2finished.png");
+
+            coinValue = 20;
+        }else if(currentTier == 3){
+            textureList[0] = new Texture("t2seed.png");
+            textureList[1] = new Texture("t2stalk.png");
+            textureList[2] = new Texture("t2finished.png");
+
+            coinValue = 30;
         }
         flowerTexture = textureList[0];
     }

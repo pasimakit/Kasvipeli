@@ -128,8 +128,8 @@ public class ChoosePlantScreen implements Screen {
     }
 
     public void createButtons(){
-        Texture closeButtonIdle = new Texture(Gdx.files.internal("button_close.png"));
-        Texture closeButtonPressed = new Texture(Gdx.files.internal("button_close_PRESSED.png"));
+        Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
+        Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
@@ -144,8 +144,8 @@ public class ChoosePlantScreen implements Screen {
             }
         });
 
-        Texture choseButtonIdle = new Texture(Gdx.files.internal("valitse_button.png"));
-        Texture choseButtonPressed = new Texture(Gdx.files.internal("seed2.png"));
+        Texture choseButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_selectplant_ENG.png"));
+        Texture choseButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_selectplant_PRESSED_ENG.png"));
 
         ImageButton choseButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(choseButtonIdle)),new TextureRegionDrawable(new TextureRegion(choseButtonPressed)));
 

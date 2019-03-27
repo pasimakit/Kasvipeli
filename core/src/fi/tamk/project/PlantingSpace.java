@@ -14,9 +14,6 @@ public class PlantingSpace extends Actor {
 
     Flower plantedFlower;
 
-    //growthTime-=stepcounter<totalsteps
-
-
     public PlantingSpace() {
         setPlantingSpaceTexture();
         addListener(new PlayerListener());
@@ -27,7 +24,7 @@ public class PlantingSpace extends Actor {
     }
 
     public void setPlantingSpaceTexture() {
-        plantingSpaceTexture = new Texture("flowerbed_shadow_bot.png");
+        plantingSpaceTexture = new Texture("flowerbed_shadow_bot-right.png");
     }
 
     public void act(float delta){

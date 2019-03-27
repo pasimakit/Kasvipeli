@@ -13,20 +13,30 @@ public class Fonts {
     final int SCREEN_WIDTH = 1920;
     final int SCREEN_HEIGHT = 1080;
 
+    BitmapFont smallestFont;
     BitmapFont smallFont;
     BitmapFont mediumFont;
     BitmapFont largeFont;
-    FreeTypeFontGenerator fontGenerator;
+
 
     public Fonts(){
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    public void createSmallFont(){
+    public void createSmallestFont(){
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 48;
+        smallestFont = generator.generateFont(parameter);
+        generator.dispose();
+    }
+
+    public void createSmallFont(){
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.color = Color.valueOf("#733e39");
+        parameter.size = 58;
         smallFont = generator.generateFont(parameter);
         generator.dispose();
     }
