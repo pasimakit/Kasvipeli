@@ -18,15 +18,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
+    Json json = new Json();
+
     SpriteBatch batch;
     final MainGame game;
-    Texture background;
+
+    private Texture background;
+    private Viewport bgViewPort;
 
     final int SCREEN_WIDTH = 256;
     final int SCREEN_HEIGHT = 144;
@@ -38,10 +48,11 @@ public class GameScreen implements Screen {
     Stage stage;
     Fonts fonts;
 
+
     ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
     public PlantingSpace chosenPlantingSpace;
 
-    public GameScreen(MainGame game){
+    public GameScreen(MainGame game) {
         this.game = game;
         batch = game.getBatch();
     }
@@ -52,7 +63,9 @@ public class GameScreen implements Screen {
         choosePlantScreen = new ChoosePlantScreen(game);
         marketScreen = new MarketScreen(game);
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"), new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
+
         background = new Texture("gamecanvas.png");
+        bgViewPort = new FillViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         fonts = new Fonts();
         fonts.createSmallestFont();
@@ -62,28 +75,43 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        //luodaan kasvatuspaik
-        if(game.currentPlantingSpaceAmount>=plantingSpaceList.size()){
-            for (int i = plantingSpaceList.size(); i < game.currentPlantingSpaceAmount; i++) {
+        //luodaan kasvatuspaikat
+        if (game.maxPlantingSpaceAmount >= plantingSpaceList.size()) {
+            for (int i = 0; i < game.maxPlantingSpaceAmount; i++) {
                 plantingSpaceList.add(new PlantingSpace());
-                System.out.println("plantingspace added");
+                System.out.println("plantingspace added" + i);
             }
         }
         //sijoitetaan kasvatuspaikat
         int plantingSpaceX = 21;
         int plantingSpaceY = 5;
-        for(PlantingSpace plantingSpace : plantingSpaceList){
-            plantingSpace.setBounds(plantingSpaceX, plantingSpaceY, 58, 58);
-            stage.addActor(plantingSpace);
-            if(plantingSpaceX>=150){
+
+        ArrayList plantingSpaces = new ArrayList();
+        for (int i = 0; plantingSpaceList.size() > i; i++) {
+            if (game.currentPlantingSpaceAmount > i) {
+                plantingSpaceList.get(i).isUsable = true;
+                System.out.println("plantingspace usable");
+            }
+            plantingSpaces.add(plantingSpaceList.get(i).isUsable);
+        }
+
+        System.out.println(json.prettyPrint(plantingSpaces));
+
+        for (PlantingSpace plantingSpace : plantingSpaceList) {
+            if (plantingSpace.isUsable) {
+                plantingSpace.setBounds(plantingSpaceX, plantingSpaceY, 58, 58);
+                stage.addActor(plantingSpace);
+            }
+
+            if (plantingSpaceX >= 145) {
                 plantingSpaceX = 21;
                 plantingSpaceY = 65;
-            }else{
-                plantingSpaceX+=48;
+            } else {
+                plantingSpaceX += 48;
             }
-            if(plantingSpace.plantedFlower != null){
-                if(plantingSpace.plantedFlower.plantChosen) {
-                    plantingSpace.plantedFlower.setBounds(plantingSpaceX-30, plantingSpace.getY()+ 20, 16, 16);
+            if (plantingSpace.plantedFlower != null) {
+                if (plantingSpace.plantedFlower.plantChosen) {
+                    plantingSpace.plantedFlower.setBounds(plantingSpace.getX() + 20, plantingSpace.getY() + 20, 16, 16);
                     plantingSpace.plantedFlower.setupGrowthBar();
                     stage.addActor(plantingSpace.plantedFlower);
                     stage.addActor(plantingSpace.plantedFlower.growthBar);
@@ -99,27 +127,27 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        for(PlantingSpace plantingSpace : plantingSpaceList){
+        for (PlantingSpace plantingSpace : plantingSpaceList) {
             //onko kasvatuspaikkaa klikattu
-            if(plantingSpace.choosePlantWindow){
+            if (plantingSpace.choosePlantWindow) {
                 plantingSpace.choosePlantWindow = false;
                 chosenPlantingSpace = plantingSpace;
-                if(chosenPlantingSpace.plantedFlower == null){
+                if (chosenPlantingSpace.plantedFlower == null) {
                     game.setScreen(choosePlantScreen);
                 }
             }
 
 
-           //kukan sijoitus ja kasvaminen
-            if(plantingSpace.plantedFlower != null) {
-                if(!plantingSpace.plantedFlower.plantHarvested){
+            //kukan sijoitus ja kasvaminen
+            if (plantingSpace.plantedFlower != null) {
+                if (!plantingSpace.plantedFlower.plantHarvested) {
                     plantingSpace.plantedFlower.updateGrowthBar(plantingSpace);
                     plantingSpace.plantedFlower.updateTexture();
                 }
-                if(game.stepCount>game.oldStepCount){
-                    plantingSpace.plantedFlower.currentGrowthTime+=game.stepCount - game.oldStepCount;
+                if (game.stepCount > game.oldStepCount) {
+                    plantingSpace.plantedFlower.currentGrowthTime += game.stepCount - game.oldStepCount;
                 }
-                if(plantingSpace.plantedFlower.plantFinished && plantingSpace.plantedFlower.plantHarvested) {
+                if (plantingSpace.plantedFlower.plantFinished && plantingSpace.plantedFlower.plantHarvested) {
                     game.coins += plantingSpace.plantedFlower.coinValue;
                     plantingSpace.plantedFlower.growthBar.remove();
                     plantingSpace.plantedFlower.remove();
@@ -130,20 +158,26 @@ public class GameScreen implements Screen {
         }
         game.oldStepCount = game.stepCount;
         stage.act(Gdx.graphics.getDeltaTime());
-        batch.setProjectionMatrix(game.camera.combined);
+        bgViewPort.apply();
+        batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
-        batch.draw(background,0,0);
-        batch.setProjectionMatrix(fonts.camera.combined);
-        fonts.largeFont.draw(batch, "STEPS: "+ game.stepCount, 50, 1050);
-        fonts.largeFont.draw(batch, "COINS: " + game.coins, 500, 1050);
+        batch.draw(background, 0, 0);
         batch.end();
-        batch.setProjectionMatrix(game.camera.combined);
+        fonts.fontViewport.apply();
+        batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
+        batch.begin();
+        fonts.largeFont.draw(batch, "STEPS: " + game.stepCount, 50, 1060);
+        fonts.largeFont.draw(batch, "COINS: " + game.coins, 500, 1060);
+        batch.end();
+        stage.getViewport().apply();
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        bgViewPort.update(width, height, true);
+        stage.getViewport().update(width, height, true);
+        fonts.fontViewport.update(width, height, true);
     }
 
     @Override
@@ -166,16 +200,16 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
-    public void createButtons(){
+    public void createButtons() {
         Texture marketButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_market.png"));
         Texture marketButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_market_PRESSED.png"));
 
-        ImageButton marketButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(marketButtonIdle)),new TextureRegionDrawable(new TextureRegion(marketButtonPressed)));
+        ImageButton marketButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(marketButtonIdle)), new TextureRegionDrawable(new TextureRegion(marketButtonPressed)));
 
-        marketButton.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT-25);
+        marketButton.setPosition(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 25);
         stage.addActor(marketButton);
 
-        marketButton.addListener (new ChangeListener() {
+        marketButton.addListener(new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -186,17 +220,21 @@ public class GameScreen implements Screen {
         Texture settingsButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_settings.png"));
         Texture settingsButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_settings_PRESSED.png"));
 
-        ImageButton settingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)),new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
+        ImageButton settingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)), new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
 
-        settingButton.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT-50);
+        settingButton.setPosition(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 50);
         stage.addActor(settingButton);
 
-        settingButton.addListener (new ChangeListener() {
+        settingButton.addListener(new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //game.setScreen(gameScreen);
             }
         });
+    }
+
+    public void makePrefs() {
+
     }
 }

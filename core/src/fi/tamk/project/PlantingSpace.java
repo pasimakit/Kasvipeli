@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 public class PlantingSpace extends Actor {
 
     Texture plantingSpaceTexture;
-    boolean choosePlantWindow, plantIsReady;
+    boolean choosePlantWindow, plantIsReady, isUsable;
 
     Flower plantedFlower;
 

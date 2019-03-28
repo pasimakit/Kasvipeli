@@ -2,13 +2,13 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Fonts {
 
-    OrthographicCamera camera;
+    FitViewport fontViewport;
 
     final int SCREEN_WIDTH = 1920;
     final int SCREEN_HEIGHT = 1080;
@@ -20,8 +20,7 @@ public class Fonts {
 
 
     public Fonts(){
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
+        fontViewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     public void createSmallestFont(){

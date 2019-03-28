@@ -11,13 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MarketScreen implements Screen {
 
     SpriteBatch batch;
     final MainGame game;
-    Texture background;
+
+    private Texture background;
+    private Viewport bgViewPort;
+
 
     Fonts fonts;
     Stage stage;
@@ -40,7 +46,9 @@ public class MarketScreen implements Screen {
     public void show() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
+
         background = new Texture("marketplace.png");
+        bgViewPort = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         fonts = new Fonts();
         fonts.createSmallestFont();
@@ -55,12 +63,14 @@ public class MarketScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(game.camera.combined);
-
-
+        bgViewPort.apply();
+        batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
         batch.draw(background,0,0);
-        batch.setProjectionMatrix(fonts.camera.combined);
+        batch.end();
+        fonts.fontViewport.apply();
+        batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
+        batch.begin();
         fonts.largeFont.draw(batch, "COINS: "+game.coins, 500, 1050);
         // tier numbers
         fonts.smallestFont.draw(batch, ""+game.fastPlantTier , 920, 645);
@@ -89,14 +99,16 @@ public class MarketScreen implements Screen {
         }else{
             fonts.smallFont.draw(batch, "$ "+plantingSpacePricing[game.currentPlantingSpaceAmount], 280, 300);
         }
-
         batch.end();
+        stage.getViewport().apply();
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        bgViewPort.update(width, height, true);
+        stage.getViewport().update(width, height, true);
+        fonts.fontViewport.update(width, height, true);
     }
 
     @Override
@@ -148,7 +160,7 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.fastPlantTier<=3 && game.coins>= plantTierPricing[game.fastPlantTier]){
+                if(game.fastPlantTier<=2 && game.coins>= plantTierPricing[game.fastPlantTier]){
                     game.coins-=plantTierPricing[game.fastPlantTier];
                     game.fastPlantTier++;
                 }
@@ -164,7 +176,7 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.mediumPlantTier<=3 && game.coins>= plantTierPricing[game.mediumPlantTier]){
+                if(game.mediumPlantTier<=2 && game.coins>= plantTierPricing[game.mediumPlantTier]){
                     game.coins-=plantTierPricing[game.mediumPlantTier];
                     game.mediumPlantTier++;
                 }
@@ -180,7 +192,7 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.slowPlantTier<=3 && game.coins>= plantTierPricing[game.slowPlantTier]){
+                if(game.slowPlantTier<=2 && game.coins>= plantTierPricing[game.slowPlantTier]){
                     game.coins-=plantTierPricing[game.slowPlantTier];
                     game.slowPlantTier++;
                 }

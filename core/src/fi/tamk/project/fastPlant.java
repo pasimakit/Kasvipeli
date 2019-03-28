@@ -10,7 +10,7 @@ public class fastPlant extends Flower {
         currentTier = tier;
         setupTextures();
         addListener(new fastPlant.PlayerListener());
-        growthTime = 1000;
+        growthTime = 10;
     }
 
     public void setupTextures(){
@@ -39,7 +39,7 @@ public class fastPlant extends Flower {
     public void updateTexture(){
         if((float)currentGrowthTime/growthTime > 0.1f){
             flowerTexture = textureList[1];
-        }else if((float)currentGrowthTime/growthTime >= 1.0f){
+        }else if((float)currentGrowthTime/growthTime >= 0.99f){
             flowerTexture = textureList[2];
         }else{
             flowerTexture = textureList[0];

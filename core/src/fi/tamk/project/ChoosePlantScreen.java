@@ -16,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -26,9 +29,10 @@ public class ChoosePlantScreen implements Screen {
 
     SpriteBatch batch;
     final MainGame game;
-    Texture background;
 
-    TextButton backButton;
+    Texture background;
+    private Viewport bgViewPort;
+
     Skin skin;
 
     Stage stage;
@@ -57,7 +61,9 @@ public class ChoosePlantScreen implements Screen {
     public void show() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
+
         background = new Texture("background_plantmenu.png");
+        bgViewPort = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         fonts = new Fonts();
         fonts.createSmallFont();
@@ -82,14 +88,17 @@ public class ChoosePlantScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.5f, 0.3f, 0.1f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(game.camera.combined);
-
+        bgViewPort.apply();
+        batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         stage.act(Gdx.graphics.getDeltaTime());
         batch.begin();
         batch.draw(background,0,0);
-        batch.setProjectionMatrix(fonts.camera.combined);
+        batch.end();
+        fonts.fontViewport.apply();
+        batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
+        batch.begin();
         fonts.mediumFont.draw(batch, ""+lily.growthTime, 300, 600);
         fonts.mediumFont.draw(batch, ""+lily.coinValue, 300, 400);
         fonts.mediumFont.draw(batch, ""+carnivorousPlant.growthTime, 850, 600);
@@ -97,12 +106,15 @@ public class ChoosePlantScreen implements Screen {
         fonts.mediumFont.draw(batch, ""+cactus.growthTime, 1400, 600);
         fonts.mediumFont.draw(batch, ""+cactus.coinValue, 1400, 400);
         batch.end();
+        stage.getViewport().apply();
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        bgViewPort.update(width, height, true);
+        stage.getViewport().update(width, height, true);
+        fonts.fontViewport.update(width, height, true);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class MainGame extends Game {
 
     int stepCount; // renderissä
     int oldStepCount;
-    int coins;
+    int coins = 10000;
 
     int fastPlantTier = 1;
     int mediumPlantTier = 1;
