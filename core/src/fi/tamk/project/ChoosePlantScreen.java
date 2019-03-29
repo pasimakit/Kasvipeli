@@ -2,6 +2,7 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,6 +28,7 @@ public class ChoosePlantScreen implements Screen {
     SpriteBatch batch;
     final MainGame game;
     Texture background;
+    Sound dig;
 
     TextButton backButton;
     Skin skin;
@@ -65,7 +67,8 @@ public class ChoosePlantScreen implements Screen {
         fonts.createLargeFont();
 
         createButtons();
-
+        //luodaan istutusääniefekti
+        dig = Gdx.audio.newSound(Gdx.files.internal("dig.mp3"));
         //luodaan valittavat kukat
         lily = new fastPlant(game.fastPlantTier);
         lily.setBounds(30, SCREEN_HEIGHT-55, 30,30);
@@ -159,6 +162,7 @@ public class ChoosePlantScreen implements Screen {
                 lily.plantChosen = true;
                 game.getGameScreen().chosenPlantingSpace.setPlantedFlower(lily);
                 game.setScreen(gameScreen);
+                dig.play();
             }
         });
 
@@ -174,6 +178,7 @@ public class ChoosePlantScreen implements Screen {
                 carnivorousPlant.plantChosen = true;
                 game.getGameScreen().chosenPlantingSpace.setPlantedFlower(carnivorousPlant);
                 game.setScreen(gameScreen);
+                dig.play();
             }
         });
 
@@ -189,6 +194,7 @@ public class ChoosePlantScreen implements Screen {
                 cactus.plantChosen = true;
                 game.getGameScreen().chosenPlantingSpace.setPlantedFlower(cactus);
                 game.setScreen(gameScreen);
+                dig.play();
             }
         });
     }

@@ -2,6 +2,7 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,6 +22,7 @@ public class MarketScreen implements Screen {
 
     Fonts fonts;
     Stage stage;
+    Sound bought;
 
     final int SCREEN_WIDTH = 256;
     final int SCREEN_HEIGHT = 144;
@@ -41,7 +43,7 @@ public class MarketScreen implements Screen {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
         background = new Texture("marketplace.png");
-
+        bought = Gdx.audio.newSound(Gdx.files.internal("bought.mp3"));
         fonts = new Fonts();
         fonts.createSmallestFont();
         fonts.createSmallFont();
@@ -71,16 +73,19 @@ public class MarketScreen implements Screen {
             fonts.smallFont.draw(batch, "MAX", 1000, 780);
         }else{
             fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.fastPlantTier], 1000, 780);
+            bought.play();
         }
         if(game.mediumPlantTier==3){
             fonts.smallFont.draw(batch, "MAX", 1000, 530);
         }else{
             fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.mediumPlantTier], 1000, 530);
+            bought.play();
         }
         if(game.slowPlantTier==3){
             fonts.smallFont.draw(batch, "MAX", 1000, 300);
         }else{
             fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.slowPlantTier], 1000, 300);
+            bought.play();
         }
         // additional plantingspaces
         fonts.smallFont.draw(batch, "+1      (" + game.currentPlantingSpaceAmount + " / " + game.maxPlantingSpaceAmount + ")", 220, 780);
@@ -88,6 +93,7 @@ public class MarketScreen implements Screen {
             fonts.smallFont.draw(batch, "SOLD!", 300, 300);
         }else{
             fonts.smallFont.draw(batch, "$ "+plantingSpacePricing[game.currentPlantingSpaceAmount], 280, 300);
+            bought.play();
         }
 
         batch.end();

@@ -2,6 +2,7 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,6 +38,7 @@ public class GameScreen implements Screen {
     Skin skin;
     Stage stage;
     Fonts fonts;
+    Sound coins;
 
     ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
     public PlantingSpace chosenPlantingSpace;
@@ -59,6 +61,7 @@ public class GameScreen implements Screen {
         fonts.createSmallFont();
         fonts.createMediumFont();
         fonts.createLargeFont();
+        coins = Gdx.audio.newSound(Gdx.files.internal("coins.mp3"));
 
         Gdx.input.setInputProcessor(stage);
 
@@ -121,6 +124,7 @@ public class GameScreen implements Screen {
                 }
                 if(plantingSpace.plantedFlower.plantFinished && plantingSpace.plantedFlower.plantHarvested) {
                     game.coins += plantingSpace.plantedFlower.coinValue;
+                    coins.play();
                     plantingSpace.plantedFlower.growthBar.remove();
                     plantingSpace.plantedFlower.remove();
                     plantingSpace.plantedFlower.growthBar = null;
