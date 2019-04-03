@@ -19,10 +19,6 @@ public class PlantingSpace extends Actor {
         addListener(new PlayerListener());
     }
 
-    public Texture getPlantingSpaceTexture() {
-        return plantingSpaceTexture;
-    }
-
     public void setPlantingSpaceTexture() {
         plantingSpaceTexture = new Texture("flowerbed_shadow_bot-right.png");
     }

@@ -5,25 +5,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-
-import java.util.ArrayList;
 
 
 public class MainGame extends Game {
 	SpriteBatch batch;
 
-	final int SCREEN_WIDTH = 256;
-	final int SCREEN_HEIGHT = 144;
+	private final int SCREEN_WIDTH = 256;
+	private final int SCREEN_HEIGHT = 144;
 
 	OrthographicCamera camera;
     GameScreen gameScreen;
 
     int stepCount; // renderissä
     int oldStepCount;
-    int coins;
+    int coins = 10000;
 
     int fastPlantTier = 1;
     int mediumPlantTier = 1;
@@ -38,7 +35,6 @@ public class MainGame extends Game {
         json.setOutputType(JsonWriter.OutputType.json);
         int[] saveData = {stepCount, oldStepCount, coins, fastPlantTier, mediumPlantTier, slowPlantTier, currentPlantingSpaceAmount, maxPlantingSpaceAmount};
         file.writeString(json.prettyPrint(saveData),false);
-        System.out.println(saveData.getClass());
     }
 
     public void fromJson(){
@@ -83,7 +79,6 @@ public class MainGame extends Game {
 
 	@Override
 	public void render () {
-        stepCount++;
         super.render();
 	}
 	

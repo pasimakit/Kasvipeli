@@ -35,7 +35,7 @@ public class Fonts {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.color = Color.valueOf("#733e39");
-        parameter.size = 58;
+        parameter.size = 50;
         smallFont = generator.generateFont(parameter);
         generator.dispose();
     }

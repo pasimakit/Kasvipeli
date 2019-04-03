@@ -4,26 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.util.ArrayList;
-
-import sun.security.provider.Sun;
 
 public class ChoosePlantScreen implements Screen {
 
@@ -33,7 +23,6 @@ public class ChoosePlantScreen implements Screen {
     Texture background;
     private Viewport bgViewPort;
 
-    Skin skin;
 
     Stage stage;
 
@@ -42,14 +31,11 @@ public class ChoosePlantScreen implements Screen {
 
     GameScreen gameScreen;
 
-    fastPlant lily;
-    mediumPlant carnivorousPlant;
-    slowPlant cactus;
+    FastPlant lily;
+    MediumPlant carnivorousPlant;
+    SlowPlant cactus;
 
     Fonts fonts;
-
-    //ASKELMÄÄRÄ JA RAHAMÄÄRÄ TULOSTUU OIKEESEN KOHTAAN
-
 
     public ChoosePlantScreen(MainGame game) {
         this.game = game;
@@ -73,15 +59,15 @@ public class ChoosePlantScreen implements Screen {
         createButtons();
 
         //luodaan valittavat kukat
-        lily = new fastPlant(game.fastPlantTier);
+        lily = new FastPlant(game.fastPlantTier);
         lily.setBounds(20, SCREEN_HEIGHT-75, 58,58);
         stage.addActor(lily);
 
-        carnivorousPlant = new mediumPlant(game.mediumPlantTier);
+        carnivorousPlant = new MediumPlant(game.mediumPlantTier);
         carnivorousPlant.setBounds(92, SCREEN_HEIGHT-50, 58,58);
         stage.addActor(carnivorousPlant);
 
-        cactus = new slowPlant(game.slowPlantTier);
+        cactus = new SlowPlant(game.slowPlantTier);
         cactus.setBounds(164, SCREEN_HEIGHT-55, 58,58);
         stage.addActor(cactus);
     }
@@ -138,7 +124,6 @@ public class ChoosePlantScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
-        skin.dispose();
     }
 
     public void createButtons(){

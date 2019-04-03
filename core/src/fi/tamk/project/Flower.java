@@ -9,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import java.util.ArrayList;
-
 public class Flower extends Actor {
 
      Texture flowerTexture;
@@ -66,6 +64,10 @@ public class Flower extends Actor {
         }else{
             flowerTexture = textureList[0];
         }
+    }
+
+    public void displayTexture(){
+         flowerTexture = textureList[2];
     }
 
     public void setupGrowthBar() {

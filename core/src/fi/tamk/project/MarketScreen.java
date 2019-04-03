@@ -2,6 +2,7 @@ package fi.tamk.project;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -24,7 +24,6 @@ public class MarketScreen implements Screen {
     private Texture background;
     private Viewport bgViewPort;
 
-
     Fonts fonts;
     Stage stage;
 
@@ -32,6 +31,10 @@ public class MarketScreen implements Screen {
     final int SCREEN_HEIGHT = 144;
 
     GameScreen gameScreen;
+
+    SlowPlant slowPlant;
+    MediumPlant mediumPlant;
+    FastPlant fastPlant;
 
     int[] plantingSpacePricing = {0, 0, 40, 80, 160, 320, 640, 1280, 0000};
     int[] plantTierPricing = {0, 200, 1000, 0000};
@@ -57,6 +60,18 @@ public class MarketScreen implements Screen {
         fonts.createLargeFont();
 
         createButtons();
+
+        fastPlant = new FastPlant(2);
+        fastPlant.setBounds(100, 82, 25,25);
+        stage.addActor(fastPlant);
+
+        mediumPlant = new MediumPlant(2);
+        mediumPlant.setBounds(100, 48, 25,25);
+        stage.addActor(mediumPlant);
+
+        slowPlant = new SlowPlant(2);
+        slowPlant.setBounds(100, 15, 25,25);
+        stage.addActor(slowPlant);
     }
 
     @Override
@@ -72,6 +87,7 @@ public class MarketScreen implements Screen {
         batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
         batch.begin();
         fonts.largeFont.draw(batch, "COINS: "+game.coins, 500, 1050);
+        fonts.smallFont.draw(batch, "UPGRADE PLANT TIERS", 720, 850);
         // tier numbers
         fonts.smallestFont.draw(batch, ""+game.fastPlantTier , 920, 645);
         fonts.smallestFont.draw(batch, ""+game.mediumPlantTier , 920, 405);
@@ -83,14 +99,14 @@ public class MarketScreen implements Screen {
             fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.fastPlantTier], 1000, 780);
         }
         if(game.mediumPlantTier==3){
-            fonts.smallFont.draw(batch, "MAX", 1000, 530);
+            fonts.smallFont.draw(batch, "MAX", 1000, 535);
         }else{
-            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.mediumPlantTier], 1000, 530);
+            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.mediumPlantTier], 1000, 535);
         }
         if(game.slowPlantTier==3){
-            fonts.smallFont.draw(batch, "MAX", 1000, 300);
+            fonts.smallFont.draw(batch, "MAX", 1000, 295);
         }else{
-            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.slowPlantTier], 1000, 300);
+            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.slowPlantTier], 1000, 295);
         }
         // additional plantingspaces
         fonts.smallFont.draw(batch, "+1      (" + game.currentPlantingSpaceAmount + " / " + game.maxPlantingSpaceAmount + ")", 220, 780);
@@ -165,6 +181,11 @@ public class MarketScreen implements Screen {
                 if(game.fastPlantTier<=2 && game.coins>= plantTierPricing[game.fastPlantTier]){
                     game.coins-=plantTierPricing[game.fastPlantTier];
                     game.fastPlantTier++;
+                    if(fastPlant.currentTier<=3){
+                        fastPlant.currentTier++;
+                        fastPlant.setupTextures();
+                        fastPlant.displayTexture();
+                    }
                 }
             }
         });
@@ -181,6 +202,11 @@ public class MarketScreen implements Screen {
                 if(game.mediumPlantTier<=2 && game.coins>= plantTierPricing[game.mediumPlantTier]){
                     game.coins-=plantTierPricing[game.mediumPlantTier];
                     game.mediumPlantTier++;
+                    if(mediumPlant.currentTier<=3){
+                        mediumPlant.currentTier++;
+                        mediumPlant.setupTextures();
+                        mediumPlant.displayTexture();
+                    }
                 }
             }
         });
@@ -197,6 +223,11 @@ public class MarketScreen implements Screen {
                 if(game.slowPlantTier<=2 && game.coins>= plantTierPricing[game.slowPlantTier]){
                     game.coins-=plantTierPricing[game.slowPlantTier];
                     game.slowPlantTier++;
+                    if(slowPlant.currentTier<=3){
+                        slowPlant.currentTier++;
+                        slowPlant.setupTextures();
+                        slowPlant.displayTexture();
+                    }
                 }
             }
         });

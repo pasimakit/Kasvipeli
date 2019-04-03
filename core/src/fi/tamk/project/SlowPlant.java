@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class slowPlant extends Flower {
+public class SlowPlant extends Flower {
 
-    public slowPlant(int tier){
+    public SlowPlant(int tier){
         currentTier = tier;
         setupTextures();
-        addListener(new slowPlant.PlayerListener());
+        addListener(new SlowPlant.PlayerListener());
         growthTime = 5000;
     }
 
@@ -36,7 +36,9 @@ public class slowPlant extends Flower {
 
             coinValue = 180;
         }
-        flowerTexture = textureList[0];
+        if(flowerTexture==null) {
+            flowerTexture = textureList[2];
+        }
     }
 
 

@@ -3,37 +3,25 @@ package fi.tamk.project;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.io.Writer;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-
-    Json json = new Json();
 
     SpriteBatch batch;
     final MainGame game;
@@ -65,9 +53,6 @@ public class GameScreen implements Screen {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
         choosePlantScreen = new ChoosePlantScreen(game);
         marketScreen = new MarketScreen(game);
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"), new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
-
-
 
         background = new Texture("gamecanvas.png");
         bgViewPort = new FillViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -200,6 +185,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        batch.dispose();
+        background.dispose();
     }
 
     public void createButtons() {
@@ -243,6 +230,7 @@ public class GameScreen implements Screen {
     }
 
     public void makePrefs() {
+        Json json = new Json();
         ArrayList<PlantingSpaceData> plantingSpaceDataList = new ArrayList<PlantingSpaceData>();
 
         FileHandle file = Gdx.files.local("gameState.json");
@@ -260,6 +248,7 @@ public class GameScreen implements Screen {
     }
 
     public void loadPrefs(){
+        Json json = new Json();
         FileHandle file = Gdx.files.local("gameState.json");
 
         if(file.exists()) {
@@ -271,37 +260,37 @@ public class GameScreen implements Screen {
                 if(plantingSpaceList.get(i).isUsable){
                     if(datalist.get(i).growthTime == 1000){
                         if(datalist.get(i).currentTier == 1){
-                            plantingSpaceList.get(i).setPlantedFlower(new fastPlant(1));
+                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(1));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }else if(datalist.get(i).currentTier == 2){
-                            plantingSpaceList.get(i).setPlantedFlower(new fastPlant(2));
+                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(2));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }else if(datalist.get(i).currentTier == 3){
-                            plantingSpaceList.get(i).setPlantedFlower(new fastPlant(3));
+                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(3));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }
                     }
                     if(datalist.get(i).growthTime == 3000){
                         if(datalist.get(i).currentTier == 1){
-                            plantingSpaceList.get(i).setPlantedFlower(new mediumPlant(1));
+                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(1));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }else if(datalist.get(i).currentTier == 2){
-                            plantingSpaceList.get(i).setPlantedFlower(new mediumPlant(2));
+                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(2));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }else if(datalist.get(i).currentTier == 3){
-                            plantingSpaceList.get(i).setPlantedFlower(new mediumPlant(3));
+                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(3));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }
                     }
                     if(datalist.get(i).growthTime == 5000){
                         if(datalist.get(i).currentTier == 1){
-                            plantingSpaceList.get(i).setPlantedFlower(new slowPlant(1));
+                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(1));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }else if(datalist.get(i).currentTier == 2){
-                            plantingSpaceList.get(i).setPlantedFlower(new slowPlant(2));
+                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(2));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }else if(datalist.get(i).currentTier == 3){
-                            plantingSpaceList.get(i).setPlantedFlower(new slowPlant(3));
+                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(3));
                             plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
                         }
                     }
