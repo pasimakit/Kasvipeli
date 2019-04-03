@@ -14,9 +14,10 @@ import java.util.ArrayList;
 public class Flower extends Actor {
 
      Texture flowerTexture;
-     //ArrayList<Texture> textureList = new ArrayList<Texture>();
      Texture[] textureList = new Texture[3];
      boolean plantChosen, plantFinished, plantHarvested;
+
+     String plantName;
 
      int growthTime;
      int currentGrowthTime;
@@ -58,10 +59,10 @@ public class Flower extends Actor {
     }
 
     public void updateTexture(){
-        if((float)currentGrowthTime/growthTime > 0.1f){
-            flowerTexture = textureList[1];
-        }else if((float)currentGrowthTime/growthTime >= 1.0f){
+        if(currentGrowthTime>=growthTime){
             flowerTexture = textureList[2];
+        }else if((float)currentGrowthTime/growthTime > 0.1f){
+            flowerTexture = textureList[1];
         }else{
             flowerTexture = textureList[0];
         }

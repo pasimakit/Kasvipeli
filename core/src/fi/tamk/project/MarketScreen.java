@@ -113,7 +113,8 @@ public class MarketScreen implements Screen {
 
     @Override
     public void pause() {
-
+        gameScreen.makePrefs();
+        game.toJson();
     }
 
     @Override
@@ -123,7 +124,8 @@ public class MarketScreen implements Screen {
 
     @Override
     public void hide() {
-
+        gameScreen.makePrefs();
+        game.toJson();
     }
 
     @Override

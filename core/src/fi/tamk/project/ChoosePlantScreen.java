@@ -74,15 +74,15 @@ public class ChoosePlantScreen implements Screen {
 
         //luodaan valittavat kukat
         lily = new fastPlant(game.fastPlantTier);
-        lily.setBounds(30, SCREEN_HEIGHT-55, 30,30);
+        lily.setBounds(20, SCREEN_HEIGHT-75, 58,58);
         stage.addActor(lily);
 
         carnivorousPlant = new mediumPlant(game.mediumPlantTier);
-        carnivorousPlant.setBounds(102, SCREEN_HEIGHT-55, 30,30);
+        carnivorousPlant.setBounds(92, SCREEN_HEIGHT-50, 58,58);
         stage.addActor(carnivorousPlant);
 
         cactus = new slowPlant(game.slowPlantTier);
-        cactus.setBounds(174, SCREEN_HEIGHT-55, 30,30);
+        cactus.setBounds(164, SCREEN_HEIGHT-55, 58,58);
         stage.addActor(cactus);
     }
 
@@ -119,7 +119,8 @@ public class ChoosePlantScreen implements Screen {
 
     @Override
     public void pause() {
-
+        gameScreen.makePrefs();
+        game.toJson();
     }
 
     @Override
@@ -129,7 +130,8 @@ public class ChoosePlantScreen implements Screen {
 
     @Override
     public void hide() {
-
+        gameScreen.makePrefs();
+        game.toJson();
     }
 
     @Override

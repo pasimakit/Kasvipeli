@@ -10,39 +10,34 @@ public class fastPlant extends Flower {
         currentTier = tier;
         setupTextures();
         addListener(new fastPlant.PlayerListener());
-        growthTime = 10;
+        growthTime = 1000;
     }
 
     public void setupTextures(){
         if(currentTier == 1){
-            textureList[0] = new Texture("t1seed.png");
-            textureList[1] = new Texture("t1stalk.png");
-            textureList[2] = new Texture("t1finished.png");
+            plantName = "fastplant1";
+            textureList[0] = new Texture("plants/plant1_stage1.png");
+            textureList[1] = new Texture("plants/plant1_stage2.png");
+            textureList[2] = new Texture("plants/plant1_stage3_tier1.png");
 
             coinValue = 10;
         }else if(currentTier == 2){
-            textureList[0] = new Texture("t2seed.png");
-            textureList[1] = new Texture("t2stalk.png");
-            textureList[2] = new Texture("t2finished.png");
+            plantName = "fastplant2";
+            textureList[0] = new Texture("plants/plant1_stage1.png");
+            textureList[1] = new Texture("plants/plant1_stage2.png");
+            textureList[2] = new Texture("plants/plant1_stage3_tier2.png");
 
             coinValue = 20;
         }else if(currentTier == 3){
-            textureList[0] = new Texture("t2seed.png");
-            textureList[1] = new Texture("t2stalk.png");
-            textureList[2] = new Texture("t2finished.png");
+            plantName = "fastplant3";
+            textureList[0] = new Texture("plants/plant1_stage1.png");
+            textureList[1] = new Texture("plants/plant1_stage2.png");
+            textureList[2] = new Texture("plants/plant1_stage3_tier3.png");
 
             coinValue = 30;
         }
-        flowerTexture = textureList[0];
-    }
-
-    public void updateTexture(){
-        if((float)currentGrowthTime/growthTime > 0.1f){
-            flowerTexture = textureList[1];
-        }else if((float)currentGrowthTime/growthTime >= 0.99f){
+        if(flowerTexture==null) {
             flowerTexture = textureList[2];
-        }else{
-            flowerTexture = textureList[0];
         }
     }
 

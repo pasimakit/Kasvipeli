@@ -15,18 +15,21 @@ public class mediumPlant extends Flower {
 
     public void setupTextures(){
         if(currentTier == 1){
+            plantName = "mediumplant1";
             textureList[0] = new Texture("t1seed_medium.png");
             textureList[1] = new Texture("t1stalk_medium.png");
             textureList[2] = new Texture("t1finished_medium.png");
 
             coinValue = 28;
         }else if(currentTier == 2){
+            plantName = "mediumplant2";
             textureList[0] = new Texture("t2seed.png");
             textureList[1] = new Texture("t2stalk.png");
             textureList[2] = new Texture("t2finished.png");
 
             coinValue = 56;
         }else if(currentTier == 3){
+            plantName = "mediumplant3";
             textureList[0] = new Texture("t2seed.png");
             textureList[1] = new Texture("t2stalk.png");
             textureList[2] = new Texture("t2finished.png");
