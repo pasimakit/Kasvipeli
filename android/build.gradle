@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "fi.tamk.project"
+        applicationId "fi.tamk.sprintgarden"
         minSdkVersion 9
         targetSdkVersion 27
         versionCode 1
@@ -86,10 +86,10 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'fi.tamk.project/fi.tamk.project.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'fi.tamk.sprintgarden/fi.tamk.sprintgarden.AndroidLauncher'
 }
 
-// sets up the Android Eclipse project, using the old Ant based build.
+// sets up the Android Eclipse sprintgarden, using the old Ant based build.
 eclipse {
     // need to specify Java source sets explicitly, SpringSource Gradle Eclipse plugin
     // ignores any nodes added in classpath.file.withXml
@@ -120,7 +120,7 @@ eclipse {
     }
 }
 
-// sets up the Android Idea project, using the old Ant based build.
+// sets up the Android Idea sprintgarden, using the old Ant based build.
 idea {
     module {
         sourceDirs += file("src");

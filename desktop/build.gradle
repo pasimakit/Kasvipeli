@@ -3,7 +3,7 @@ apply plugin: "java"
 sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "fi.tamk.project.desktop.DesktopLauncher"
+project.ext.mainClassName = "fi.tamk.sprintgarden.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../android/assets");
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -43,7 +43,7 @@ eclipse {
     }
 }
 
-task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
+task afterEclipseImport(description: "Post processing after sprintgarden generation", group: "IDE") {
   doLast {
     def classpath = new XmlParser().parse(file(".classpath"))
     new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);

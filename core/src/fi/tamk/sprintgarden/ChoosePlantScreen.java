@@ -1,4 +1,4 @@
-package fi.tamk.project;
+package fi.tamk.sprintgarden;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,25 +17,21 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class ChoosePlantScreen implements Screen {
 
-    SpriteBatch batch;
+    private SpriteBatch batch;
     final MainGame game;
 
-    Texture background;
+    private Texture background;
     private Viewport bgViewPort;
 
+    private Stage stage;
 
-    Stage stage;
+    private GameScreen gameScreen;
 
-    final int SCREEN_WIDTH = 256;
-    final int SCREEN_HEIGHT = 144;
+    private FastPlant fastPlant;
+    private MediumPlant mediumPlant;
+    private SlowPlant slowPlant;
 
-    GameScreen gameScreen;
-
-    FastPlant lily;
-    MediumPlant carnivorousPlant;
-    SlowPlant cactus;
-
-    Fonts fonts;
+    private Fonts fonts;
 
     public ChoosePlantScreen(MainGame game) {
         this.game = game;
@@ -45,11 +41,11 @@ public class ChoosePlantScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
+        stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
 
         background = new Texture("background_plantmenu.png");
-        bgViewPort = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
+        bgViewPort = new StretchViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
         fonts.createSmallFont();
@@ -59,17 +55,20 @@ public class ChoosePlantScreen implements Screen {
         createButtons();
 
         //luodaan valittavat kukat
-        lily = new FastPlant(game.fastPlantTier);
-        lily.setBounds(20, SCREEN_HEIGHT-75, 58,58);
-        stage.addActor(lily);
+        fastPlant = new FastPlant(game.getFastPlantTier());
+        fastPlant.setBounds(20, game.SCREEN_HEIGHT-75, 58,58);
+        fastPlant.displayTexture();
+        stage.addActor(fastPlant);
 
-        carnivorousPlant = new MediumPlant(game.mediumPlantTier);
-        carnivorousPlant.setBounds(92, SCREEN_HEIGHT-50, 58,58);
-        stage.addActor(carnivorousPlant);
+        mediumPlant = new MediumPlant(game.getMediumPlantTier());
+        mediumPlant.setBounds(92, game.SCREEN_HEIGHT-50, 58,58);
+        mediumPlant.displayTexture();
+        stage.addActor(mediumPlant);
 
-        cactus = new SlowPlant(game.slowPlantTier);
-        cactus.setBounds(164, SCREEN_HEIGHT-55, 58,58);
-        stage.addActor(cactus);
+        slowPlant = new SlowPlant(game.getSlowPlantTier());
+        slowPlant.setBounds(164, game.SCREEN_HEIGHT-55, 58,58);
+        slowPlant.displayTexture();
+        stage.addActor(slowPlant);
     }
 
     @Override
@@ -82,15 +81,15 @@ public class ChoosePlantScreen implements Screen {
         batch.begin();
         batch.draw(background,0,0);
         batch.end();
-        fonts.fontViewport.apply();
-        batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
+        fonts.getFontViewport().apply();
+        batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.mediumFont.draw(batch, ""+lily.growthTime, 300, 600);
-        fonts.mediumFont.draw(batch, ""+lily.coinValue, 300, 400);
-        fonts.mediumFont.draw(batch, ""+carnivorousPlant.growthTime, 850, 600);
-        fonts.mediumFont.draw(batch, ""+carnivorousPlant.coinValue, 850, 400);
-        fonts.mediumFont.draw(batch, ""+cactus.growthTime, 1400, 600);
-        fonts.mediumFont.draw(batch, ""+cactus.coinValue, 1400, 400);
+        fonts.getMediumFont().draw(batch, ""+ fastPlant.getGrowthTime(), 300, 600);
+        fonts.getMediumFont().draw(batch, ""+ fastPlant.getCoinValue(), 300, 400);
+        fonts.getMediumFont().draw(batch, ""+ mediumPlant.getGrowthTime(), 850, 600);
+        fonts.getMediumFont().draw(batch, ""+ mediumPlant.getCoinValue(), 850, 400);
+        fonts.getMediumFont().draw(batch, ""+ slowPlant.getGrowthTime(), 1400, 600);
+        fonts.getMediumFont().draw(batch, ""+ slowPlant.getCoinValue(), 1400, 400);
         batch.end();
         stage.getViewport().apply();
         stage.draw();
@@ -100,7 +99,7 @@ public class ChoosePlantScreen implements Screen {
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
-        fonts.fontViewport.update(width, height, true);
+        fonts.getFontViewport().update(width, height, true);
     }
 
     @Override
@@ -124,6 +123,9 @@ public class ChoosePlantScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
+        fastPlant.getFlowerTexture().dispose();
+        mediumPlant.getFlowerTexture().dispose();
+        slowPlant.getFlowerTexture().dispose();
     }
 
     public void createButtons(){
@@ -132,7 +134,7 @@ public class ChoosePlantScreen implements Screen {
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
-        closeButton.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT-25);
+        closeButton.setPosition(game.SCREEN_WIDTH-25, game.SCREEN_HEIGHT-25);
         stage.addActor(closeButton);
 
         closeButton.addListener (new ChangeListener() {
@@ -155,8 +157,8 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                lily.plantChosen = true;
-                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(lily);
+                fastPlant.setPlantChosen(true);
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(fastPlant);
                 game.setScreen(gameScreen);
             }
         });
@@ -170,8 +172,8 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                carnivorousPlant.plantChosen = true;
-                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(carnivorousPlant);
+                mediumPlant.setPlantChosen(true);
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(mediumPlant);
                 game.setScreen(gameScreen);
             }
         });
@@ -185,8 +187,8 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                cactus.plantChosen = true;
-                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(cactus);
+                slowPlant.setPlantChosen(true);
+                game.getGameScreen().chosenPlantingSpace.setPlantedFlower(slowPlant);
                 game.setScreen(gameScreen);
             }
         });

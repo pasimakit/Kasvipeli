@@ -1,8 +1,8 @@
-package fi.tamk.project.desktop;
+package fi.tamk.sprintgarden.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import fi.tamk.project.MainGame;
+import fi.tamk.sprintgarden.MainGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

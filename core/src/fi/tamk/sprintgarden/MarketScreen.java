@@ -1,8 +1,7 @@
-package fi.tamk.project;
+package fi.tamk.sprintgarden;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,26 +17,23 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MarketScreen implements Screen {
 
-    SpriteBatch batch;
+    private SpriteBatch batch;
     final MainGame game;
 
     private Texture background;
     private Viewport bgViewPort;
 
-    Fonts fonts;
-    Stage stage;
+    private Fonts fonts;
+    private Stage stage;
 
-    final int SCREEN_WIDTH = 256;
-    final int SCREEN_HEIGHT = 144;
+    private GameScreen gameScreen;
 
-    GameScreen gameScreen;
+    private SlowPlant slowPlant;
+    private MediumPlant mediumPlant;
+    private FastPlant fastPlant;
 
-    SlowPlant slowPlant;
-    MediumPlant mediumPlant;
-    FastPlant fastPlant;
-
-    int[] plantingSpacePricing = {0, 0, 40, 80, 160, 320, 640, 1280, 0000};
-    int[] plantTierPricing = {0, 200, 1000, 0000};
+    private int[] plantingSpacePricing = {0, 0, 40, 80, 160, 320, 640, 1280};
+    private int[] plantTierPricing = {0, 200, 1000};
 
     public MarketScreen(MainGame game){
         this.game = game;
@@ -47,30 +43,34 @@ public class MarketScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
+        stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
 
         background = new Texture("marketplace.png");
-        bgViewPort = new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
+        bgViewPort = new StretchViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
         fonts.createSmallestFont();
         fonts.createSmallFont();
         fonts.createMediumFont();
         fonts.createLargeFont();
+        fonts.createTitleFont();
 
         createButtons();
 
         fastPlant = new FastPlant(2);
         fastPlant.setBounds(100, 82, 25,25);
+        fastPlant.displayTexture();
         stage.addActor(fastPlant);
 
         mediumPlant = new MediumPlant(2);
         mediumPlant.setBounds(100, 48, 25,25);
+        mediumPlant.displayTexture();
         stage.addActor(mediumPlant);
 
         slowPlant = new SlowPlant(2);
         slowPlant.setBounds(100, 15, 25,25);
+        slowPlant.displayTexture();
         stage.addActor(slowPlant);
     }
 
@@ -78,42 +78,47 @@ public class MarketScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         bgViewPort.apply();
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
         batch.draw(background,0,0);
         batch.end();
-        fonts.fontViewport.apply();
-        batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
+
+        fonts.getFontViewport().apply();
+        batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.largeFont.draw(batch, "COINS: "+game.coins, 500, 1050);
-        fonts.smallFont.draw(batch, "UPGRADE PLANT TIERS", 720, 850);
+        fonts.getLargeFont().draw(batch, "MARKET",150, 950);
+        fonts.getLargeFont().draw(batch, "COINS: "+ game.getCoins(), 150, 880);
+        fonts.getSmallFont().draw(batch, "UPGRADE PLANT TIERS", 720, 850);
+
         // tier numbers
-        fonts.smallestFont.draw(batch, ""+game.fastPlantTier , 920, 645);
-        fonts.smallestFont.draw(batch, ""+game.mediumPlantTier , 920, 405);
-        fonts.smallestFont.draw(batch, ""+game.slowPlantTier , 920, 165);
+        fonts.getSmallestFont().draw(batch, ""+ game.getFastPlantTier(), 920, 645);
+        fonts.getSmallestFont().draw(batch, ""+ game.getMediumPlantTier(), 920, 405);
+        fonts.getSmallestFont().draw(batch, ""+ game.getSlowPlantTier(), 920, 165);
+
         // upgrade prices
-        if(game.fastPlantTier==3){
-            fonts.smallFont.draw(batch, "MAX", 1000, 780);
+        if(game.getFastPlantTier() ==3){
+            fonts.getSmallFont().draw(batch, "MAX", 1000, 780);
         }else{
-            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.fastPlantTier], 1000, 780);
+            fonts.getSmallFont().draw(batch, "$ "+ plantTierPricing[game.getFastPlantTier()], 1000, 780);
         }
-        if(game.mediumPlantTier==3){
-            fonts.smallFont.draw(batch, "MAX", 1000, 535);
+        if(game.getMediumPlantTier() ==3){
+            fonts.getSmallFont().draw(batch, "MAX", 1000, 535);
         }else{
-            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.mediumPlantTier], 1000, 535);
+            fonts.getSmallFont().draw(batch, "$ "+ plantTierPricing[game.getMediumPlantTier()], 1000, 535);
         }
-        if(game.slowPlantTier==3){
-            fonts.smallFont.draw(batch, "MAX", 1000, 295);
+        if(game.getSlowPlantTier() ==3){
+            fonts.getSmallFont().draw(batch, "MAX", 1000, 295);
         }else{
-            fonts.smallFont.draw(batch, "$ "+ plantTierPricing[game.slowPlantTier], 1000, 295);
+            fonts.getSmallFont().draw(batch, "$ "+ plantTierPricing[game.getSlowPlantTier()], 1000, 295);
         }
         // additional plantingspaces
-        fonts.smallFont.draw(batch, "+1      (" + game.currentPlantingSpaceAmount + " / " + game.maxPlantingSpaceAmount + ")", 220, 780);
-        if(game.currentPlantingSpaceAmount==game.maxPlantingSpaceAmount){
-            fonts.smallFont.draw(batch, "SOLD!", 300, 300);
+        fonts.getSmallFont().draw(batch, "+1      (" + game.getCurrentPlantingSpaceAmount() + " / " + game.getMaxPlantingSpaceAmount() + ")", 220, 720);
+        if(game.getCurrentPlantingSpaceAmount() == game.getMaxPlantingSpaceAmount()){
+            fonts.getSmallFont().draw(batch, "SOLD!", 300, 300);
         }else{
-            fonts.smallFont.draw(batch, "$ "+plantingSpacePricing[game.currentPlantingSpaceAmount], 280, 300);
+            fonts.getSmallFont().draw(batch, "$ "+plantingSpacePricing[game.getCurrentPlantingSpaceAmount()], 280, 300);
         }
         batch.end();
         stage.getViewport().apply();
@@ -124,7 +129,7 @@ public class MarketScreen implements Screen {
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
-        fonts.fontViewport.update(width, height, true);
+        fonts.getFontViewport().update(width, height, true);
     }
 
     @Override
@@ -155,7 +160,7 @@ public class MarketScreen implements Screen {
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
-        closeButton.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT-25);
+        closeButton.setPosition(game.SCREEN_WIDTH-25, game.SCREEN_HEIGHT-25);
         stage.addActor(closeButton);
 
         closeButton.addListener (new ChangeListener() {
@@ -178,11 +183,11 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.fastPlantTier<=2 && game.coins>= plantTierPricing[game.fastPlantTier]){
-                    game.coins-=plantTierPricing[game.fastPlantTier];
-                    game.fastPlantTier++;
-                    if(fastPlant.currentTier<=3){
-                        fastPlant.currentTier++;
+                if(game.getFastPlantTier() <=2 && game.getCoins() >= plantTierPricing[game.getFastPlantTier()]){
+                    game.setCoins(game.getCoins() - plantTierPricing[game.getFastPlantTier()]);
+                    game.setFastPlantTier(game.getFastPlantTier() + 1);
+                    if(fastPlant.getCurrentTier() <=3){
+                        fastPlant.setCurrentTier(fastPlant.getCurrentTier() + 1);
                         fastPlant.setupTextures();
                         fastPlant.displayTexture();
                     }
@@ -199,11 +204,11 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.mediumPlantTier<=2 && game.coins>= plantTierPricing[game.mediumPlantTier]){
-                    game.coins-=plantTierPricing[game.mediumPlantTier];
-                    game.mediumPlantTier++;
-                    if(mediumPlant.currentTier<=3){
-                        mediumPlant.currentTier++;
+                if(game.getMediumPlantTier() <=2 && game.getCoins() >= plantTierPricing[game.getMediumPlantTier()]){
+                    game.setCoins(game.getCoins() - plantTierPricing[game.getMediumPlantTier()]);
+                    game.setMediumPlantTier(game.getMediumPlantTier() + 1);
+                    if(mediumPlant.getCurrentTier() <=3){
+                        mediumPlant.setCurrentTier(mediumPlant.getCurrentTier() + 1);
                         mediumPlant.setupTextures();
                         mediumPlant.displayTexture();
                     }
@@ -220,11 +225,11 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.slowPlantTier<=2 && game.coins>= plantTierPricing[game.slowPlantTier]){
-                    game.coins-=plantTierPricing[game.slowPlantTier];
-                    game.slowPlantTier++;
-                    if(slowPlant.currentTier<=3){
-                        slowPlant.currentTier++;
+                if(game.getSlowPlantTier() <=2 && game.getCoins() >= plantTierPricing[game.getSlowPlantTier()]){
+                    game.setCoins(game.getCoins() - plantTierPricing[game.getSlowPlantTier()]);
+                    game.setSlowPlantTier(game.getSlowPlantTier() + 1);
+                    if(slowPlant.getCurrentTier() <=3){
+                        slowPlant.setCurrentTier(slowPlant.getCurrentTier() + 1);
                         slowPlant.setupTextures();
                         slowPlant.displayTexture();
                     }
@@ -241,9 +246,9 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(game.currentPlantingSpaceAmount<game.maxPlantingSpaceAmount && game.coins >= plantingSpacePricing[game.currentPlantingSpaceAmount]){
-                    game.coins-= plantingSpacePricing[game.currentPlantingSpaceAmount];
-                    game.currentPlantingSpaceAmount++;
+                if(game.getCurrentPlantingSpaceAmount() < game.getMaxPlantingSpaceAmount() && game.getCoins() >= plantingSpacePricing[game.getCurrentPlantingSpaceAmount()]){
+                    game.setCoins(game.getCoins() - plantingSpacePricing[game.getCurrentPlantingSpaceAmount()]);
+                    game.setCurrentPlantingSpaceAmount(game.getCurrentPlantingSpaceAmount() + 1);
                 }
             }
         });

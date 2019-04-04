@@ -1,4 +1,4 @@
-package fi.tamk.project;
+package fi.tamk.sprintgarden;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,7 +9,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
-// This is AndroidLauncher class that you can find from every LibGDX project.
+// This is AndroidLauncher class that you can find from every LibGDX sprintgarden.
 // You have to do some changes to this one like we have done.
 
 public class AndroidLauncher extends AndroidApplication implements SensorEventListener, StepListener {
@@ -66,7 +66,7 @@ public class AndroidLauncher extends AndroidApplication implements SensorEventLi
 		numSteps++;
 
 		// This one calls your method in core, that updates steps so you can use those in LibGDX
-		game.receiveSteps(numSteps);
+		game.receiveSteps(1);
 	}
 
 }

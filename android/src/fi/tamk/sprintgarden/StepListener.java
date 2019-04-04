@@ -1,4 +1,4 @@
-package fi.tamk.project;
+package fi.tamk.sprintgarden;
 
 
 // Will listen to step alerts

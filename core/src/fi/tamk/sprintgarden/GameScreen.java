@@ -1,4 +1,4 @@
-package fi.tamk.project;
+package fi.tamk.sprintgarden;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
@@ -23,24 +22,21 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
-    SpriteBatch batch;
+    private SpriteBatch batch;
     final MainGame game;
 
     private Texture background;
     private Viewport bgViewPort;
 
-    final int SCREEN_WIDTH = 256;
-    final int SCREEN_HEIGHT = 144;
+    private ChoosePlantScreen choosePlantScreen;
+    private MarketScreen marketScreen;
+    private OptionsScreen optionsScreen;
 
-    ChoosePlantScreen choosePlantScreen;
-    MarketScreen marketScreen;
-
-    Skin skin;
-    Stage stage;
-    Fonts fonts;
+    private Stage stage;
+    private Fonts fonts;
 
 
-    ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
+    private ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
     public PlantingSpace chosenPlantingSpace;
 
     public GameScreen(MainGame game) {
@@ -50,12 +46,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT), batch);
+        stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
         choosePlantScreen = new ChoosePlantScreen(game);
         marketScreen = new MarketScreen(game);
+        optionsScreen = new OptionsScreen(game);
 
         background = new Texture("gamecanvas.png");
-        bgViewPort = new FillViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
+        bgViewPort = new FillViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
         fonts.createSmallestFont();
@@ -66,9 +63,9 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         //luodaan kasvatuspaikat
-        if (game.maxPlantingSpaceAmount >= plantingSpaceList.size()) {
-            for (int i = 0; i < game.maxPlantingSpaceAmount; i++) {
-                if (plantingSpaceList.size() != game.maxPlantingSpaceAmount) {
+        if (game.getMaxPlantingSpaceAmount() >= plantingSpaceList.size()) {
+            for (int i = 0; i < game.getMaxPlantingSpaceAmount(); i++) {
+                if (plantingSpaceList.size() != game.getMaxPlantingSpaceAmount()) {
                     plantingSpaceList.add(new PlantingSpace());
                 }
             }
@@ -76,8 +73,8 @@ public class GameScreen implements Screen {
         loadPrefs();
 
         for (int i = 0; plantingSpaceList.size() > i; i++) {
-            if (game.currentPlantingSpaceAmount > i) {
-                plantingSpaceList.get(i).isUsable = true;
+            if (game.getCurrentPlantingSpaceAmount() > i) {
+                plantingSpaceList.get(i).setUsable(true);
             }
         }
 
@@ -85,7 +82,7 @@ public class GameScreen implements Screen {
         int plantingSpaceY = 5;
 
         for (PlantingSpace plantingSpace : plantingSpaceList) {
-            if (plantingSpace.isUsable) {
+            if (plantingSpace.isUsable()) {
                 plantingSpace.setBounds(plantingSpaceX, plantingSpaceY, 58, 58);
                 stage.addActor(plantingSpace);
             }
@@ -96,11 +93,11 @@ public class GameScreen implements Screen {
             } else {
                 plantingSpaceX += 48;
             }
-            if (plantingSpace.plantedFlower != null) {
-                plantingSpace.plantedFlower.setBounds(plantingSpace.getX(), plantingSpace.getY(), 58, 58);
-                plantingSpace.plantedFlower.setupGrowthBar();
-                stage.addActor(plantingSpace.plantedFlower);
-                stage.addActor(plantingSpace.plantedFlower.growthBar);
+            if (plantingSpace.getPlantedFlower() != null) {
+                plantingSpace.getPlantedFlower().setBounds(plantingSpace.getX(), plantingSpace.getY(), 58, 58);
+                plantingSpace.getPlantedFlower().setupGrowthBar();
+                stage.addActor(plantingSpace.getPlantedFlower());
+                stage.addActor(plantingSpace.getPlantedFlower().getGrowthBar());
             }
         }
         createButtons();
@@ -111,48 +108,47 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         for (PlantingSpace plantingSpace : plantingSpaceList) {
             //onko kasvatuspaikkaa klikattu
-            if (plantingSpace.choosePlantWindow) {
-                plantingSpace.choosePlantWindow = false;
+            if (plantingSpace.isChoosePlantWindow()) {
+                plantingSpace.setChoosePlantWindow(false);
                 chosenPlantingSpace = plantingSpace;
-                if (chosenPlantingSpace.plantedFlower == null) {
+                if (chosenPlantingSpace.getPlantedFlower() == null) {
                     game.setScreen(choosePlantScreen);
                 }
             }
 
 
             //kukan sijoitus ja kasvaminen
-            if (plantingSpace.plantedFlower != null) {
-                if (!plantingSpace.plantedFlower.plantHarvested) {
-                    plantingSpace.plantedFlower.updateGrowthBar(plantingSpace);
-                    plantingSpace.plantedFlower.updateTexture();
+            if (plantingSpace.getPlantedFlower() != null) {
+                if (!plantingSpace.getPlantedFlower().isPlantHarvested()) {
+                    plantingSpace.getPlantedFlower().updateGrowthBar(plantingSpace);
+                    plantingSpace.getPlantedFlower().updateTexture();
                 }
-                if (game.stepCount > game.oldStepCount) {
-                    plantingSpace.plantedFlower.currentGrowthTime += game.stepCount - game.oldStepCount;
+                if (game.getStepCount() > game.getOldStepCount()) {
+                    plantingSpace.getPlantedFlower().setCurrentGrowthTime(plantingSpace.getPlantedFlower().getCurrentGrowthTime() + game.getStepCount() - game.getOldStepCount());
                 }
-                if (plantingSpace.plantedFlower.plantFinished && plantingSpace.plantedFlower.plantHarvested) {
-                    game.coins += plantingSpace.plantedFlower.coinValue;
-                    plantingSpace.plantedFlower.growthBar.remove();
-                    plantingSpace.plantedFlower.remove();
-                    plantingSpace.plantedFlower.growthBar = null;
-                    plantingSpace.plantedFlower = null;
+                if (plantingSpace.getPlantedFlower().isPlantFinished() && plantingSpace.getPlantedFlower().isPlantHarvested()) {
+                    game.setCoins(game.getCoins() + plantingSpace.getPlantedFlower().getCoinValue());
+                    plantingSpace.getPlantedFlower().getGrowthBar().remove();
+                    plantingSpace.getPlantedFlower().remove();
+                    plantingSpace.getPlantedFlower().setGrowthBar(null);
+                    plantingSpace.setPlantedFlower(null);
                 }
             }
         }
-        game.oldStepCount = game.stepCount;
+        game.setOldStepCount(game.getStepCount());
         stage.act(Gdx.graphics.getDeltaTime());
         bgViewPort.apply();
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
         batch.draw(background, 0, 0);
         batch.end();
-        fonts.fontViewport.apply();
-        batch.setProjectionMatrix(fonts.fontViewport.getCamera().combined);
+        fonts.getFontViewport().apply();
+        batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.largeFont.draw(batch, "STEPS: " + game.stepCount, 50, 1060);
-        fonts.largeFont.draw(batch, "COINS: " + game.coins, 500, 1060);
+        fonts.getLargeFont().draw(batch, "STEPS: " + game.getStepCount(), 50, 1060);
+        fonts.getLargeFont().draw(batch, "COINS: " + game.getCoins(), 500, 1060);
         batch.end();
         stage.getViewport().apply();
         stage.draw();
@@ -162,7 +158,7 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
-        fonts.fontViewport.update(width, height, true);
+        fonts.getFontViewport().update(width, height, true);
     }
 
     @Override
@@ -187,6 +183,7 @@ public class GameScreen implements Screen {
         stage.dispose();
         batch.dispose();
         background.dispose();
+        fonts.getSmallestFont().dispose();
     }
 
     public void createButtons() {
@@ -195,7 +192,7 @@ public class GameScreen implements Screen {
 
         ImageButton marketButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(marketButtonIdle)), new TextureRegionDrawable(new TextureRegion(marketButtonPressed)));
 
-        marketButton.setPosition(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 25);
+        marketButton.setPosition(game.SCREEN_WIDTH - 25, game.SCREEN_HEIGHT - 25);
         stage.addActor(marketButton);
 
         marketButton.addListener(new ChangeListener() {
@@ -211,14 +208,14 @@ public class GameScreen implements Screen {
 
         ImageButton settingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)), new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
 
-        settingButton.setPosition(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 50);
+        settingButton.setPosition(game.SCREEN_WIDTH - 25, game.SCREEN_HEIGHT - 50);
         stage.addActor(settingButton);
 
         settingButton.addListener(new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //game.setScreen(gameScreen);
+                game.setScreen(optionsScreen);
             }
         });
     }
@@ -236,11 +233,11 @@ public class GameScreen implements Screen {
         FileHandle file = Gdx.files.local("gameState.json");
         for (int i = 0; plantingSpaceList.size() > i; i++) {
             plantingSpaceDataList.add(new PlantingSpaceData());
-            plantingSpaceDataList.get(i).isUsable = plantingSpaceList.get(i).isUsable;
-            if(plantingSpaceList.get(i).plantedFlower != null) {
-                plantingSpaceDataList.get(i).growthTime = plantingSpaceList.get(i).plantedFlower.growthTime;
-                plantingSpaceDataList.get(i).currentGrowthTime = plantingSpaceList.get(i).plantedFlower.currentGrowthTime;
-                plantingSpaceDataList.get(i).currentTier = plantingSpaceList.get(i).plantedFlower.currentTier;
+            plantingSpaceDataList.get(i).isUsable = plantingSpaceList.get(i).isUsable();
+            if(plantingSpaceList.get(i).getPlantedFlower() != null) {
+                plantingSpaceDataList.get(i).growthTime = plantingSpaceList.get(i).getPlantedFlower().getGrowthTime();
+                plantingSpaceDataList.get(i).currentGrowthTime = plantingSpaceList.get(i).getPlantedFlower().getCurrentGrowthTime();
+                plantingSpaceDataList.get(i).currentTier = plantingSpaceList.get(i).getPlantedFlower().getCurrentTier();
             }
         }
         json.setOutputType(JsonWriter.OutputType.json);
@@ -255,43 +252,43 @@ public class GameScreen implements Screen {
             ArrayList<PlantingSpaceData> datalist = json.fromJson(ArrayList.class, PlantingSpaceData.class, file);
 
             for(int i = 0; datalist.size() > i; i++){
-                plantingSpaceList.get(i).isUsable = datalist.get(i).isUsable;
+                plantingSpaceList.get(i).setUsable(datalist.get(i).isUsable);
 
-                if(plantingSpaceList.get(i).isUsable){
+                if(plantingSpaceList.get(i).isUsable()){
                     if(datalist.get(i).growthTime == 1000){
                         if(datalist.get(i).currentTier == 1){
                             plantingSpaceList.get(i).setPlantedFlower(new FastPlant(1));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 2){
                             plantingSpaceList.get(i).setPlantedFlower(new FastPlant(2));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 3){
                             plantingSpaceList.get(i).setPlantedFlower(new FastPlant(3));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }
                     }
                     if(datalist.get(i).growthTime == 3000){
                         if(datalist.get(i).currentTier == 1){
                             plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(1));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 2){
                             plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(2));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 3){
                             plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(3));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }
                     }
                     if(datalist.get(i).growthTime == 5000){
                         if(datalist.get(i).currentTier == 1){
                             plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(1));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 2){
                             plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(2));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 3){
                             plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(3));
-                            plantingSpaceList.get(i).plantedFlower.currentGrowthTime = datalist.get(i).currentGrowthTime;
+                            plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }
                     }
                 }

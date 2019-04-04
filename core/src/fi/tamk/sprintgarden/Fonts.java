@@ -1,4 +1,4 @@
-package fi.tamk.project;
+package fi.tamk.sprintgarden;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,15 +8,16 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Fonts {
 
-    FitViewport fontViewport;
+    private FitViewport fontViewport;
 
     final int SCREEN_WIDTH = 1920;
     final int SCREEN_HEIGHT = 1080;
 
-    BitmapFont smallestFont;
-    BitmapFont smallFont;
-    BitmapFont mediumFont;
-    BitmapFont largeFont;
+    private BitmapFont smallestFont;
+    private BitmapFont smallFont;
+    private BitmapFont mediumFont;
+    private BitmapFont largeFont;
+    private BitmapFont titleFont;
 
 
     public Fonts(){
@@ -60,5 +61,37 @@ public class Fonts {
         parameter.shadowOffsetY = 5;
         largeFont = generator.generateFont(parameter);
         generator.dispose();
+    }
+    public void createTitleFont(){
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.color = Color.valueOf("#733e39");
+        parameter.size = 96;
+        titleFont = generator.generateFont(parameter);
+        generator.dispose();
+    }
+
+    public FitViewport getFontViewport() {
+        return fontViewport;
+    }
+
+    public BitmapFont getSmallestFont() {
+        return smallestFont;
+    }
+
+    public BitmapFont getSmallFont() {
+        return smallFont;
+    }
+
+    public BitmapFont getMediumFont() {
+        return mediumFont;
+    }
+
+    public BitmapFont getLargeFont() {
+        return largeFont;
+    }
+
+    public BitmapFont getTitleFont() {
+        return titleFont;
     }
 }
