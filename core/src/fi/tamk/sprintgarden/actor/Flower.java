@@ -1,4 +1,4 @@
-package fi.tamk.sprintgarden;
+package fi.tamk.sprintgarden.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

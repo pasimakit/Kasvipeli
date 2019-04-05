@@ -1,4 +1,4 @@
-package fi.tamk.sprintgarden;
+package fi.tamk.sprintgarden.util;
 
 public interface GetSteps {
 

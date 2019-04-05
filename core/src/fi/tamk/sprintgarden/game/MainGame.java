@@ -1,4 +1,4 @@
-package fi.tamk.sprintgarden;
+package fi.tamk.sprintgarden.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -6,6 +6,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+
+import fi.tamk.sprintgarden.screen.GameScreen;
+import fi.tamk.sprintgarden.util.GetSteps;
 
 
 public class MainGame extends Game{

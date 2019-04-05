@@ -21,7 +21,9 @@ import com.badlogic.gdx.backends.android.AndroidFiles;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
-public class MyService extends Service implements SensorEventListener, StepListener, GetSteps{
+import fi.tamk.sprintgarden.util.GetSteps;
+
+public class MyService extends Service implements SensorEventListener, StepListener, GetSteps {
 
     private StepDetector simpleStepDetector;
     private SensorManager sensorManager;

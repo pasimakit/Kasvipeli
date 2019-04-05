@@ -5,28 +5,17 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
-// This is AndroidLauncher class that you can find from every LibGDX sprintgarden.
-// You have to do some changes to this one like we have done.
+import fi.tamk.sprintgarden.game.MainGame;
 
 public class AndroidLauncher extends AndroidApplication {
 
-
-	// Your main game class
-	// You have to have your game class so you can call its methods.
-	// Make sure you have named this correctly, so if you main glass is named example
-	// MySuperAwesomeGame, then this should look like private MySuperAwesomeGame game;
 	private MainGame game;
 	MyService mService;
 	boolean mBound = false;
@@ -64,9 +53,7 @@ public class AndroidLauncher extends AndroidApplication {
     private ServiceConnection connection = new ServiceConnection() {
 
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+        public void onServiceConnected(ComponentName className, IBinder service) {
             MyService.LocalBinder binder = (MyService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
