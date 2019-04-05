@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
 
-public class MainGame extends Game {
+public class MainGame extends Game{
 
 	private SpriteBatch batch;
 
@@ -19,7 +19,7 @@ public class MainGame extends Game {
 
     private int stepCount; // renderissä
     private int oldStepCount;
-    private int coins;
+    private int coins = 10000;
 
     private int fastPlantTier = 1;
     private int mediumPlantTier = 1;
@@ -30,7 +30,7 @@ public class MainGame extends Game {
 
     public void toJson(){
         Json json = new Json();
-        FileHandle file = Gdx.files.local("test.json");
+        FileHandle file = Gdx.files.local("save.json");
         json.setOutputType(JsonWriter.OutputType.json);
         int[] saveData = {getStepCount(), getOldStepCount(), getCoins(), getFastPlantTier(), getMediumPlantTier(), getSlowPlantTier(), getCurrentPlantingSpaceAmount(), getMaxPlantingSpaceAmount()};
         file.writeString(json.prettyPrint(saveData),false);
@@ -38,7 +38,7 @@ public class MainGame extends Game {
 
     public void fromJson(){
         Json json = new Json();
-        FileHandle file = Gdx.files.local("test.json");
+        FileHandle file = Gdx.files.local("save.json");
 
         if(file.exists()){
             int[] saveData = new int[8];
@@ -85,6 +85,9 @@ public class MainGame extends Game {
 	}
 
     public int getStepCount() {
+        if(stepGetter!= null){
+            stepCount += stepGetter.getNumSteps();
+        }
         return stepCount;
     }
 
@@ -142,5 +145,11 @@ public class MainGame extends Game {
 
     public int getMaxPlantingSpaceAmount() {
         return maxPlantingSpaceAmount;
+    }
+
+    private GetSteps stepGetter;
+
+    public void setGetSteps(GetSteps sg){
+        stepGetter = sg;
     }
 }

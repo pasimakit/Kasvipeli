@@ -60,6 +60,7 @@ project(":android") {
 
     dependencies {
         compile project(":core")
+        implementation "com.android.support:support-core-utils:27.1.1"
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"

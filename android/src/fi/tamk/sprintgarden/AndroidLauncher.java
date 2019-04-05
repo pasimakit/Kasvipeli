@@ -1,10 +1,18 @@
 package fi.tamk.sprintgarden;
 
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -12,61 +20,62 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 // This is AndroidLauncher class that you can find from every LibGDX sprintgarden.
 // You have to do some changes to this one like we have done.
 
-public class AndroidLauncher extends AndroidApplication implements SensorEventListener, StepListener {
-	private StepDetector simpleStepDetector;
-	private SensorManager sensorManager;
-	private Sensor accel;
-	private int numSteps;
+public class AndroidLauncher extends AndroidApplication {
+
 
 	// Your main game class
 	// You have to have your game class so you can call its methods.
 	// Make sure you have named this correctly, so if you main glass is named example
 	// MySuperAwesomeGame, then this should look like private MySuperAwesomeGame game;
 	private MainGame game;
+	MyService mService;
+	boolean mBound = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// Once again, make sure you have here your own class. MyGdxGame is just the class I use in this example;
 		game = new MainGame();
-
-		// Get an instance of the SensorManager
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		simpleStepDetector = new StepDetector();
-		simpleStepDetector.registerListener(this);
-
-		numSteps = 0;
-		sensorManager.registerListener(AndroidLauncher.this, accel, SensorManager.SENSOR_DELAY_FASTEST);
-
-		// If you want to stop Listener, you can use:
-		// sensorManager.unregisterListener(AndroidLauncher.this);
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(game, config);
+
+        Intent intent = new Intent(this, MyService.class);
+
+        if(Build.VERSION.SDK_INT>=26) {
+            startForegroundService(intent);
+        }else{
+            startService(intent);
+        }
 	}
 
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-	}
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, MyService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(connection);
+        mBound = false;
+    }
+    private ServiceConnection connection = new ServiceConnection() {
 
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			simpleStepDetector.updateAccel(
-					event.timestamp, event.values[0], event.values[1], event.values[2]);
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MyService.LocalBinder binder = (MyService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            game.setGetSteps(mService);
+        }
 
-		}
-
-	}
-
-	@Override
-	public void step(long timeNs) {
-		numSteps++;
-
-		// This one calls your method in core, that updates steps so you can use those in LibGDX
-		game.receiveSteps(1);
-	}
-
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
