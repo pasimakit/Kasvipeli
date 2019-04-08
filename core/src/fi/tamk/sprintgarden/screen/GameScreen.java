@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
         marketScreen = new MarketScreen(game);
         optionsScreen = new OptionsScreen(game);
 
-        background = new Texture("gamecanvas.png");
+        background = game.getAssetManager().get("gamecanvas.png");
         bgViewPort = new FillViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
         if (game.getMaxPlantingSpaceAmount() >= plantingSpaceList.size()) {
             for (int i = 0; i < game.getMaxPlantingSpaceAmount(); i++) {
                 if (plantingSpaceList.size() != game.getMaxPlantingSpaceAmount()) {
-                    plantingSpaceList.add(new PlantingSpace());
+                    plantingSpaceList.add(new PlantingSpace(game));
                 }
             }
         }
@@ -103,6 +103,7 @@ public class GameScreen implements Screen {
             if (plantingSpace.getPlantedFlower() != null) {
                 plantingSpace.getPlantedFlower().setBounds(plantingSpace.getX(), plantingSpace.getY(), 58, 58);
                 plantingSpace.getPlantedFlower().setupGrowthBar();
+                plantingSpace.getPlantedFlower().setMainGame(game);
                 stage.addActor(plantingSpace.getPlantedFlower());
                 stage.addActor(plantingSpace.getPlantedFlower().getGrowthBar());
             }
@@ -124,7 +125,6 @@ public class GameScreen implements Screen {
                     game.setScreen(choosePlantScreen);
                 }
             }
-
 
             //kukan sijoitus ja kasvaminen
             if (plantingSpace.getPlantedFlower() != null) {
@@ -189,13 +189,11 @@ public class GameScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
-        background.dispose();
-        fonts.getSmallestFont().dispose();
     }
 
     public void createButtons() {
-        Texture marketButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_market.png"));
-        Texture marketButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_market_PRESSED.png"));
+        Texture marketButtonIdle = game.getAssetManager().get("BUTTONS/button_market.png");
+        Texture marketButtonPressed = game.getAssetManager().get("BUTTONS/button_market_PRESSED.png");
 
         ImageButton marketButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(marketButtonIdle)), new TextureRegionDrawable(new TextureRegion(marketButtonPressed)));
 
@@ -210,8 +208,8 @@ public class GameScreen implements Screen {
             }
         });
 
-        Texture settingsButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_settings.png"));
-        Texture settingsButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_settings_PRESSED.png"));
+        Texture settingsButtonIdle = game.getAssetManager().get("BUTTONS/button_settings.png");
+        Texture settingsButtonPressed = game.getAssetManager().get("BUTTONS/button_settings_PRESSED.png");
 
         ImageButton settingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)), new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
 
@@ -222,6 +220,7 @@ public class GameScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.setLastScreen(game.getGameScreen());
                 game.setScreen(optionsScreen);
             }
         });
@@ -262,39 +261,39 @@ public class GameScreen implements Screen {
                 plantingSpaceList.get(i).setUsable(datalist.get(i).isUsable);
 
                 if(plantingSpaceList.get(i).isUsable()){
-                    if(datalist.get(i).growthTime == 1000){
+                    if(datalist.get(i).growthTime == 500){
                         if(datalist.get(i).currentTier == 1){
-                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(1));
+                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(1, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 2){
-                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(2));
+                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(2, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 3){
-                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(3));
+                            plantingSpaceList.get(i).setPlantedFlower(new FastPlant(3, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }
                     }
-                    if(datalist.get(i).growthTime == 3000){
+                    if(datalist.get(i).growthTime == 1500){
                         if(datalist.get(i).currentTier == 1){
-                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(1));
+                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(1, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 2){
-                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(2));
+                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(2, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 3){
-                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(3));
+                            plantingSpaceList.get(i).setPlantedFlower(new MediumPlant(3, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }
                     }
-                    if(datalist.get(i).growthTime == 5000){
+                    if(datalist.get(i).growthTime == 2500){
                         if(datalist.get(i).currentTier == 1){
-                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(1));
+                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(1, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 2){
-                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(2));
+                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(2, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }else if(datalist.get(i).currentTier == 3){
-                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(3));
+                            plantingSpaceList.get(i).setPlantedFlower(new SlowPlant(3, game));
                             plantingSpaceList.get(i).getPlantedFlower().setCurrentGrowthTime(datalist.get(i).currentGrowthTime);
                         }
                     }

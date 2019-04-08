@@ -42,7 +42,7 @@ public class OptionsScreen implements Screen {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("settings.png");
+        background = game.getAssetManager().get("settings.png");
         bgViewPort = new StretchViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
@@ -102,12 +102,13 @@ public class OptionsScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        batch.dispose();
+        stage.dispose();
     }
 
     public void createButtons() {
-        Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
-        Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
+        Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_close.png");
+        Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_close_PRESSED.png");
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)), new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
@@ -118,12 +119,12 @@ public class OptionsScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(gameScreen);
+                game.setScreen(game.getLastScreen());
             }
         });
 
-        Texture engButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_ENG.png"));
-        Texture engButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_ENG_PRESSED.png"));
+        Texture engButtonIdle = game.getAssetManager().get("BUTTONS/button_ENG.png");
+        Texture engButtonPressed = game.getAssetManager().get("BUTTONS/button_ENG_PRESSED.png");
 
         ImageButton engButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(engButtonIdle)), new TextureRegionDrawable(new TextureRegion(engButtonPressed)));
 
@@ -138,8 +139,8 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        Texture finButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_FIN.png"));
-        Texture finButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_FIN_PRESSED.png"));
+        Texture finButtonIdle = game.getAssetManager().get("BUTTONS/button_FIN.png");
+        Texture finButtonPressed = game.getAssetManager().get("BUTTONS/button_FIN_PRESSED.png");
 
         ImageButton finButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(finButtonIdle)), new TextureRegionDrawable(new TextureRegion(finButtonPressed)));
 
@@ -154,8 +155,8 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        Texture minusButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_minus.png"));
-        Texture minusButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_minus_PRESSED.png"));
+        Texture minusButtonIdle = game.getAssetManager().get("BUTTONS/button_minus.png");
+        Texture minusButtonPressed = game.getAssetManager().get("BUTTONS/button_minus_PRESSED.png");
 
         ImageButton minusEffButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(minusButtonIdle)), new TextureRegionDrawable(new TextureRegion(minusButtonPressed)));
 
@@ -183,8 +184,8 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        Texture plusButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_plus.png"));
-        Texture plusButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_plus_PRESSED.png"));
+        Texture plusButtonIdle = game.getAssetManager().get("BUTTONS/button_plus.png");
+        Texture plusButtonPressed = game.getAssetManager().get("BUTTONS/button_plus_PRESSED.png");
 
         ImageButton plusEffButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(plusButtonIdle)), new TextureRegionDrawable(new TextureRegion(plusButtonPressed)));
 

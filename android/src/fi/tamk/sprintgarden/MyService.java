@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -68,10 +69,10 @@ public class MyService extends Service implements SensorEventListener, StepListe
             channel.setDescription("Service Name");
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
-
             Notification notification = new NotificationCompat.Builder(this,NOTIFICATION_Service_CHANNEL_ID)
                     .setContentTitle("Service")
                     .setContentText("Running...")
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .build();
             startForeground(121, notification);

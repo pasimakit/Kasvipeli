@@ -50,7 +50,7 @@ public class ChoosePlantScreen implements Screen {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("background_plantmenu.png");
+        background = game.getAssetManager().get("background_plantmenu.png");
         bgViewPort = new StretchViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
@@ -61,17 +61,20 @@ public class ChoosePlantScreen implements Screen {
         createButtons();
 
         //luodaan valittavat kukat
-        fastPlant = new FastPlant(game.getFastPlantTier());
+        fastPlant = new FastPlant(game.getFastPlantTier(), game);
+        fastPlant.setMainGame(game);
         fastPlant.setBounds(20, game.SCREEN_HEIGHT-75, 58,58);
         fastPlant.displayTexture();
         stage.addActor(fastPlant);
 
-        mediumPlant = new MediumPlant(game.getMediumPlantTier());
+        mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
+        mediumPlant.setMainGame(game);
         mediumPlant.setBounds(92, game.SCREEN_HEIGHT-50, 58,58);
         mediumPlant.displayTexture();
         stage.addActor(mediumPlant);
 
-        slowPlant = new SlowPlant(game.getSlowPlantTier());
+        slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
+        slowPlant.setMainGame(game);
         slowPlant.setBounds(164, game.SCREEN_HEIGHT-55, 58,58);
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
@@ -90,10 +93,13 @@ public class ChoosePlantScreen implements Screen {
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
+        fonts.getMediumFont().draw(batch, ""+ fastPlant.getPlantName(), 180, 960);
         fonts.getMediumFont().draw(batch, ""+ fastPlant.getGrowthTime(), 300, 600);
         fonts.getMediumFont().draw(batch, ""+ fastPlant.getCoinValue(), 300, 400);
+        fonts.getMediumFont().draw(batch, ""+ mediumPlant.getPlantName(), 680, 960);
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getGrowthTime(), 850, 600);
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getCoinValue(), 850, 400);
+        fonts.getMediumFont().draw(batch, ""+ slowPlant.getPlantName(), 1240, 960);
         fonts.getMediumFont().draw(batch, ""+ slowPlant.getGrowthTime(), 1400, 600);
         fonts.getMediumFont().draw(batch, ""+ slowPlant.getCoinValue(), 1400, 400);
         batch.end();
@@ -129,14 +135,11 @@ public class ChoosePlantScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
-        fastPlant.getFlowerTexture().dispose();
-        mediumPlant.getFlowerTexture().dispose();
-        slowPlant.getFlowerTexture().dispose();
     }
 
     public void createButtons(){
-        Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
-        Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
+        Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_close.png");
+        Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_close_PRESSED.png");
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
@@ -151,8 +154,8 @@ public class ChoosePlantScreen implements Screen {
             }
         });
 
-        Texture choseButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_selectplant_ENG.png"));
-        Texture choseButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_selectplant_PRESSED_ENG.png"));
+        Texture choseButtonIdle = game.getAssetManager().get("BUTTONS/button_selectplant_ENG.png");
+        Texture choseButtonPressed = game.getAssetManager().get("BUTTONS/button_selectplant_PRESSED_ENG.png");
 
         ImageButton choseButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(choseButtonIdle)),new TextureRegionDrawable(new TextureRegion(choseButtonPressed)));
 

@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
+import fi.tamk.sprintgarden.game.MainGame;
+
 public class PlantingSpace extends Actor {
 
     private Texture plantingSpaceTexture;
@@ -15,13 +17,16 @@ public class PlantingSpace extends Actor {
 
     private Flower plantedFlower;
 
-    public PlantingSpace() {
+    private MainGame game;
+
+    public PlantingSpace(MainGame game) {
+        this.game = game;
         setPlantingSpaceTexture();
         addListener(new PlayerListener());
     }
 
     public void setPlantingSpaceTexture() {
-        setPlantingSpaceTexture(new Texture("flowerbed_shadow_bot-right.png"));
+       plantingSpaceTexture = game.getAssetManager().get("flowerbed_shadow_bot-right.png");
     }
 
     public void act(float delta){
@@ -49,10 +54,6 @@ public class PlantingSpace extends Actor {
 
     public Texture getPlantingSpaceTexture() {
         return plantingSpaceTexture;
-    }
-
-    public void setPlantingSpaceTexture(Texture plantingSpaceTexture) {
-        this.plantingSpaceTexture = plantingSpaceTexture;
     }
 
     public boolean isChoosePlantWindow() {

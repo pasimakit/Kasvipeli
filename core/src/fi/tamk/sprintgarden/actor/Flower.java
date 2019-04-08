@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import fi.tamk.sprintgarden.game.MainGame;
+
 public class Flower extends Actor {
 
      private Texture flowerTexture;
@@ -16,6 +18,8 @@ public class Flower extends Actor {
      private boolean plantChosen;
      private boolean plantFinished;
      private boolean plantHarvested;
+
+     private MainGame game;
 
      private String plantName;
 
@@ -26,13 +30,21 @@ public class Flower extends Actor {
 
     private ProgressBar growthBar;
 
-     public Flower(){
+     public Flower(MainGame game){
          setupGrowthBar();
+         this.game = game;
      }
 
-   @Override
-    public void act(float delta){
+     public void setMainGame(MainGame game){
+         this.game = game;
+     }
 
+    public MainGame getGame() {
+        return game;
+    }
+
+    @Override
+    public void act(float delta){
         super.act(delta);
     }
     @Override

@@ -1,38 +1,40 @@
 package fi.tamk.sprintgarden.actor;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
+import fi.tamk.sprintgarden.game.MainGame;
+
 public class MediumPlant extends Flower {
 
-    public MediumPlant(int tier){
+    public MediumPlant(int tier, MainGame game){
+        super(game);
         setCurrentTier(tier);
         setupTextures();
         addListener(new MediumPlant.PlayerListener());
-        setGrowthTime(3000);
+        setGrowthTime(1500);
     }
 
     public void setupTextures(){
         if(getCurrentTier() == 1){
             setPlantName("mediumplant1");
-            getTextureList()[0] = new Texture("t1seed_medium.png");
-            getTextureList()[1] = new Texture("t1stalk_medium.png");
-            getTextureList()[2] = new Texture("t1finished_medium.png");
+            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
+            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier1.png");
+            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier1.png");
 
             setCoinValue(28);
         }else if(getCurrentTier() == 2){
             setPlantName("mediumplant2");
-            getTextureList()[0] = new Texture("t2seed.png");
-            getTextureList()[1] = new Texture("t2stalk.png");
-            getTextureList()[2] = new Texture("t2finished.png");
+            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
+            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier2.png");
+            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier2.png");
 
             setCoinValue(56);
         }else if(getCurrentTier() == 3){
             setPlantName("mediumplant3");
-            getTextureList()[0] = new Texture("t2seed.png");
-            getTextureList()[1] = new Texture("t2stalk.png");
-            getTextureList()[2] = new Texture("t2finished.png");
+            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
+            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier3.png");
+            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier3.png");
 
             setCoinValue(112);
         }

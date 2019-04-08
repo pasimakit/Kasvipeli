@@ -64,17 +64,17 @@ public class MarketScreen implements Screen {
 
         createButtons();
 
-        fastPlant = new FastPlant(2);
+        fastPlant = new FastPlant(game.getFastPlantTier(), game);
         fastPlant.setBounds(100, 82, 25,25);
         fastPlant.displayTexture();
         stage.addActor(fastPlant);
 
-        mediumPlant = new MediumPlant(2);
+        mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
         mediumPlant.setBounds(100, 48, 25,25);
         mediumPlant.displayTexture();
         stage.addActor(mediumPlant);
 
-        slowPlant = new SlowPlant(2);
+        slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
         slowPlant.setBounds(100, 15, 25,25);
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
@@ -157,7 +157,8 @@ public class MarketScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        batch.dispose();
     }
 
     public void createButtons(){
