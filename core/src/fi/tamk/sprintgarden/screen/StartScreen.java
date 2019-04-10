@@ -99,8 +99,21 @@ public class StartScreen implements Screen {
     }
 
     public void createButtons() {
-        Texture playButtonIdle = game.getAssetManager().get("BUTTONS/button_startgame_ENG.png");
-        Texture playButtonPressed = game.getAssetManager().get("BUTTONS/button_startgame_ENG_PRESSED.png");
+        Texture playButtonIdle, playButtonPressed,settingsButtonIdle, settingsButtonPressed;
+
+        if(game.getLocale().getCountry() == "FI"){
+            playButtonIdle = game.getAssetManager().get("BUTTONS/button_startgame_FIN.png");
+            playButtonPressed = game.getAssetManager().get("BUTTONS/button_startgame_FIN_PRESSED.png");
+
+            settingsButtonIdle = game.getAssetManager().get("BUTTONS/button_startsettings_FIN.png");
+            settingsButtonPressed = game.getAssetManager().get("BUTTONS/button_startsettings_FIN_PRESSED.png");
+        }else{
+            playButtonIdle = game.getAssetManager().get("BUTTONS/button_startgame_ENG.png");
+            playButtonPressed = game.getAssetManager().get("BUTTONS/button_startgame_ENG_PRESSED.png");
+
+            settingsButtonIdle = game.getAssetManager().get("BUTTONS/button_startsettings_ENG.png");
+            settingsButtonPressed = game.getAssetManager().get("BUTTONS/button_startsettings_ENG_PRESSED.png");
+        }
 
         ImageButton playButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonIdle)), new TextureRegionDrawable(new TextureRegion(playButtonPressed)));
 
@@ -115,9 +128,6 @@ public class StartScreen implements Screen {
             }
         });
 
-        Texture settingsButtonIdle = game.getAssetManager().get("BUTTONS/button_startsettings_ENG.png");
-        Texture settingsButtonPressed =game.getAssetManager().get("BUTTONS/button_startsettings_ENG_PRESSED.png");
-
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)), new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
 
         settingsButton.setPosition(143, 12);
@@ -127,7 +137,6 @@ public class StartScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //lokalisaatio enkuksi
                 game.setScreen(new OptionsScreen(game));
             }
         });

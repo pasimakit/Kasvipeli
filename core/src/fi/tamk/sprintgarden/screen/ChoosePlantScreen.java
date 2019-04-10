@@ -63,19 +63,19 @@ public class ChoosePlantScreen implements Screen {
         //luodaan valittavat kukat
         fastPlant = new FastPlant(game.getFastPlantTier(), game);
         fastPlant.setMainGame(game);
-        fastPlant.setBounds(20, game.SCREEN_HEIGHT-75, 58,58);
+        fastPlant.setBounds(20, game.SCREEN_HEIGHT-70, 58,58);
         fastPlant.displayTexture();
         stage.addActor(fastPlant);
 
         mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
         mediumPlant.setMainGame(game);
-        mediumPlant.setBounds(92, game.SCREEN_HEIGHT-50, 58,58);
+        mediumPlant.setBounds(98, game.SCREEN_HEIGHT-68, 45,45);
         mediumPlant.displayTexture();
         stage.addActor(mediumPlant);
 
         slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
         slowPlant.setMainGame(game);
-        slowPlant.setBounds(164, game.SCREEN_HEIGHT-55, 58,58);
+        slowPlant.setBounds(164, game.SCREEN_HEIGHT-75, 58,58);
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
     }
@@ -140,6 +140,15 @@ public class ChoosePlantScreen implements Screen {
     public void createButtons(){
         Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_close.png");
         Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_close_PRESSED.png");
+        Texture choseButtonIdle, choseButtonPressed;
+
+        if(game.getLocale().getCountry() == "FI"){
+            choseButtonIdle = game.getAssetManager().get("BUTTONS/button_selectplant_FIN.png");
+            choseButtonPressed = game.getAssetManager().get("BUTTONS/button_selectplant_PRESSED_FIN.png");
+        } else{
+            choseButtonIdle = game.getAssetManager().get("BUTTONS/button_selectplant_ENG.png");
+            choseButtonPressed = game.getAssetManager().get("BUTTONS/button_selectplant_PRESSED_ENG.png");
+        }
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
@@ -154,8 +163,7 @@ public class ChoosePlantScreen implements Screen {
             }
         });
 
-        Texture choseButtonIdle = game.getAssetManager().get("BUTTONS/button_selectplant_ENG.png");
-        Texture choseButtonPressed = game.getAssetManager().get("BUTTONS/button_selectplant_PRESSED_ENG.png");
+
 
         ImageButton choseButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(choseButtonIdle)),new TextureRegionDrawable(new TextureRegion(choseButtonPressed)));
 

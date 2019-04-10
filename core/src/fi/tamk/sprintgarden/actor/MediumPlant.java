@@ -18,23 +18,26 @@ public class MediumPlant extends Flower {
     public void setupTextures(){
         if(getCurrentTier() == 1){
             setPlantName("mediumplant1");
-            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
-            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier1.png");
-            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier1.png");
+            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage0.png");
+            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
+            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier1.png");
+            getTextureList()[3] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier1.png");
 
             setCoinValue(28);
         }else if(getCurrentTier() == 2){
             setPlantName("mediumplant2");
-            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
-            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier2.png");
-            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier2.png");
+            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage0.png");
+            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
+            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier2.png");
+            getTextureList()[3] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier2.png");
 
             setCoinValue(56);
         }else if(getCurrentTier() == 3){
             setPlantName("mediumplant3");
-            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
-            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier3.png");
-            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier3.png");
+            getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage0.png");
+            getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
+            getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier3.png");
+            getTextureList()[3] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage3_tier3.png");
 
             setCoinValue(112);
         }

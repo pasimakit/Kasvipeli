@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Locale;
+
 import fi.tamk.sprintgarden.util.Fonts;
 import fi.tamk.sprintgarden.game.MainGame;
 
@@ -136,6 +138,8 @@ public class OptionsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //lokalisaatio enkuksi
+                game.setLocale(new Locale("en", "UK"));
+                game.setScreen(new OptionsScreen(game));
             }
         });
 
@@ -152,6 +156,8 @@ public class OptionsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //lokalisaatio suomeksi
+                game.setLocale(new Locale("fi", "FI"));
+                game.setScreen(new OptionsScreen(game));
             }
         });
 

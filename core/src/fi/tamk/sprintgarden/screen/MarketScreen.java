@@ -2,13 +2,16 @@ package fi.tamk.sprintgarden.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -38,8 +41,11 @@ public class MarketScreen implements Screen {
     private MediumPlant mediumPlant;
     private FastPlant fastPlant;
 
-    private int[] plantingSpacePricing = {0, 0, 40, 80, 160, 320, 640, 1280};
+    private int[] plantingSpacePricing = {0, 0 ,40 ,80 ,350 ,700 ,1400 ,2800};
     private int[] plantTierPricing = {0, 200, 1000};
+
+    private ProgressBar mileStoneBar;
+    private int goalSteps = 100000;
 
     public MarketScreen(MainGame game){
         this.game = game;
@@ -78,12 +84,18 @@ public class MarketScreen implements Screen {
         slowPlant.setBounds(100, 15, 25,25);
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
+
+        createMileStoneBar();
+        mileStoneBar.setBounds(game.SCREEN_WIDTH- 60, 15, 20, 100);
+        stage.addActor(mileStoneBar);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        mileStoneBar.setValue((float)game.getStepCount()/goalSteps);
 
         bgViewPort.apply();
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
@@ -126,6 +138,9 @@ public class MarketScreen implements Screen {
         }else{
             fonts.getSmallFont().draw(batch, "$ "+plantingSpacePricing[game.getCurrentPlantingSpaceAmount()], 280, 300);
         }
+        //milestonebar description
+        fonts.getSmallFont().draw(batch, "STEPMETER", 1440, 920);
+        fonts.getSmallFont().draw(batch, ""+game.getStepCount(),1470, 90);
         batch.end();
         stage.getViewport().apply();
         stage.draw();
@@ -161,9 +176,48 @@ public class MarketScreen implements Screen {
         batch.dispose();
     }
 
+    public void createMileStoneBar(){
+        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+
+        Pixmap pixmap = new Pixmap(20, 100, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.fill();
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        progressBarStyle.background = drawable;
+
+        pixmap = new Pixmap(0, 3, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.rgb888(254,174, 52));
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        progressBarStyle.knob = drawable;
+
+        pixmap = new Pixmap(20, 100, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.valueOf("#FEAE34"));
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        progressBarStyle.knobBefore = drawable;
+
+        mileStoneBar = new ProgressBar(0.0f, 1.0f, 0.01f, true, progressBarStyle);
+    }
+
     public void createButtons(){
         Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
+        Texture buyButtonIdle, buyButtonPressed;
+
+        if(game.getLocale().getCountry() == "FI"){
+            buyButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_buy_FIN.png"));
+            buyButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_buy_PRESSED_FIN.png"));
+        } else{
+            buyButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_buy_ENG.png"));
+            buyButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_buy_PRESSED_ENG.png"));
+        }
 
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(closeButtonIdle)),new TextureRegionDrawable(new TextureRegion(closeButtonPressed)));
 
@@ -177,9 +231,6 @@ public class MarketScreen implements Screen {
                 game.setScreen(gameScreen);
             }
         });
-
-        Texture buyButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_buy_ENG.png"));
-        Texture buyButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_buy_PRESSED_ENG.png"));
 
         ImageButton buyFastPlantButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(buyButtonIdle)),new TextureRegionDrawable(new TextureRegion(buyButtonPressed)));
 

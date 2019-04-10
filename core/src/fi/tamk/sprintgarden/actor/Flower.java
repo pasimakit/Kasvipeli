@@ -14,7 +14,7 @@ import fi.tamk.sprintgarden.game.MainGame;
 public class Flower extends Actor {
 
      private Texture flowerTexture;
-     private Texture[] textureList = new Texture[3];
+     private Texture[] textureList = new Texture[4];
      private boolean plantChosen;
      private boolean plantFinished;
      private boolean plantHarvested;
@@ -72,6 +72,8 @@ public class Flower extends Actor {
 
     public void updateTexture(){
         if(getCurrentGrowthTime() >= getGrowthTime()){
+            flowerTexture = getTextureList()[3];
+        }else if((float) getCurrentGrowthTime() / getGrowthTime() > 0.5f){
             flowerTexture = getTextureList()[2];
         }else if((float) getCurrentGrowthTime() / getGrowthTime() > 0.1f){
             flowerTexture = getTextureList()[1];
@@ -81,7 +83,7 @@ public class Flower extends Actor {
     }
 
     public void displayTexture(){
-         flowerTexture = getTextureList()[2];
+         flowerTexture = getTextureList()[3];
     }
 
     public void setupGrowthBar() {

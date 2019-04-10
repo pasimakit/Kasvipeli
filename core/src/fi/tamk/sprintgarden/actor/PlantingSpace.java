@@ -26,7 +26,11 @@ public class PlantingSpace extends Actor {
     }
 
     public void setPlantingSpaceTexture() {
-       plantingSpaceTexture = game.getAssetManager().get("flowerbed_shadow_bot-right.png");
+        if(plantedFlower == null) {
+            plantingSpaceTexture = game.getAssetManager().get("flowerbed_shadow_bot-right.png");
+        }else{
+            plantingSpaceTexture = game.getAssetManager().get("flowerbed_shadow_bot-right_PLANTED.png");
+        }
     }
 
     public void act(float delta){
@@ -45,6 +49,7 @@ public class PlantingSpace extends Actor {
     }
     // Sijoitetaan kasvatuspaikkaan kukka
     public void setPlantedFlower(Flower flower){
+        setPlantingSpaceTexture();
         plantedFlower = flower;
     }
 

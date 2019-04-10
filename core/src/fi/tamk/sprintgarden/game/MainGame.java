@@ -7,8 +7,11 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+
+import java.util.Locale;
 
 import fi.tamk.sprintgarden.screen.GameScreen;
 import fi.tamk.sprintgarden.screen.OptionsScreen;
@@ -41,6 +44,7 @@ public class MainGame extends Game{
     private int maxPlantingSpaceAmount = 8;
 
     private AssetManager assetManager;
+    private Locale locale;
 
     public void toJson(){
         Json json = new Json();
@@ -50,12 +54,12 @@ public class MainGame extends Game{
         file.writeString(json.prettyPrint(saveData),false);
     }
 
-    public void fromJson(){
+    private void fromJson(){
         Json json = new Json();
         FileHandle file = Gdx.files.local("save.json");
 
         if(file.exists()){
-            int[] saveData = new int[8];
+            int[] saveData;
             saveData = json.fromJson(int[].class, file);
             setStepCount(saveData[0]);
             setOldStepCount(saveData[1]);
@@ -66,6 +70,7 @@ public class MainGame extends Game{
             setCurrentPlantingSpaceAmount(saveData[6]);
             maxPlantingSpaceAmount = saveData[7];
         }
+        locale = Locale.getDefault();
     }
 
     public SpriteBatch getBatch() {
@@ -105,9 +110,10 @@ public class MainGame extends Game{
         FileHandle file = Gdx.files.local("save.json");
         FileHandle file1 = Gdx.files.local("gameState.json");
 
-        setupAssetManager();
 
+        setupAssetManager();
         fromJson();
+        System.out.println(locale);
 
         if(!file.exists() & !file1.exists()) {
             lastScreen = getStartScreen();
@@ -120,6 +126,7 @@ public class MainGame extends Game{
 
 	@Override
 	public void render () {
+        stepCount++;
         super.render();
 	}
 	
@@ -192,6 +199,14 @@ public class MainGame extends Game{
         return maxPlantingSpaceAmount;
     }
 
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
     private GetSteps stepGetter;
 
     public void setGetSteps(GetSteps sg){
@@ -205,6 +220,7 @@ public class MainGame extends Game{
         assetManager.load("background_plantmenu.png", Texture.class);
         assetManager.load("background_store.png", Texture.class);
         assetManager.load("flowerbed_shadow_bot-right.png", Texture.class);
+        assetManager.load("flowerbed_shadow_bot-right_PLANTED.png", Texture.class);
         assetManager.load("marketplace.png", Texture.class);
         assetManager.load("settings.png", Texture.class);
 
@@ -260,9 +276,16 @@ public class MainGame extends Game{
         assetManager.load("plants/mediumPlant/plant2_stage3_tier3.png", Texture.class);
         assetManager.load("plants/mediumPlant/plant2_stage2_tier1.png", Texture.class);
         assetManager.load("plants/slowPlant/plant3_stage1.png", Texture.class);
+        assetManager.load("plants/fastPlant/plant1_stage0.png",Texture.class);
+        assetManager.load("plants/mediumPlant/plant2_stage0.png",Texture.class);
+        assetManager.load("plants/slowPlant/plant3_stage0.png",Texture.class);
         assetManager.finishLoading();
     }
     public AssetManager getAssetManager() {
         return assetManager;
+    }
+
+    public void setupLocalization(){
+        I18NBundle myBundle = I18NBundle.createBundle(Gdx.files.internal("Mybundle"), locale);
     }
 }

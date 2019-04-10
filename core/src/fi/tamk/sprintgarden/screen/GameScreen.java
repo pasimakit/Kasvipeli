@@ -142,6 +142,8 @@ public class GameScreen implements Screen {
                     plantingSpace.getPlantedFlower().setGrowthBar(null);
                     plantingSpace.setPlantedFlower(null);
                 }
+            }else{
+                plantingSpace.setPlantingSpaceTexture();
             }
         }
         game.setOldStepCount(game.getStepCount());
@@ -192,6 +194,12 @@ public class GameScreen implements Screen {
     }
 
     public void createButtons() {
+
+        if(game.getLocale().getCountry() == "FI"){
+
+        }else{
+
+        }
         Texture marketButtonIdle = game.getAssetManager().get("BUTTONS/button_market.png");
         Texture marketButtonPressed = game.getAssetManager().get("BUTTONS/button_market_PRESSED.png");
 
