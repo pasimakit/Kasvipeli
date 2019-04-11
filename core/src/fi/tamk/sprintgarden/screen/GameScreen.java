@@ -2,6 +2,7 @@ package fi.tamk.sprintgarden.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -137,6 +138,8 @@ public class GameScreen implements Screen {
                 }
                 if (plantingSpace.getPlantedFlower().isPlantFinished() && plantingSpace.getPlantedFlower().isPlantHarvested()) {
                     game.setCoins(game.getCoins() + plantingSpace.getPlantedFlower().getCoinValue());
+                    Sound coinSound = game.getAssetManager().get("Sounds/coins.mp3");
+                    coinSound.play(game.getEffVolume());
                     plantingSpace.getPlantedFlower().getGrowthBar().remove();
                     plantingSpace.getPlantedFlower().remove();
                     plantingSpace.getPlantedFlower().setGrowthBar(null);
@@ -156,8 +159,8 @@ public class GameScreen implements Screen {
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.getLargeFont().draw(batch, "STEPS: " + game.getStepCount(), 50, 1060);
-        fonts.getLargeFont().draw(batch, "COINS: " + game.getCoins(), 500, 1060);
+        fonts.getLargeFont().draw(batch, ""+game.getLocalization().get("steps")+": " + game.getStepCount(), 500, 1060);
+        fonts.getLargeFont().draw(batch, ""+game.getLocalization().get("coins")+": " + game.getCoins(), 50, 1060);
         batch.end();
         stage.getViewport().apply();
         stage.draw();
@@ -194,12 +197,6 @@ public class GameScreen implements Screen {
     }
 
     public void createButtons() {
-
-        if(game.getLocale().getCountry() == "FI"){
-
-        }else{
-
-        }
         Texture marketButtonIdle = game.getAssetManager().get("BUTTONS/button_market.png");
         Texture marketButtonPressed = game.getAssetManager().get("BUTTONS/button_market_PRESSED.png");
 

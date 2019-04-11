@@ -18,6 +18,7 @@ public class Fonts {
     private BitmapFont mediumFont;
     private BitmapFont largeFont;
     private BitmapFont titleFont;
+    private BitmapFont largestFont;
 
 
     public Fonts(){
@@ -53,13 +54,26 @@ public class Fonts {
     public void createLargeFont(){
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 72;
+        parameter.size = 62;
         parameter.borderWidth = 3;
         parameter.borderColor = Color.BLACK;
         parameter.shadowColor = Color.BLACK;
         parameter.shadowOffsetX = 5;
         parameter.shadowOffsetY = 5;
         largeFont = generator.generateFont(parameter);
+        generator.dispose();
+    }
+
+    public void createLargestFont() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 92;
+        parameter.borderWidth = 3;
+        parameter.borderColor = Color.BLACK;
+        parameter.shadowColor = Color.BLACK;
+        parameter.shadowOffsetX = 5;
+        parameter.shadowOffsetY = 5;
+        largestFont = generator.generateFont(parameter);
         generator.dispose();
     }
     public void createTitleFont(){
@@ -69,6 +83,10 @@ public class Fonts {
         parameter.size = 96;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
+    }
+
+    public BitmapFont getLargestFont() {
+        return largestFont;
     }
 
     public FitViewport getFontViewport() {

@@ -71,10 +71,12 @@ public class OptionsScreen implements Screen {
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.getTitleFont().draw(batch, "SETTINGS", 150, 950);
-        fonts.getTitleFont().draw(batch, "EFFECT VOLUME", 270, 693);
-        fonts.getTitleFont().draw(batch, "MUSIC VOLUME", 270,493);
-        fonts.getTitleFont().draw(batch, "LANGUAGE", 270,273);
+        fonts.getTitleFont().draw(batch, ""+game.getLocalization().get("settings"), 150, 950);
+        fonts.getTitleFont().draw(batch, ""+game.getLocalization().get("effVolume"), 270, 693);
+        fonts.getTitleFont().draw(batch, ""+(int)(game.getEffVolume()*100), 1260, 693);
+        fonts.getTitleFont().draw(batch, ""+game.getLocalization().get("musicVolume"), 270,493);
+        fonts.getTitleFont().draw(batch, ""+(int)(game.getMusicVolume()*100), 1260, 493);
+        fonts.getTitleFont().draw(batch, ""+game.getLocalization().get("settings"), 270,273);
         batch.end();
         stage.getViewport().apply();
         stage.draw();
@@ -139,6 +141,7 @@ public class OptionsScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 //lokalisaatio enkuksi
                 game.setLocale(new Locale("en", "UK"));
+                game.setupLocalization();
                 game.setScreen(new OptionsScreen(game));
             }
         });
@@ -151,12 +154,13 @@ public class OptionsScreen implements Screen {
         finButton.setPosition(136, 23);
         stage.addActor(finButton);
 
-        engButton.addListener(new ChangeListener() {
+        finButton.addListener(new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //lokalisaatio suomeksi
                 game.setLocale(new Locale("fi", "FI"));
+                game.setupLocalization();
                 game.setScreen(new OptionsScreen(game));
             }
         });
@@ -174,6 +178,9 @@ public class OptionsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //efekti äänet alas
+                if(game.getEffVolume() > 0.09f){
+                    game.setEffVolume(game.getEffVolume() - 0.1f);
+                }
             }
         });
 
@@ -187,6 +194,9 @@ public class OptionsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //musiikki äänet alas
+                if(game.getMusicVolume() > 0.09f){
+                    game.setMusicVolume(game.getMusicVolume() - 0.1f);
+                }
             }
         });
 
@@ -203,6 +213,9 @@ public class OptionsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //efekti äänet ylös
+                if(game.getEffVolume() < 1.0f){
+                    game.setEffVolume(game.getEffVolume() + 0.1f);
+                }
             }
         });
 
@@ -211,11 +224,14 @@ public class OptionsScreen implements Screen {
         plusMusButton.setPosition(192, 51);
         stage.addActor(plusMusButton);
 
-        plusEffButton.addListener(new ChangeListener() {
+        plusMusButton.addListener(new ChangeListener() {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //musiikki äänet ylös
+                if(game.getMusicVolume() < 1.0f){
+                    game.setMusicVolume(game.getMusicVolume() + 0.1f);
+                }
             }
         });
     }

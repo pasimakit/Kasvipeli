@@ -1,5 +1,6 @@
 package fi.tamk.sprintgarden.actor;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -51,6 +52,12 @@ public class PlantingSpace extends Actor {
     public void setPlantedFlower(Flower flower){
         setPlantingSpaceTexture();
         plantedFlower = flower;
+        Sound digSound = game.getAssetManager().get("Sounds/dig.mp3");
+        if(plantedFlower != null){
+        if(plantedFlower.getCurrentGrowthTime() < 1) {
+            digSound.play(game.getEffVolume());
+            }
+        }
     }
 
     public Flower getPlantedFlower() {

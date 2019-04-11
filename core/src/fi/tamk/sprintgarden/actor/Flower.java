@@ -13,24 +13,24 @@ import fi.tamk.sprintgarden.game.MainGame;
 
 public class Flower extends Actor {
 
-     private Texture flowerTexture;
-     private Texture[] textureList = new Texture[4];
-     private boolean plantChosen;
-     private boolean plantFinished;
-     private boolean plantHarvested;
+    private Texture flowerTexture;
+    private Texture[] textureList = new Texture[4];
+    private boolean plantChosen;
+    private boolean plantFinished;
+    private boolean plantHarvested;
 
-     private MainGame game;
+    private MainGame game;
 
-     private String plantName;
+    private String plantName;
 
-     private int growthTime;
-     private int currentGrowthTime;
-     private int coinValue;
-     private int currentTier;
+    private int growthTime;
+    private int currentGrowthTime;
+    private int coinValue;
+    private int currentTier;
 
     private ProgressBar growthBar;
 
-     public Flower(MainGame game){
+    public Flower(MainGame game){
          setupGrowthBar();
          this.game = game;
      }

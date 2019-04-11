@@ -63,19 +63,19 @@ public class ChoosePlantScreen implements Screen {
         //luodaan valittavat kukat
         fastPlant = new FastPlant(game.getFastPlantTier(), game);
         fastPlant.setMainGame(game);
-        fastPlant.setBounds(20, game.SCREEN_HEIGHT-70, 58,58);
+        fastPlant.setBounds(18, game.SCREEN_HEIGHT-74, 54,54);
         fastPlant.displayTexture();
         stage.addActor(fastPlant);
 
         mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
         mediumPlant.setMainGame(game);
-        mediumPlant.setBounds(98, game.SCREEN_HEIGHT-68, 45,45);
+        mediumPlant.setBounds(96, game.SCREEN_HEIGHT-70, 45,45);
         mediumPlant.displayTexture();
         stage.addActor(mediumPlant);
 
         slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
         slowPlant.setMainGame(game);
-        slowPlant.setBounds(164, game.SCREEN_HEIGHT-75, 58,58);
+        slowPlant.setBounds(163, game.SCREEN_HEIGHT-72, 52,52);
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
     }
@@ -93,13 +93,13 @@ public class ChoosePlantScreen implements Screen {
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.getMediumFont().draw(batch, ""+ fastPlant.getPlantName(), 180, 960);
+        fonts.getMediumFont().draw(batch, ""+ fastPlant.getPlantName(), 250, 960);
         fonts.getMediumFont().draw(batch, ""+ fastPlant.getGrowthTime(), 300, 600);
         fonts.getMediumFont().draw(batch, ""+ fastPlant.getCoinValue(), 300, 400);
-        fonts.getMediumFont().draw(batch, ""+ mediumPlant.getPlantName(), 680, 960);
+        fonts.getMediumFont().draw(batch, ""+ mediumPlant.getPlantName(), 790, 960);
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getGrowthTime(), 850, 600);
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getCoinValue(), 850, 400);
-        fonts.getMediumFont().draw(batch, ""+ slowPlant.getPlantName(), 1240, 960);
+        fonts.getMediumFont().draw(batch, ""+ slowPlant.getPlantName(), 1285, 960);
         fonts.getMediumFont().draw(batch, ""+ slowPlant.getGrowthTime(), 1400, 600);
         fonts.getMediumFont().draw(batch, ""+ slowPlant.getCoinValue(), 1400, 400);
         batch.end();

@@ -2,6 +2,7 @@ package fi.tamk.sprintgarden.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -67,26 +68,27 @@ public class MarketScreen implements Screen {
         fonts.createMediumFont();
         fonts.createLargeFont();
         fonts.createTitleFont();
+        fonts.createLargestFont();
 
         createButtons();
 
         fastPlant = new FastPlant(game.getFastPlantTier(), game);
-        fastPlant.setBounds(100, 82, 25,25);
+        fastPlant.setBounds(96, 74, 32,32);
         fastPlant.displayTexture();
         stage.addActor(fastPlant);
 
         mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
-        mediumPlant.setBounds(100, 48, 25,25);
+        mediumPlant.setBounds(99, 46, 25,25);
         mediumPlant.displayTexture();
         stage.addActor(mediumPlant);
 
         slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
-        slowPlant.setBounds(100, 15, 25,25);
+        slowPlant.setBounds(94, 9, 34,34);
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
 
         createMileStoneBar();
-        mileStoneBar.setBounds(game.SCREEN_WIDTH- 60, 15, 20, 100);
+        mileStoneBar.setBounds(game.SCREEN_WIDTH- 70, 15, 20, 90);
         stage.addActor(mileStoneBar);
     }
 
@@ -106,9 +108,9 @@ public class MarketScreen implements Screen {
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.getLargeFont().draw(batch, "MARKET",150, 950);
-        fonts.getLargeFont().draw(batch, "COINS: "+ game.getCoins(), 150, 880);
-        fonts.getSmallFont().draw(batch, "UPGRADE PLANT TIERS", 720, 850);
+        fonts.getLargestFont().draw(batch, ""+game.getLocalization().get("market"),150, 1000);
+        fonts.getLargeFont().draw(batch, ""+game.getLocalization().get("coins") + ": " + game.getCoins(), 760, 980);
+        fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("upgradeTitle"), 720, 850);
 
         // tier numbers
         fonts.getSmallestFont().draw(batch, ""+ game.getFastPlantTier(), 920, 645);
@@ -132,15 +134,21 @@ public class MarketScreen implements Screen {
             fonts.getSmallFont().draw(batch, "$ "+ plantTierPricing[game.getSlowPlantTier()], 1000, 295);
         }
         // additional plantingspaces
-        fonts.getSmallFont().draw(batch, "+1      (" + game.getCurrentPlantingSpaceAmount() + " / " + game.getMaxPlantingSpaceAmount() + ")", 220, 720);
+        fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("plantingspaceTitle"), 150, 850);
+        fonts.getSmallFont().draw(batch, "(" + game.getCurrentPlantingSpaceAmount() + " / " + game.getMaxPlantingSpaceAmount() + ")", 290, 740);
         if(game.getCurrentPlantingSpaceAmount() == game.getMaxPlantingSpaceAmount()){
-            fonts.getSmallFont().draw(batch, "SOLD!", 300, 300);
+            fonts.getSmallFont().draw(batch, "SOLD!", 400, 210);
         }else{
-            fonts.getSmallFont().draw(batch, "$ "+plantingSpacePricing[game.getCurrentPlantingSpaceAmount()], 280, 300);
+            fonts.getSmallFont().draw(batch, "$ "+plantingSpacePricing[game.getCurrentPlantingSpaceAmount()], 400, 210);
         }
         //milestonebar description
-        fonts.getSmallFont().draw(batch, "STEPMETER", 1440, 920);
-        fonts.getSmallFont().draw(batch, ""+game.getStepCount(),1470, 90);
+        if(game.getLocale().getCountry() == "fi"){
+            fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1280, 850);
+        }else{
+            fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1355, 850);
+        }
+        fonts.getSmallFont().draw(batch, "- "+goalSteps, 1560, 800);
+        fonts.getSmallFont().draw(batch, ""+game.getStepCount(),1400, 90);
         batch.end();
         stage.getViewport().apply();
         stage.draw();
@@ -179,7 +187,7 @@ public class MarketScreen implements Screen {
     public void createMileStoneBar(){
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
 
-        Pixmap pixmap = new Pixmap(20, 100, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(20, 90, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
         pixmap.fill();
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -195,7 +203,7 @@ public class MarketScreen implements Screen {
 
         progressBarStyle.knob = drawable;
 
-        pixmap = new Pixmap(20, 100, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(20, 90, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.valueOf("#FEAE34"));
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -203,13 +211,14 @@ public class MarketScreen implements Screen {
 
         progressBarStyle.knobBefore = drawable;
 
-        mileStoneBar = new ProgressBar(0.0f, 1.0f, 0.01f, true, progressBarStyle);
+        mileStoneBar = new ProgressBar(0.0f, 1.0f, 0.0001f, true, progressBarStyle);
     }
 
     public void createButtons(){
         Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
         Texture buyButtonIdle, buyButtonPressed;
+        final Sound upgradeSound = game.getAssetManager().get("Sounds/bought.mp3");
 
         if(game.getLocale().getCountry() == "FI"){
             buyButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_buy_FIN.png"));
@@ -244,10 +253,12 @@ public class MarketScreen implements Screen {
                 if(game.getFastPlantTier() <=2 && game.getCoins() >= plantTierPricing[game.getFastPlantTier()]){
                     game.setCoins(game.getCoins() - plantTierPricing[game.getFastPlantTier()]);
                     game.setFastPlantTier(game.getFastPlantTier() + 1);
+                    upgradeSound.play(game.getEffVolume());
                     if(fastPlant.getCurrentTier() <=3){
                         fastPlant.setCurrentTier(fastPlant.getCurrentTier() + 1);
                         fastPlant.setupTextures();
                         fastPlant.displayTexture();
+
                     }
                 }
             }
@@ -265,6 +276,7 @@ public class MarketScreen implements Screen {
                 if(game.getMediumPlantTier() <=2 && game.getCoins() >= plantTierPricing[game.getMediumPlantTier()]){
                     game.setCoins(game.getCoins() - plantTierPricing[game.getMediumPlantTier()]);
                     game.setMediumPlantTier(game.getMediumPlantTier() + 1);
+                    upgradeSound.play(game.getEffVolume());
                     if(mediumPlant.getCurrentTier() <=3){
                         mediumPlant.setCurrentTier(mediumPlant.getCurrentTier() + 1);
                         mediumPlant.setupTextures();
@@ -286,6 +298,7 @@ public class MarketScreen implements Screen {
                 if(game.getSlowPlantTier() <=2 && game.getCoins() >= plantTierPricing[game.getSlowPlantTier()]){
                     game.setCoins(game.getCoins() - plantTierPricing[game.getSlowPlantTier()]);
                     game.setSlowPlantTier(game.getSlowPlantTier() + 1);
+                    upgradeSound.play(game.getEffVolume());
                     if(slowPlant.getCurrentTier() <=3){
                         slowPlant.setCurrentTier(slowPlant.getCurrentTier() + 1);
                         slowPlant.setupTextures();
@@ -297,7 +310,7 @@ public class MarketScreen implements Screen {
 
         ImageButton buyPlantingSpaceButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(buyButtonIdle)),new TextureRegionDrawable(new TextureRegion(buyButtonPressed)));
 
-        buyPlantingSpaceButton.setPosition(35, 15);
+        buyPlantingSpaceButton.setPosition(26, 18);
         stage.addActor(buyPlantingSpaceButton);
 
         buyPlantingSpaceButton.addListener (new ChangeListener() {
@@ -307,6 +320,7 @@ public class MarketScreen implements Screen {
                 if(game.getCurrentPlantingSpaceAmount() < game.getMaxPlantingSpaceAmount() && game.getCoins() >= plantingSpacePricing[game.getCurrentPlantingSpaceAmount()]){
                     game.setCoins(game.getCoins() - plantingSpacePricing[game.getCurrentPlantingSpaceAmount()]);
                     game.setCurrentPlantingSpaceAmount(game.getCurrentPlantingSpaceAmount() + 1);
+                    upgradeSound.play(game.getEffVolume());
                 }
             }
         });

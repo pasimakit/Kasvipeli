@@ -17,7 +17,7 @@ public class SlowPlant extends Flower {
 
     public void setupTextures(){
         if(getCurrentTier() == 1){
-            setPlantName("slowplant1");
+            setPlantName("Carnivore");
             getTextureList()[0] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage2_tier1.png");
@@ -25,7 +25,7 @@ public class SlowPlant extends Flower {
 
             setCoinValue(45);
         }else if(getCurrentTier() == 2){
-            setPlantName("slowplant2");
+            setPlantName("Carnivore");
             getTextureList()[0] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage2_tier2.png");
@@ -33,7 +33,7 @@ public class SlowPlant extends Flower {
 
             setCoinValue(90);
         }else if(getCurrentTier() == 3){
-            setPlantName("slowplant3");
+            setPlantName("Carnivore");
             getTextureList()[0] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/slowPlant/plant3_stage2_tier3.png");

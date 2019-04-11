@@ -17,7 +17,7 @@ public class FastPlant extends Flower {
 
     public void setupTextures(){
         if(getCurrentTier() == 1){
-            setPlantName("fastplant1");
+            setPlantName("Flower");
             getTextureList()[0] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage2_tier1.png");
@@ -25,7 +25,7 @@ public class FastPlant extends Flower {
 
             setCoinValue(10);
         }else if(getCurrentTier() == 2){
-            setPlantName("fastplant2");
+            setPlantName("Flower");
             getTextureList()[0] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage2_tier2.png");
@@ -33,7 +33,7 @@ public class FastPlant extends Flower {
 
             setCoinValue(20);
         }else if(getCurrentTier() == 3){
-            setPlantName("fastplant3");
+            setPlantName("Flower");
             getTextureList()[0] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/fastPlant/plant1_stage2_tier3.png");

@@ -66,12 +66,13 @@ public class MyService extends Service implements SensorEventListener, StepListe
 
         if(Build.VERSION.SDK_INT>=26) {
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_Service_CHANNEL_ID, "Sync Service", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Service Name");
+            channel.setDescription("Sprint Garden");
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
             Notification notification = new NotificationCompat.Builder(this,NOTIFICATION_Service_CHANNEL_ID)
-                    .setContentTitle("Service")
-                    .setContentText("Running...")
+                    .setContentTitle("Sprint Garden")
+                    .setContentText("Game is tracking your steps")
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .build();

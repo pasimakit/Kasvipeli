@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,7 +36,7 @@ public class MainGame extends Game{
 
     private int stepCount; // renderissä
     private int oldStepCount;
-    private int coins;
+    private int coins = 10000;
 
     private int fastPlantTier = 1;
     private int mediumPlantTier = 1;
@@ -44,7 +46,13 @@ public class MainGame extends Game{
     private int maxPlantingSpaceAmount = 8;
 
     private AssetManager assetManager;
+
+    private Music musicBg;
+    private float effVolume = 0.5f;
+    private float musicVolume = 0.5f;
+
     private Locale locale;
+    private I18NBundle myBundle;
 
     public void toJson(){
         Json json = new Json();
@@ -110,10 +118,13 @@ public class MainGame extends Game{
         FileHandle file = Gdx.files.local("save.json");
         FileHandle file1 = Gdx.files.local("gameState.json");
 
-
         setupAssetManager();
         fromJson();
+        setupLocalization();
         System.out.println(locale);
+        musicBg = getAssetManager().get("Sounds/music.mp3");
+        musicBg.play();
+        musicBg.setVolume(musicVolume);
 
         if(!file.exists() & !file1.exists()) {
             lastScreen = getStartScreen();
@@ -126,6 +137,7 @@ public class MainGame extends Game{
 
 	@Override
 	public void render () {
+        musicBg.setVolume(musicVolume);
         stepCount++;
         super.render();
 	}
@@ -207,6 +219,26 @@ public class MainGame extends Game{
         this.locale = locale;
     }
 
+    public float getEffVolume() {
+        return effVolume;
+    }
+
+    public void setEffVolume(float effVolume) {
+        this.effVolume = effVolume;
+    }
+
+    public float getMusicVolume() {
+        return musicVolume;
+    }
+
+    public void setMusicVolume(float musicVolume) {
+        this.musicVolume = musicVolume;
+    }
+
+    public Music getMusicBg() {
+        return musicBg;
+    }
+
     private GetSteps stepGetter;
 
     public void setGetSteps(GetSteps sg){
@@ -279,6 +311,12 @@ public class MainGame extends Game{
         assetManager.load("plants/fastPlant/plant1_stage0.png",Texture.class);
         assetManager.load("plants/mediumPlant/plant2_stage0.png",Texture.class);
         assetManager.load("plants/slowPlant/plant3_stage0.png",Texture.class);
+
+        assetManager.load("Sounds/coins.mp3",Sound.class);
+        assetManager.load("Sounds/dig.mp3",Sound.class);
+        assetManager.load("Sounds/music.mp3", Music.class);
+        assetManager.load("Sounds/bought.mp3",Sound.class);
+
         assetManager.finishLoading();
     }
     public AssetManager getAssetManager() {
@@ -286,6 +324,10 @@ public class MainGame extends Game{
     }
 
     public void setupLocalization(){
-        I18NBundle myBundle = I18NBundle.createBundle(Gdx.files.internal("Mybundle"), locale);
+        myBundle = I18NBundle.createBundle(Gdx.files.internal("MyBundle"), locale);
+    }
+
+    public I18NBundle getLocalization(){
+        return myBundle;
     }
 }
