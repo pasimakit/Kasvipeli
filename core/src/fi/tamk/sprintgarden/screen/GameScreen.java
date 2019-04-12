@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
         }
 
         int plantingSpaceX = 21;
-        int plantingSpaceY = 5;
+        int plantingSpaceY = 7;
 
         for (PlantingSpace plantingSpace : plantingSpaceList) {
             if (plantingSpace.isUsable()) {
@@ -97,7 +97,7 @@ public class GameScreen implements Screen {
 
             if (plantingSpaceX >= 145) {
                 plantingSpaceX = 21;
-                plantingSpaceY = 65;
+                plantingSpaceY = 67;
             } else {
                 plantingSpaceX += 48;
             }

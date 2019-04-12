@@ -17,7 +17,7 @@ public class MediumPlant extends Flower {
 
     public void setupTextures(){
         if(getCurrentTier() == 1){
-            setPlantName("Cactus");
+            setPlantName(game.getLocalization().get("mediumPlant"));
             getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier1.png");
@@ -25,7 +25,7 @@ public class MediumPlant extends Flower {
 
             setCoinValue(28);
         }else if(getCurrentTier() == 2){
-            setPlantName("Cactus");
+            setPlantName(game.getLocalization().get("mediumPlant"));
             getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier2.png");
@@ -33,7 +33,7 @@ public class MediumPlant extends Flower {
 
             setCoinValue(56);
         }else if(getCurrentTier() == 3){
-            setPlantName("Cactus");
+            setPlantName(game.getLocalization().get("mediumPlant"));
             getTextureList()[0] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage0.png");
             getTextureList()[1] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage1.png");
             getTextureList()[2] = getGame().getAssetManager().get("plants/mediumPlant/plant2_stage2_tier3.png");

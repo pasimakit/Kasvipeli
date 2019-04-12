@@ -75,18 +75,22 @@ public class MarketScreen implements Screen {
         fastPlant = new FastPlant(game.getFastPlantTier(), game);
         fastPlant.setBounds(96, 74, 32,32);
         fastPlant.displayTexture();
+        fastPlant.setCurrentTier(game.getFastPlantTier() +1);
         stage.addActor(fastPlant);
 
         mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
         mediumPlant.setBounds(99, 46, 25,25);
         mediumPlant.displayTexture();
+        mediumPlant.setCurrentTier(game.getMediumPlantTier() +1);
         stage.addActor(mediumPlant);
 
         slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
         slowPlant.setBounds(94, 9, 34,34);
         slowPlant.displayTexture();
+        slowPlant.setCurrentTier(game.getSlowPlantTier() +1);
         stage.addActor(slowPlant);
 
+        checkFlowerTexture();
         createMileStoneBar();
         mileStoneBar.setBounds(game.SCREEN_WIDTH- 70, 15, 20, 90);
         stage.addActor(mileStoneBar);
@@ -219,6 +223,7 @@ public class MarketScreen implements Screen {
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
         Texture buyButtonIdle, buyButtonPressed;
         final Sound upgradeSound = game.getAssetManager().get("Sounds/bought.mp3");
+        final Texture trophy = game.getAssetManager().get("tiertrophy.png");
 
         if(game.getLocale().getCountry() == "FI"){
             buyButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_buy_FIN.png"));
@@ -254,11 +259,12 @@ public class MarketScreen implements Screen {
                     game.setCoins(game.getCoins() - plantTierPricing[game.getFastPlantTier()]);
                     game.setFastPlantTier(game.getFastPlantTier() + 1);
                     upgradeSound.play(game.getEffVolume());
-                    if(fastPlant.getCurrentTier() <=3){
+                    if(fastPlant.getCurrentTier() <3){
                         fastPlant.setCurrentTier(fastPlant.getCurrentTier() + 1);
                         fastPlant.setupTextures();
                         fastPlant.displayTexture();
-
+                    }else{
+                        fastPlant.setFlowerTexture(trophy);
                     }
                 }
             }
@@ -277,10 +283,12 @@ public class MarketScreen implements Screen {
                     game.setCoins(game.getCoins() - plantTierPricing[game.getMediumPlantTier()]);
                     game.setMediumPlantTier(game.getMediumPlantTier() + 1);
                     upgradeSound.play(game.getEffVolume());
-                    if(mediumPlant.getCurrentTier() <=3){
+                    if(mediumPlant.getCurrentTier() <3){
                         mediumPlant.setCurrentTier(mediumPlant.getCurrentTier() + 1);
                         mediumPlant.setupTextures();
                         mediumPlant.displayTexture();
+                    }else{
+                        mediumPlant.setFlowerTexture(trophy);
                     }
                 }
             }
@@ -299,10 +307,12 @@ public class MarketScreen implements Screen {
                     game.setCoins(game.getCoins() - plantTierPricing[game.getSlowPlantTier()]);
                     game.setSlowPlantTier(game.getSlowPlantTier() + 1);
                     upgradeSound.play(game.getEffVolume());
-                    if(slowPlant.getCurrentTier() <=3){
+                    if(slowPlant.getCurrentTier() <3){
                         slowPlant.setCurrentTier(slowPlant.getCurrentTier() + 1);
                         slowPlant.setupTextures();
                         slowPlant.displayTexture();
+                    }else{
+                        slowPlant.setFlowerTexture(trophy);
                     }
                 }
             }
@@ -324,7 +334,24 @@ public class MarketScreen implements Screen {
                 }
             }
         });
-
-
     }
+
+    public void checkFlowerTexture(){
+        final Texture trophy = game.getAssetManager().get("tiertrophy.png");
+
+        if(fastPlant.getCurrentTier()>=3){
+            fastPlant.setFlowerTexture(trophy);
+            fastPlant.setBounds(94, 73, 34,34);
+        }
+        if(mediumPlant.getCurrentTier()>=3){
+            mediumPlant.setFlowerTexture(trophy);
+            mediumPlant.setBounds(94, 42, 34,34);
+        }
+        if(slowPlant.getCurrentTier()>=3){
+            slowPlant.setFlowerTexture(trophy);
+            slowPlant.setBounds(94, 9, 34,34);
+        }
+    }
+
+
 }

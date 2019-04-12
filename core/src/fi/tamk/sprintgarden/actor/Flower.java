@@ -19,7 +19,7 @@ public class Flower extends Actor {
     private boolean plantFinished;
     private boolean plantHarvested;
 
-    private MainGame game;
+    MainGame game;
 
     private String plantName;
 
@@ -158,6 +158,10 @@ public class Flower extends Actor {
 
     public void setTextureList(Texture[] textureList) {
         this.textureList = textureList;
+    }
+
+    public void setFlowerTexture(Texture flowerTexture) {
+        this.flowerTexture = flowerTexture;
     }
 
     public String getPlantName() {

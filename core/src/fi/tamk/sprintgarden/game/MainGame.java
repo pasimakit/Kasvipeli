@@ -2,6 +2,7 @@ package fi.tamk.sprintgarden.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -60,11 +61,18 @@ public class MainGame extends Game{
         json.setOutputType(JsonWriter.OutputType.json);
         int[] saveData = {getStepCount(), getOldStepCount(), getCoins(), getFastPlantTier(), getMediumPlantTier(), getSlowPlantTier(), getCurrentPlantingSpaceAmount(), getMaxPlantingSpaceAmount()};
         file.writeString(json.prettyPrint(saveData),false);
+
+        Preferences prefs = Gdx.app.getPreferences("MyPreferences");
+        prefs.putFloat("effVolume", effVolume);
+        prefs.putFloat("musicVolume", musicVolume);
+        prefs.putString("language", myBundle.getLocale().toString());
+        prefs.flush();
     }
 
     private void fromJson(){
         Json json = new Json();
         FileHandle file = Gdx.files.local("save.json");
+        Preferences prefs = Gdx.app.getPreferences("MyPreferences");
 
         if(file.exists()){
             int[] saveData;
@@ -77,8 +85,18 @@ public class MainGame extends Game{
             setSlowPlantTier(saveData[5]);
             setCurrentPlantingSpaceAmount(saveData[6]);
             maxPlantingSpaceAmount = saveData[7];
+
+            setEffVolume(prefs.getFloat("effVolume"));
+            setMusicVolume(prefs.getFloat("musicVolume"));
+            if(prefs.getString("language").equals("fi_FI")){
+                setLocale(new Locale("fi", "FI"));
+                System.out.println("suomi: " + locale);
+            }else{
+                setLocale(new Locale("en", "UK"));
+            }
+        }else{
+            setLocale(Locale.getDefault());
         }
-        locale = Locale.getDefault();
     }
 
     public SpriteBatch getBatch() {
@@ -117,11 +135,9 @@ public class MainGame extends Game{
         startScreen = new StartScreen(this);
         FileHandle file = Gdx.files.local("save.json");
         FileHandle file1 = Gdx.files.local("gameState.json");
-
-        setupAssetManager();
         fromJson();
+        setupAssetManager();
         setupLocalization();
-        System.out.println(locale);
         musicBg = getAssetManager().get("Sounds/music.mp3");
         musicBg.play();
         musicBg.setVolume(musicVolume);
@@ -311,6 +327,8 @@ public class MainGame extends Game{
         assetManager.load("plants/fastPlant/plant1_stage0.png",Texture.class);
         assetManager.load("plants/mediumPlant/plant2_stage0.png",Texture.class);
         assetManager.load("plants/slowPlant/plant3_stage0.png",Texture.class);
+        assetManager.load("flowerbed_planted_GOLD.png", Texture.class);
+        assetManager.load("tiertrophy.png", Texture.class);
 
         assetManager.load("Sounds/coins.mp3",Sound.class);
         assetManager.load("Sounds/dig.mp3",Sound.class);

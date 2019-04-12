@@ -99,7 +99,7 @@ public class ChoosePlantScreen implements Screen {
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getPlantName(), 790, 960);
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getGrowthTime(), 850, 600);
         fonts.getMediumFont().draw(batch, ""+ mediumPlant.getCoinValue(), 850, 400);
-        fonts.getMediumFont().draw(batch, ""+ slowPlant.getPlantName(), 1285, 960);
+        fonts.getMediumFont().draw(batch, ""+ slowPlant.getPlantName(), 1255, 960);
         fonts.getMediumFont().draw(batch, ""+ slowPlant.getGrowthTime(), 1400, 600);
         fonts.getMediumFont().draw(batch, ""+ slowPlant.getCoinValue(), 1400, 400);
         batch.end();
