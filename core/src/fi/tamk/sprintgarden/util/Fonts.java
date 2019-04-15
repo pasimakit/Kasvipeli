@@ -19,6 +19,7 @@ public class Fonts {
     private BitmapFont largeFont;
     private BitmapFont titleFont;
     private BitmapFont largestFont;
+    private BitmapFont congratsFont;
 
 
     public Fonts(){
@@ -83,6 +84,19 @@ public class Fonts {
         parameter.size = 96;
         titleFont = generator.generateFont(parameter);
         generator.dispose();
+    }
+
+    public void createCongratsFont(){
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.color = Color.valueOf("#733e39");
+        parameter.size = 172;
+        congratsFont = generator.generateFont(parameter);
+        generator.dispose();
+    }
+
+    public BitmapFont getCongratsFont() {
+        return congratsFont;
     }
 
     public BitmapFont getLargestFont() {

@@ -29,8 +29,14 @@ public class PlantingSpace extends Actor {
     public void setPlantingSpaceTexture() {
         if(plantedFlower == null) {
             plantingSpaceTexture = game.getAssetManager().get("flowerbed_shadow_bot-right.png");
+            if(game.isGoalReached()){
+                plantingSpaceTexture = game.getAssetManager().get("flowerbed_GOLD.png");
+            }
         }else{
             plantingSpaceTexture = game.getAssetManager().get("flowerbed_shadow_bot-right_PLANTED.png");
+            if(game.isGoalReached()){
+                plantingSpaceTexture = game.getAssetManager().get("flowerbed_planted_GOLD.png");
+            }
         }
     }
 
@@ -53,9 +59,10 @@ public class PlantingSpace extends Actor {
         setPlantingSpaceTexture();
         plantedFlower = flower;
         Sound digSound = game.getAssetManager().get("Sounds/dig.mp3");
+
         if(plantedFlower != null){
-        if(plantedFlower.getCurrentGrowthTime() < 1) {
-            digSound.play(game.getEffVolume());
+            if(plantedFlower.getCurrentGrowthTime() == 0) {
+                digSound.play(game.getEffVolume());
             }
         }
     }

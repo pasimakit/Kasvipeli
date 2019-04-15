@@ -29,13 +29,15 @@ public class MainGame extends Game{
 	public final int SCREEN_WIDTH = 256;
 	public final int SCREEN_HEIGHT = 144;
 
+	public final int GOALSTEPS = 100000;
+
     private GameScreen gameScreen;
     private OptionsScreen optionsScreen;
     private StartScreen startScreen;
 
     private Screen lastScreen;
 
-    private int stepCount; // renderissä
+    private int stepCount;
     private int oldStepCount;
     private int coins = 10000;
 
@@ -45,6 +47,8 @@ public class MainGame extends Game{
 
     private int currentPlantingSpaceAmount = 2;
     private int maxPlantingSpaceAmount = 8;
+
+    private boolean goalReached;
 
     private AssetManager assetManager;
 
@@ -59,7 +63,13 @@ public class MainGame extends Game{
         Json json = new Json();
         FileHandle file = Gdx.files.local("save.json");
         json.setOutputType(JsonWriter.OutputType.json);
-        int[] saveData = {getStepCount(), getOldStepCount(), getCoins(), getFastPlantTier(), getMediumPlantTier(), getSlowPlantTier(), getCurrentPlantingSpaceAmount(), getMaxPlantingSpaceAmount()};
+        int goalReachedInt;
+        if(isGoalReached()){
+            goalReachedInt = 1;
+        }else{
+            goalReachedInt = 0;
+        }
+        int[] saveData = {getStepCount(), getOldStepCount(), getCoins(), getFastPlantTier(), getMediumPlantTier(), getSlowPlantTier(), getCurrentPlantingSpaceAmount(), getMaxPlantingSpaceAmount(), goalReachedInt};
         file.writeString(json.prettyPrint(saveData),false);
 
         Preferences prefs = Gdx.app.getPreferences("MyPreferences");
@@ -75,6 +85,14 @@ public class MainGame extends Game{
         Preferences prefs = Gdx.app.getPreferences("MyPreferences");
 
         if(file.exists()){
+            setEffVolume(prefs.getFloat("effVolume"));
+            setMusicVolume(prefs.getFloat("musicVolume"));
+            if(prefs.getString("language").equals("fi_FI")){
+                setLocale(new Locale("fi", "FI"));
+            }else{
+                setLocale(new Locale("en", "UK"));
+            }
+
             int[] saveData;
             saveData = json.fromJson(int[].class, file);
             setStepCount(saveData[0]);
@@ -85,15 +103,12 @@ public class MainGame extends Game{
             setSlowPlantTier(saveData[5]);
             setCurrentPlantingSpaceAmount(saveData[6]);
             maxPlantingSpaceAmount = saveData[7];
-
-            setEffVolume(prefs.getFloat("effVolume"));
-            setMusicVolume(prefs.getFloat("musicVolume"));
-            if(prefs.getString("language").equals("fi_FI")){
-                setLocale(new Locale("fi", "FI"));
-                System.out.println("suomi: " + locale);
+            if(saveData[8] == 1){
+                setGoalReached(true);
             }else{
-                setLocale(new Locale("en", "UK"));
+                setGoalReached(false);
             }
+
         }else{
             setLocale(Locale.getDefault());
         }
@@ -251,6 +266,14 @@ public class MainGame extends Game{
         this.musicVolume = musicVolume;
     }
 
+    public boolean isGoalReached() {
+        return goalReached;
+    }
+
+    public void setGoalReached(boolean goalReached) {
+        this.goalReached = goalReached;
+    }
+
     public Music getMusicBg() {
         return musicBg;
     }
@@ -328,6 +351,7 @@ public class MainGame extends Game{
         assetManager.load("plants/mediumPlant/plant2_stage0.png",Texture.class);
         assetManager.load("plants/slowPlant/plant3_stage0.png",Texture.class);
         assetManager.load("flowerbed_planted_GOLD.png", Texture.class);
+        assetManager.load("flowerbed_GOLD.png", Texture.class);
         assetManager.load("tiertrophy.png", Texture.class);
 
         assetManager.load("Sounds/coins.mp3",Sound.class);

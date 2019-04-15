@@ -84,6 +84,11 @@ public class ChoosePlantScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if(game.getStepCount() >= game.GOALSTEPS && !game.isGoalReached()){
+            game.setScreen(new PrizeScreen(game));
+        }
+
         bgViewPort.apply();
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         stage.act(Gdx.graphics.getDeltaTime());
@@ -159,6 +164,7 @@ public class ChoosePlantScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.setLastScreen(new ChoosePlantScreen(game));
                 game.setScreen(gameScreen);
             }
         });
@@ -176,6 +182,7 @@ public class ChoosePlantScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 fastPlant.setPlantChosen(true);
                 game.getGameScreen().chosenPlantingSpace.setPlantedFlower(fastPlant);
+                game.setLastScreen(new ChoosePlantScreen(game));
                 game.setScreen(gameScreen);
             }
         });
@@ -191,6 +198,7 @@ public class ChoosePlantScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 mediumPlant.setPlantChosen(true);
                 game.getGameScreen().chosenPlantingSpace.setPlantedFlower(mediumPlant);
+                game.setLastScreen(new ChoosePlantScreen(game));
                 game.setScreen(gameScreen);
             }
         });
@@ -206,6 +214,7 @@ public class ChoosePlantScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 slowPlant.setPlantChosen(true);
                 game.getGameScreen().chosenPlantingSpace.setPlantedFlower(slowPlant);
+                game.setLastScreen(new ChoosePlantScreen(game));
                 game.setScreen(gameScreen);
             }
         });

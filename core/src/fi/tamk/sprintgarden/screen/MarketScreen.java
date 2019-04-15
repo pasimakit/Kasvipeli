@@ -46,7 +46,6 @@ public class MarketScreen implements Screen {
     private int[] plantTierPricing = {0, 200, 1000};
 
     private ProgressBar mileStoneBar;
-    private int goalSteps = 100000;
 
     public MarketScreen(MainGame game){
         this.game = game;
@@ -72,22 +71,19 @@ public class MarketScreen implements Screen {
 
         createButtons();
 
-        fastPlant = new FastPlant(game.getFastPlantTier(), game);
+        fastPlant = new FastPlant(game.getFastPlantTier()+1, game);
         fastPlant.setBounds(96, 74, 32,32);
         fastPlant.displayTexture();
-        fastPlant.setCurrentTier(game.getFastPlantTier() +1);
         stage.addActor(fastPlant);
 
-        mediumPlant = new MediumPlant(game.getMediumPlantTier(), game);
+        mediumPlant = new MediumPlant(game.getMediumPlantTier()+1, game);
         mediumPlant.setBounds(99, 46, 25,25);
         mediumPlant.displayTexture();
-        mediumPlant.setCurrentTier(game.getMediumPlantTier() +1);
         stage.addActor(mediumPlant);
 
-        slowPlant = new SlowPlant(game.getSlowPlantTier(), game);
+        slowPlant = new SlowPlant(game.getSlowPlantTier()+1, game);
         slowPlant.setBounds(94, 9, 34,34);
         slowPlant.displayTexture();
-        slowPlant.setCurrentTier(game.getSlowPlantTier() +1);
         stage.addActor(slowPlant);
 
         checkFlowerTexture();
@@ -101,7 +97,11 @@ public class MarketScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mileStoneBar.setValue((float)game.getStepCount()/goalSteps);
+        if(game.getStepCount() >= game.GOALSTEPS && !game.isGoalReached()){
+            game.setScreen(new PrizeScreen(game));
+        }
+
+        mileStoneBar.setValue((float)game.getStepCount()/game.GOALSTEPS);
 
         bgViewPort.apply();
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
@@ -146,12 +146,12 @@ public class MarketScreen implements Screen {
             fonts.getSmallFont().draw(batch, "$ "+plantingSpacePricing[game.getCurrentPlantingSpaceAmount()], 400, 210);
         }
         //milestonebar description
-        if(game.getLocale().getCountry() == "fi"){
-            fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1280, 850);
+        if(game.getLocale().getCountry() == "FI"){
+            fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1320, 850);
         }else{
             fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1355, 850);
         }
-        fonts.getSmallFont().draw(batch, "- "+goalSteps, 1560, 800);
+        fonts.getSmallFont().draw(batch, "- "+game.GOALSTEPS, 1560, 800);
         fonts.getSmallFont().draw(batch, ""+game.getStepCount(),1400, 90);
         batch.end();
         stage.getViewport().apply();
@@ -191,7 +191,7 @@ public class MarketScreen implements Screen {
     public void createMileStoneBar(){
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
 
-        Pixmap pixmap = new Pixmap(20, 90, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(20, 88, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.BLACK);
         pixmap.fill();
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -199,7 +199,7 @@ public class MarketScreen implements Screen {
 
         progressBarStyle.background = drawable;
 
-        pixmap = new Pixmap(0, 3, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(0, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.rgb888(254,174, 52));
         pixmap.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -242,6 +242,7 @@ public class MarketScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.setLastScreen(new MarketScreen(game));
                 game.setScreen(gameScreen);
             }
         });
@@ -339,15 +340,15 @@ public class MarketScreen implements Screen {
     public void checkFlowerTexture(){
         final Texture trophy = game.getAssetManager().get("tiertrophy.png");
 
-        if(fastPlant.getCurrentTier()>=3){
+        if(fastPlant.getCurrentTier()==4){
             fastPlant.setFlowerTexture(trophy);
             fastPlant.setBounds(94, 73, 34,34);
         }
-        if(mediumPlant.getCurrentTier()>=3){
+        if(mediumPlant.getCurrentTier()==4){
             mediumPlant.setFlowerTexture(trophy);
             mediumPlant.setBounds(94, 42, 34,34);
         }
-        if(slowPlant.getCurrentTier()>=3){
+        if(slowPlant.getCurrentTier()==4){
             slowPlant.setFlowerTexture(trophy);
             slowPlant.setBounds(94, 9, 34,34);
         }

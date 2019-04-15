@@ -117,12 +117,17 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if(game.getStepCount() >= game.GOALSTEPS && !game.isGoalReached()){
+            game.setScreen(new PrizeScreen(game));
+        }
+
         for (PlantingSpace plantingSpace : plantingSpaceList) {
             //onko kasvatuspaikkaa klikattu
             if (plantingSpace.isChoosePlantWindow()) {
                 plantingSpace.setChoosePlantWindow(false);
                 chosenPlantingSpace = plantingSpace;
                 if (chosenPlantingSpace.getPlantedFlower() == null) {
+                    game.setLastScreen(choosePlantScreen);
                     game.setScreen(choosePlantScreen);
                 }
             }
@@ -209,6 +214,7 @@ public class GameScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.setLastScreen(marketScreen);
                 game.setScreen(marketScreen);
             }
         });
