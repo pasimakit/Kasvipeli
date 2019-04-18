@@ -216,7 +216,7 @@ public class GameScreen implements Screen {
         batch.dispose();
     }
 
-    public void createButtons() {
+    private void createButtons() {
         Texture marketButtonIdle = game.getAssetManager().get("BUTTONS/button_market.png");
         Texture marketButtonPressed = game.getAssetManager().get("BUTTONS/button_market_PRESSED.png");
 

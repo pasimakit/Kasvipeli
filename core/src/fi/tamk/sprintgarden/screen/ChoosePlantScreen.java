@@ -142,12 +142,12 @@ public class ChoosePlantScreen implements Screen {
         batch.dispose();
     }
 
-    public void createButtons(){
+    private void createButtons(){
         Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_close.png");
         Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_close_PRESSED.png");
         Texture choseButtonIdle, choseButtonPressed;
 
-        if(game.getLocale().getCountry() == "FI"){
+        if(game.getLocale().getCountry().equals("FI")){
             choseButtonIdle = game.getAssetManager().get("BUTTONS/button_selectplant_FIN.png");
             choseButtonPressed = game.getAssetManager().get("BUTTONS/button_selectplant_PRESSED_FIN.png");
         } else{

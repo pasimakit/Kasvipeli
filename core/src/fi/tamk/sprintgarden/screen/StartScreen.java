@@ -98,7 +98,7 @@ public class StartScreen implements Screen {
         batch.dispose();
     }
 
-    public void createButtons() {
+    private void createButtons() {
         Texture playButtonIdle, playButtonPressed,settingsButtonIdle, settingsButtonPressed, creditsButtonIdle, creditsButtonPressed;
 
         if(game.getLocale().getCountry().equals("FI")){

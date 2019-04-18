@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.JsonWriter;
 import java.util.Locale;
 
 import fi.tamk.sprintgarden.screen.GameScreen;
-import fi.tamk.sprintgarden.screen.OptionsScreen;
 import fi.tamk.sprintgarden.screen.SplashScreen;
 import fi.tamk.sprintgarden.screen.StartScreen;
 import fi.tamk.sprintgarden.util.GetSteps;
@@ -33,7 +32,6 @@ public class MainGame extends Game{
 	public final int GOALSTEPS = 100000;
 
     private GameScreen gameScreen;
-    private OptionsScreen optionsScreen;
     private StartScreen startScreen;
     private SplashScreen splashScreen;
 
@@ -137,10 +135,6 @@ public class MainGame extends Game{
         return gameScreen;
     }
 
-    public OptionsScreen getOptionsScreen() {
-        return optionsScreen;
-    }
-
     public StartScreen getStartScreen() {
         return startScreen;
     }
@@ -153,15 +147,10 @@ public class MainGame extends Game{
         this.lastScreen = lastScreen;
     }
 
-    public void receiveSteps(int stepCount) {
-        this.setStepCount(this.getStepCount() + stepCount);
-    }
-
     @Override
 	public void create () {
 		batch = new SpriteBatch();
         gameScreen = new GameScreen(this);
-        optionsScreen = new OptionsScreen(this);
         startScreen = new StartScreen(this);
         splashScreen = new SplashScreen(this);
 
@@ -304,7 +293,7 @@ public class MainGame extends Game{
         stepGetter = sg;
     }
 
-    public void setupAssetManager(){
+    private void setupAssetManager(){
         assetManager = new AssetManager();
         assetManager.load("startscreen.png", Texture.class);
         assetManager.load("gamecanvas.png", Texture.class);

@@ -192,7 +192,7 @@ public class MarketScreen implements Screen {
         batch.dispose();
     }
 
-    public void createMileStoneBar(){
+    private void createMileStoneBar(){
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
 
         Pixmap pixmap = new Pixmap(20, 88, Pixmap.Format.RGBA8888);
@@ -222,7 +222,7 @@ public class MarketScreen implements Screen {
         mileStoneBar = new ProgressBar(0.0f, 1.0f, 0.0001f, true, progressBarStyle);
     }
 
-    public void createButtons(){
+    private void createButtons(){
         Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
         Texture buyButtonIdle, buyButtonPressed;
@@ -341,7 +341,7 @@ public class MarketScreen implements Screen {
         });
     }
 
-    public void checkFlowerTexture(){
+    private void checkFlowerTexture(){
         final Texture trophy = game.getAssetManager().get("tiertrophy.png");
 
         if(fastPlant.getCurrentTier()==4){

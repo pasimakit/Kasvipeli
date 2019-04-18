@@ -84,7 +84,7 @@ public class CreditsScreen implements Screen {
 
     }
 
-    public void createButtons() {
+    private void createButtons() {
         Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
 

@@ -87,9 +87,7 @@ public class SplashScreen implements Screen {
 
     }
 
-    public void createSplashAnimation(){
-
-
+    private void createSplashAnimation(){
         TextureRegion[][] tmp = TextureRegion.split(splashSheet,
                 splashSheet.getWidth() / FRAME_COLS,
                 splashSheet.getHeight() / FRAME_ROWS);

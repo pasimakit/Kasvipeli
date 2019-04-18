@@ -109,7 +109,7 @@ public class OptionsScreen implements Screen {
         stage.dispose();
     }
 
-    public void createButtons() {
+    private void createButtons() {
         Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_close.png");
         Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_close_PRESSED.png");
 

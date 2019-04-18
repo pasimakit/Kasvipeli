@@ -29,13 +29,9 @@ public class PrizeScreen implements Screen {
     private Fonts fonts;
     private Stage stage;
 
-    private GameScreen gameScreen;
-
     public PrizeScreen(MainGame game) {
         this.game = game;
         batch = game.getBatch();
-        gameScreen = game.getGameScreen();
-
     }
 
     @Override
@@ -74,7 +70,7 @@ public class PrizeScreen implements Screen {
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        if(game.getLocale().getCountry() == "FI"){
+        if(game.getLocale().getCountry().equals("FI")){
             fonts.getCongratsFont().draw(batch,""+game.getLocalization().get("congrats"), 480, 900 );
         }else{
             fonts.getCongratsFont().draw(batch,""+game.getLocalization().get("congrats"), 250, 900 );
@@ -116,7 +112,7 @@ public class PrizeScreen implements Screen {
         stage.dispose();
     }
 
-    public void createButtons() {
+    private void createButtons() {
         Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_OK.png");
         Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_OK_PRESSED.png");
 
@@ -129,7 +125,6 @@ public class PrizeScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //game.setScreen(game.getLastScreen());
                 game.setScreen(game.getLastScreen());
             }
         });
