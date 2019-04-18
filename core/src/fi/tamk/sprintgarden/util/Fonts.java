@@ -55,12 +55,8 @@ public class Fonts {
     public void createLargeFont(){
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixelated.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 62;
-        parameter.borderWidth = 3;
-        parameter.borderColor = Color.BLACK;
-        parameter.shadowColor = Color.BLACK;
-        parameter.shadowOffsetX = 5;
-        parameter.shadowOffsetY = 5;
+        parameter.size = 72;
+        parameter.color = Color.valueOf("#733e39");
         largeFont = generator.generateFont(parameter);
         generator.dispose();
     }

@@ -30,7 +30,7 @@ public class MarketScreen implements Screen {
     private SpriteBatch batch;
     final MainGame game;
 
-    private Texture background;
+    private Texture background, arrowLeft;
     private Viewport bgViewPort;
 
     private Fonts fonts;
@@ -42,8 +42,8 @@ public class MarketScreen implements Screen {
     private MediumPlant mediumPlant;
     private FastPlant fastPlant;
 
-    private int[] plantingSpacePricing = {0, 0 ,40 ,80 ,350 ,700 ,1400 ,2800};
-    private int[] plantTierPricing = {0, 200, 1000};
+    private int[] plantingSpacePricing = {10, 20, 40, 80, 350, 1000, 3000, 5000};
+    private int[] plantTierPricing = {0, 400, 1000};
 
     private ProgressBar mileStoneBar;
 
@@ -58,7 +58,8 @@ public class MarketScreen implements Screen {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("marketplace.png");
+        background = game.getAssetManager().get("marketplace.png");
+        arrowLeft = game.getAssetManager().get("arrow_left.png");
         bgViewPort = new StretchViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
         fonts = new Fonts();
@@ -107,13 +108,16 @@ public class MarketScreen implements Screen {
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
         batch.draw(background,0,0);
+        if(!game.isTutorialDone() && game.getCurrentPlantingSpaceAmount() == 0){
+            batch.draw(arrowLeft, 65, 14, 24,24);
+        }
         batch.end();
 
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
         fonts.getLargestFont().draw(batch, ""+game.getLocalization().get("market"),150, 1000);
-        fonts.getLargeFont().draw(batch, ""+game.getLocalization().get("coins") + ": " + game.getCoins(), 760, 980);
+        fonts.getMediumFont().draw(batch, ""+game.getLocalization().get("coins") + ": " + game.getCoins(), 760, 980);
         fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("upgradeTitle"), 720, 850);
 
         // tier numbers
@@ -146,7 +150,7 @@ public class MarketScreen implements Screen {
             fonts.getSmallFont().draw(batch, "$ "+plantingSpacePricing[game.getCurrentPlantingSpaceAmount()], 400, 210);
         }
         //milestonebar description
-        if(game.getLocale().getCountry() == "FI"){
+        if(game.getLocale().getCountry().equals("FI")){
             fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1320, 850);
         }else{
             fonts.getSmallFont().draw(batch, ""+game.getLocalization().get("stepmeter"), 1355, 850);
@@ -225,7 +229,7 @@ public class MarketScreen implements Screen {
         final Sound upgradeSound = game.getAssetManager().get("Sounds/bought.mp3");
         final Texture trophy = game.getAssetManager().get("tiertrophy.png");
 
-        if(game.getLocale().getCountry() == "FI"){
+        if(game.getLocale().getCountry().equals("FI")){
             buyButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_buy_FIN.png"));
             buyButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_buy_PRESSED_FIN.png"));
         } else{

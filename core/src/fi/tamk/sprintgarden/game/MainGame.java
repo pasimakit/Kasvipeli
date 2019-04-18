@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import fi.tamk.sprintgarden.screen.GameScreen;
 import fi.tamk.sprintgarden.screen.OptionsScreen;
+import fi.tamk.sprintgarden.screen.SplashScreen;
 import fi.tamk.sprintgarden.screen.StartScreen;
 import fi.tamk.sprintgarden.util.GetSteps;
 
@@ -34,28 +35,28 @@ public class MainGame extends Game{
     private GameScreen gameScreen;
     private OptionsScreen optionsScreen;
     private StartScreen startScreen;
+    private SplashScreen splashScreen;
 
     private Screen lastScreen;
 
     private int stepCount;
     private int oldStepCount;
-    private int coins = 10000;
+    private int coins = 10;
 
     private int fastPlantTier = 1;
     private int mediumPlantTier = 1;
     private int slowPlantTier = 1;
 
-    private int currentPlantingSpaceAmount = 2;
+    private int currentPlantingSpaceAmount = 0;
     private int maxPlantingSpaceAmount = 8;
 
-    private boolean goalReached;
+    private boolean goalReached, tutorialDone;
 
     private AssetManager assetManager;
 
     private Music musicBg;
     private float effVolume = 0.5f;
     private float musicVolume = 0.5f;
-
     private Locale locale;
     private I18NBundle myBundle;
 
@@ -64,12 +65,21 @@ public class MainGame extends Game{
         FileHandle file = Gdx.files.local("save.json");
         json.setOutputType(JsonWriter.OutputType.json);
         int goalReachedInt;
+        int tutorialDoneInt;
         if(isGoalReached()){
             goalReachedInt = 1;
         }else{
             goalReachedInt = 0;
         }
-        int[] saveData = {getStepCount(), getOldStepCount(), getCoins(), getFastPlantTier(), getMediumPlantTier(), getSlowPlantTier(), getCurrentPlantingSpaceAmount(), getMaxPlantingSpaceAmount(), goalReachedInt};
+
+        if(isTutorialDone()){
+            tutorialDoneInt = 1;
+        }else{
+            tutorialDoneInt = 0;
+        }
+        int[] saveData = {getStepCount(), getOldStepCount(), getCoins(), getFastPlantTier(),
+                getMediumPlantTier(), getSlowPlantTier(), getCurrentPlantingSpaceAmount(),
+                getMaxPlantingSpaceAmount(), goalReachedInt, tutorialDoneInt};
         file.writeString(json.prettyPrint(saveData),false);
 
         Preferences prefs = Gdx.app.getPreferences("MyPreferences");
@@ -107,6 +117,11 @@ public class MainGame extends Game{
                 setGoalReached(true);
             }else{
                 setGoalReached(false);
+            }
+            if(saveData[9] == 1){
+                setTutorialDone(true);
+            }else{
+                setTutorialDone(false);
             }
 
         }else{
@@ -148,18 +163,19 @@ public class MainGame extends Game{
         gameScreen = new GameScreen(this);
         optionsScreen = new OptionsScreen(this);
         startScreen = new StartScreen(this);
+        splashScreen = new SplashScreen(this);
+
         FileHandle file = Gdx.files.local("save.json");
         FileHandle file1 = Gdx.files.local("gameState.json");
         fromJson();
         setupAssetManager();
         setupLocalization();
+
         musicBg = getAssetManager().get("Sounds/music.mp3");
         musicBg.play();
-        musicBg.setVolume(musicVolume);
 
         if(!file.exists() & !file1.exists()) {
-            lastScreen = getStartScreen();
-            setScreen(getStartScreen());
+            setScreen(splashScreen);
         }else{
             lastScreen = getGameScreen();
             setScreen(getGameScreen());
@@ -274,8 +290,12 @@ public class MainGame extends Game{
         this.goalReached = goalReached;
     }
 
-    public Music getMusicBg() {
-        return musicBg;
+    public boolean isTutorialDone() {
+        return tutorialDone;
+    }
+
+    public void setTutorialDone(boolean tutorialDone) {
+        this.tutorialDone = tutorialDone;
     }
 
     private GetSteps stepGetter;
@@ -293,7 +313,15 @@ public class MainGame extends Game{
         assetManager.load("flowerbed_shadow_bot-right.png", Texture.class);
         assetManager.load("flowerbed_shadow_bot-right_PLANTED.png", Texture.class);
         assetManager.load("marketplace.png", Texture.class);
+        assetManager.load("credits.png", Texture.class);
         assetManager.load("settings.png", Texture.class);
+        assetManager.load("arrow_down.png", Texture.class);
+        assetManager.load("arrow_left.png", Texture.class);
+        assetManager.load("arrow_right.png", Texture.class);
+        assetManager.load("arrow_up.png", Texture.class);
+        assetManager.load("splashSpriteSheet.png", Texture.class);
+        assetManager.load("credits_ENG.png", Texture.class);
+        assetManager.load("credits_FIN.png", Texture.class);
 
         assetManager.load("BUTTONS/button_buy_ENG.png", Texture.class);
         assetManager.load("BUTTONS/button_buy_FIN.png", Texture.class);
@@ -325,6 +353,12 @@ public class MainGame extends Game{
         assetManager.load("BUTTONS/button_startsettings_ENG_PRESSED.png", Texture.class);
         assetManager.load("BUTTONS/button_startsettings_FIN.png", Texture.class);
         assetManager.load("BUTTONS/button_startsettings_FIN_PRESSED.png", Texture.class);
+        assetManager.load("BUTTONS/button_OK.png", Texture.class);
+        assetManager.load("BUTTONS/button_OK_PRESSED.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_ENG.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_ENG_PRESSED.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_FIN.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_FIN_PRESSED.png", Texture.class);
 
         assetManager.load("plants/slowPlant/plant3_stage3_tier2.png", Texture.class);
         assetManager.load("plants/slowPlant/plant3_stage3_tier3.png", Texture.class);

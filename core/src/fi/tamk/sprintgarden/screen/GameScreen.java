@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     final MainGame game;
 
-    private Texture background;
+    private Texture background, arrowRight, arrowLeft;
     private Viewport bgViewPort;
 
     private ChoosePlantScreen choosePlantScreen;
@@ -110,6 +110,10 @@ public class GameScreen implements Screen {
             }
         }
         createButtons();
+        arrowRight = game.getAssetManager().get("arrow_right.png");
+        arrowLeft = game.getAssetManager().get("arrow_left.png");
+
+
     }
 
     @Override
@@ -160,12 +164,23 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
         batch.draw(background, 0, 0);
+        if(!game.isTutorialDone()){
+            if(game.getCurrentPlantingSpaceAmount() == 0){
+                batch.draw(arrowRight, 193, 112);
+            }
+            if(game.getCurrentPlantingSpaceAmount() == 1 && plantingSpaceList.get(0).getPlantedFlower() == null){
+                batch.draw(arrowLeft, 85 ,25);
+            }
+            if(game.getCurrentPlantingSpaceAmount() == 1 && plantingSpaceList.get(0).getPlantedFlower() != null){
+                game.setTutorialDone(true);
+            }
+        }
         batch.end();
         fonts.getFontViewport().apply();
         batch.setProjectionMatrix(fonts.getFontViewport().getCamera().combined);
         batch.begin();
-        fonts.getLargeFont().draw(batch, ""+game.getLocalization().get("steps")+": " + game.getStepCount(), 500, 1060);
-        fonts.getLargeFont().draw(batch, ""+game.getLocalization().get("coins")+": " + game.getCoins(), 50, 1060);
+        fonts.getMediumFont().draw(batch, ""+game.getLocalization().get("steps")+": " + game.getStepCount(), 500, 1060);
+        fonts.getMediumFont().draw(batch, ""+game.getLocalization().get("coins")+": " + game.getCoins(), 50, 1060);
         batch.end();
         stage.getViewport().apply();
         stage.draw();

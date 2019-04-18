@@ -33,12 +33,9 @@ public class OptionsScreen implements Screen {
     private Fonts fonts;
     private Stage stage;
 
-    private GameScreen gameScreen;
-
     public OptionsScreen(MainGame game){
         this.game = game;
         batch = game.getBatch();
-        gameScreen = game.getGameScreen();
     }
 
     @Override

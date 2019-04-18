@@ -99,25 +99,31 @@ public class StartScreen implements Screen {
     }
 
     public void createButtons() {
-        Texture playButtonIdle, playButtonPressed,settingsButtonIdle, settingsButtonPressed;
+        Texture playButtonIdle, playButtonPressed,settingsButtonIdle, settingsButtonPressed, creditsButtonIdle, creditsButtonPressed;
 
-        if(game.getLocale().getCountry() == "FI"){
+        if(game.getLocale().getCountry().equals("FI")){
             playButtonIdle = game.getAssetManager().get("BUTTONS/button_startgame_FIN.png");
             playButtonPressed = game.getAssetManager().get("BUTTONS/button_startgame_FIN_PRESSED.png");
 
             settingsButtonIdle = game.getAssetManager().get("BUTTONS/button_startsettings_FIN.png");
             settingsButtonPressed = game.getAssetManager().get("BUTTONS/button_startsettings_FIN_PRESSED.png");
+
+            creditsButtonIdle = game.getAssetManager().get("BUTTONS/button_credits_FIN.png");
+            creditsButtonPressed = game.getAssetManager().get("BUTTONS/button_credits_FIN_PRESSED.png");
         }else{
             playButtonIdle = game.getAssetManager().get("BUTTONS/button_startgame_ENG.png");
             playButtonPressed = game.getAssetManager().get("BUTTONS/button_startgame_ENG_PRESSED.png");
 
             settingsButtonIdle = game.getAssetManager().get("BUTTONS/button_startsettings_ENG.png");
             settingsButtonPressed = game.getAssetManager().get("BUTTONS/button_startsettings_ENG_PRESSED.png");
+
+            creditsButtonIdle = game.getAssetManager().get("BUTTONS/button_credits_ENG.png");
+            creditsButtonPressed = game.getAssetManager().get("BUTTONS/button_credits_ENG_PRESSED.png");
         }
 
         ImageButton playButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonIdle)), new TextureRegionDrawable(new TextureRegion(playButtonPressed)));
 
-        playButton.setPosition(47, 12);
+        playButton.setPosition(95, 12);
         stage.addActor(playButton);
 
         playButton.addListener(new ChangeListener() {
@@ -130,7 +136,7 @@ public class StartScreen implements Screen {
 
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonIdle)), new TextureRegionDrawable(new TextureRegion(settingsButtonPressed)));
 
-        settingsButton.setPosition(143, 12);
+        settingsButton.setPosition(175, 12);
         stage.addActor(settingsButton);
 
         settingsButton.addListener(new ChangeListener() {
@@ -138,6 +144,19 @@ public class StartScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new OptionsScreen(game));
+            }
+        });
+
+        ImageButton creditsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsButtonIdle)), new TextureRegionDrawable(new TextureRegion(creditsButtonPressed)));
+
+        creditsButton.setPosition(15, 12);
+        stage.addActor(creditsButton);
+
+        creditsButton.addListener(new ChangeListener() {
+            // This method is called whenever the actor is clicked. We override its behavior here.
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new CreditsScreen(game));
             }
         });
     }
