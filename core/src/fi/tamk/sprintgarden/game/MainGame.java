@@ -309,6 +309,7 @@ public class MainGame extends Game{
         assetManager.load("arrow_right.png", Texture.class);
         assetManager.load("arrow_up.png", Texture.class);
         assetManager.load("splashSpriteSheet.png", Texture.class);
+        assetManager.load("coinSpriteSheet.png", Texture.class);
         assetManager.load("credits_ENG.png", Texture.class);
         assetManager.load("credits_FIN.png", Texture.class);
 

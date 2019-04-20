@@ -43,9 +43,10 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Fonts fonts;
 
-
     private ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
     public PlantingSpace chosenPlantingSpace;
+
+    private float stateTime;
 
     public GameScreen(MainGame game) {
         this.game = game;
@@ -112,8 +113,6 @@ public class GameScreen implements Screen {
         createButtons();
         arrowRight = game.getAssetManager().get("arrow_right.png");
         arrowLeft = game.getAssetManager().get("arrow_left.png");
-
-
     }
 
     @Override
@@ -146,13 +145,16 @@ public class GameScreen implements Screen {
                     plantingSpace.getPlantedFlower().setCurrentGrowthTime(plantingSpace.getPlantedFlower().getCurrentGrowthTime() + game.getStepCount() - game.getOldStepCount());
                 }
                 if (plantingSpace.getPlantedFlower().isPlantFinished() && plantingSpace.getPlantedFlower().isPlantHarvested()) {
-                    game.setCoins(game.getCoins() + plantingSpace.getPlantedFlower().getCoinValue());
-                    Sound coinSound = game.getAssetManager().get("Sounds/coins.mp3");
-                    coinSound.play(game.getEffVolume());
-                    plantingSpace.getPlantedFlower().getGrowthBar().remove();
-                    plantingSpace.getPlantedFlower().remove();
-                    plantingSpace.getPlantedFlower().setGrowthBar(null);
-                    plantingSpace.setPlantedFlower(null);
+                    plantingSpace.getPlantedFlower().setupCoinAnimation();
+                    plantingSpace.getPlantedFlower().startCoinAnimation(Gdx.graphics.getDeltaTime());
+                    if(plantingSpace.getPlantedFlower().getCoinAnimation().getKeyFrame(110) == plantingSpace.getPlantedFlower().getCoinCurrentFrame()){
+                        game.setCoins(game.getCoins() + plantingSpace.getPlantedFlower().getCoinValue());
+                        plantingSpace.getPlantedFlower().getGrowthBar().remove();
+                        plantingSpace.getPlantedFlower().remove();
+                        plantingSpace.getPlantedFlower().setGrowthBar(null);
+                        plantingSpace.setPlantedFlower(null);
+                    }
+
                 }
             }else{
                 plantingSpace.setPlantingSpaceTexture();

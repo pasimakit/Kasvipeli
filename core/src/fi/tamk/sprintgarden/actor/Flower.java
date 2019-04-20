@@ -3,6 +3,7 @@ package fi.tamk.sprintgarden.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,8 +14,10 @@ import fi.tamk.sprintgarden.game.MainGame;
 
 public class Flower extends Actor {
 
-    private Texture flowerTexture;
+    private Texture flowerTexture, coinSpriteSheet;
+    private TextureRegion coinCurrentFrame;
     private Texture[] textureList = new Texture[4];
+    private Animation<TextureRegion> coinAnimation;
     private boolean plantChosen;
     private boolean plantFinished;
     private boolean plantHarvested;
@@ -29,6 +32,7 @@ public class Flower extends Actor {
     private int currentTier;
 
     private ProgressBar growthBar;
+    private float stateTime;
 
     public Flower(MainGame game){
          setupGrowthBar();
@@ -49,18 +53,23 @@ public class Flower extends Actor {
     }
     @Override
     public void draw(Batch batch, float alpha){
-        batch.draw(getFlowerTexture(),this.getX(), this.getY(),
-                this.getOriginX(), this.getOriginY(),
-                this.getWidth(), this.getHeight(),
-                this.getScaleX(), this.getScaleY(),
-                this.getRotation(),
-                0,0,
-                getFlowerTexture().getWidth(), getFlowerTexture().getHeight(),
-                false, false);
+        if(!plantHarvested){
+            batch.draw(getFlowerTexture(),this.getX(), this.getY(),
+                    this.getOriginX(), this.getOriginY(),
+                    this.getWidth(), this.getHeight(),
+                    this.getScaleX(), this.getScaleY(),
+                    this.getRotation(),
+                    0,0,
+                    getFlowerTexture().getWidth(), getFlowerTexture().getHeight(),
+                    false, false);
+        }else{
+            batch.draw(getCoinCurrentFrame(), this.getX(), this.getY(),
+                    this.getWidth(), this.getHeight());
+        }
+
     }
 
     public void updateGrowthBar(PlantingSpace space){
-
          if(!isPlantHarvested()) {
              getGrowthBar().setBounds(space.getX() + 10, space.getY() - 5, 39, 5);
              getGrowthBar().setValue((float) getCurrentGrowthTime() / getGrowthTime());
@@ -114,6 +123,30 @@ public class Flower extends Actor {
         progressBarStyle.knobBefore = drawable;
 
         setGrowthBar(new ProgressBar(0.0f, 1.0f, 0.01f, false, progressBarStyle));
+    }
+
+    public void setupCoinAnimation(){
+        coinSpriteSheet = game.getAssetManager().get("coinSpriteSheet.png");
+
+        TextureRegion[][] tmp = TextureRegion.split(coinSpriteSheet,
+                coinSpriteSheet.getWidth() / 11,
+                coinSpriteSheet.getHeight() / 1);
+
+        TextureRegion[] coinFrames = new TextureRegion[11 * 1];
+
+        int index = 0;
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 11; j++) {
+                coinFrames[index++] = tmp[i][j];
+            }
+        }
+
+        coinAnimation = new Animation<TextureRegion>(0.08f, coinFrames);
+    }
+
+    public void startCoinAnimation(float delta){
+        stateTime += delta;
+        coinCurrentFrame = coinAnimation.getKeyFrame(stateTime, false);
     }
 
     public Texture getFlowerTexture() {
@@ -202,5 +235,17 @@ public class Flower extends Actor {
 
     public void setGrowthBar(ProgressBar growthBar) {
         this.growthBar = growthBar;
+    }
+
+    public TextureRegion getCoinCurrentFrame() {
+        return coinCurrentFrame;
+    }
+
+    public Animation<TextureRegion> getCoinAnimation() {
+        return coinAnimation;
+    }
+
+    public float getStateTime() {
+        return stateTime;
     }
 }
