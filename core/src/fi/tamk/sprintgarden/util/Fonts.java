@@ -6,19 +6,50 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+/**
+ * Class that holds different fonts with different styles. Also has viewport for fonts with higher
+ * resolution for sharper text.
+ */
 public class Fonts {
-
+    /**
+     * Viewport for fonts.
+     */
     private FitViewport fontViewport;
-
+    /**
+     * Font viewport width.
+     */
     final int SCREEN_WIDTH = 1920;
+    /**
+     * Font viewport height.
+     */
     final int SCREEN_HEIGHT = 1080;
-
+    /**
+     * Smallest font with 48 size.
+     */
     private BitmapFont smallestFont;
+    /**
+     * Small font with 50 size and brown color.
+     */
     private BitmapFont smallFont;
+    /**
+     * Medium font with 72 size and black border.
+     */
     private BitmapFont mediumFont;
+    /**
+     * Large font with 72 size and brown color.
+     */
     private BitmapFont largeFont;
+    /**
+     * Title font with 96 size and brown color.
+     */
     private BitmapFont titleFont;
+    /**
+     * Largest font with 96 size and black borders and shadow.
+     */
     private BitmapFont largestFont;
+    /**
+     * Congrats font with 172 szie and brown color.
+     */
     private BitmapFont congratsFont;
 
 

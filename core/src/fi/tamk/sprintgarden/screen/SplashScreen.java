@@ -13,26 +13,58 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fi.tamk.sprintgarden.game.MainGame;
 
+/**
+ * Screen that displays animation of our team logo.
+ */
 public class SplashScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * GameObjects are drawn on stage.
+     */
     private Stage stage;
-
-    final int FRAME_COLS = 40, FRAME_ROWS = 1;
+    /**
+     * How many frames are on the spritesheet column .
+     */
+    final int FRAME_COLS = 40;
+    /**
+     * How many frames are on the spritesheet row.
+     */
+    final int FRAME_ROWS = 1;
+    /**
+     * Animation that is constructed from the spritesheet.
+     */
     Animation<TextureRegion> splashScreenAnimation;
+    /**
+     * Spritesheet that is going to be animated.
+     */
     Texture splashSheet;
+    /**
+     * Variable for animation to show correct frame
+     */
     float stateTime;
 
+    /**
+     * Construct for SplashScreen.
+     * @param game used to make reference to MainGame
+     */
     public SplashScreen(MainGame game){
         this.game = game;
         batch = game.getBatch();
     }
-
-
+    /**
+     * Method which is called when screen is shown. In this method create references to variables.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -43,7 +75,10 @@ public class SplashScreen implements Screen {
         splashSheet = game.getAssetManager().get("splashSpriteSheet.png");
         createSplashAnimation();
     }
-
+    /**
+     * Method which is called everytime frame is rendered. Display splash animation.
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
@@ -60,33 +95,48 @@ public class SplashScreen implements Screen {
             game.setScreen(game.getStartScreen());
         }
     }
-
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
     }
-
+    /**
+     * Method that is called when game is paused.
+     */
     @Override
     public void pause() {
 
     }
-
+    /**
+     * Method that is called when game is hidden.
+     */
     @Override
     public void resume() {
 
     }
-
+    /**
+     * Method that is called when game is hidden.
+     */
     @Override
     public void hide() {
 
     }
-
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
 
     }
 
+    /**
+     * Creates the animation from the spritesheet.
+     */
     private void createSplashAnimation(){
         TextureRegion[][] tmp = TextureRegion.split(splashSheet,
                 splashSheet.getWidth() / FRAME_COLS,

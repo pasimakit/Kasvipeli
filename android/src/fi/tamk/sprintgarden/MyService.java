@@ -74,7 +74,7 @@ public class MyService extends Service implements SensorEventListener, StepListe
                     .setContentText("Game is tracking your steps")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setPriority(NotificationCompat.PRIORITY_MIN)
                     .build();
             startForeground(121, notification);
         }

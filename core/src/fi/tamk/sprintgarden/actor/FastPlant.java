@@ -6,8 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import fi.tamk.sprintgarden.game.MainGame;
 
+/**
+ * Subclass of Flower that is easiest to grow
+ */
 public class FastPlant extends Flower {
-
+    /**
+     * Constructor for FastPlant. Sets needed values and textures and adds listener.
+     * @param tier tier of FastPlant
+     * @param game to create game reference for assetManager
+     */
     public FastPlant(int tier, MainGame game){
         super(game);
         setCurrentTier(tier);
@@ -16,6 +23,9 @@ public class FastPlant extends Flower {
         setGrowthTime(500);
     }
 
+    /**
+     * Setup texture array based on tier of FastPlant and coin value.
+     */
     public void setupTextures(){
         if(getCurrentTier() == 1){
             setPlantName(game.getLocalization().get("fastPlant"));
@@ -44,7 +54,19 @@ public class FastPlant extends Flower {
         }
     }
 
+    /**
+     * Listener for FastPlant
+     */
     class PlayerListener extends InputListener {
+        /**
+         * Method for when FastPlant is touched.
+         * @param event
+         * @param x
+         * @param y
+         * @param pointer
+         * @param button
+         * @return
+         */
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             setPlantChosen(true);
@@ -60,6 +82,10 @@ public class FastPlant extends Flower {
         }
     }
 
+    /**
+     * Getter for plantChosen
+     * @return returns plantChosen
+     */
     public boolean isPlantChosen(){
         return super.isPlantChosen();
     }

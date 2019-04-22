@@ -4,9 +4,16 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import fi.tamk.sprintgarden.game.MainGame;
-
+/**
+ * Subclass of Flower that is hardest to grow.
+ */
 public class SlowPlant extends Flower {
 
+    /**
+     * Constructor for SlowPlant. Sets needed values and textures and adds listener.
+     * @param tier tier of SlowPlant
+     * @param game to create game reference for assetManager
+     */
     public SlowPlant(int tier, MainGame game){
         super(game);
         setCurrentTier(tier);
@@ -14,7 +21,9 @@ public class SlowPlant extends Flower {
         addListener(new SlowPlant.PlayerListener());
         setGrowthTime(2500);
     }
-
+    /**
+     * Setup texture array based on tier of SlowPlant and coin value.
+     */
     public void setupTextures(){
         if(getCurrentTier() == 1){
             setPlantName(game.getLocalization().get("slowPlant"));
@@ -43,8 +52,19 @@ public class SlowPlant extends Flower {
         }
     }
 
-
+    /**
+     * Listener for SlowPlant
+     */
     class PlayerListener extends InputListener {
+        /**
+         * Method for when SlowPlant is touched.
+         * @param event
+         * @param x
+         * @param y
+         * @param pointer
+         * @param button
+         * @return
+         */
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             setPlantChosen(true);
@@ -55,7 +75,10 @@ public class SlowPlant extends Flower {
             return false;
         }
     }
-
+    /**
+     * Getter for plantChosen
+     * @return returns plantChosen
+     */
     public boolean isPlantChosen(){
         return super.isPlantChosen();
     }

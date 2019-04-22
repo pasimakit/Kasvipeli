@@ -18,25 +18,53 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fi.tamk.sprintgarden.game.MainGame;
 import fi.tamk.sprintgarden.util.Fonts;
 
+/**
+ * Screen that has buttons between screens. One for starting the game one for options and one for
+ * credits.
+ */
+
 public class StartScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
+    /**
+     * Background image.
+     */
     private Texture background;
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * Fonts are stored in this object
+     */
     private Fonts fonts;
+    /**
+     * GameObjects are drawn on stage
+     */
     private Stage stage;
-
+    /**
+     * Screen where game is played.
+     */
     private GameScreen gameScreen;
 
+    /**
+     * Constructor for StartScreen
+     * @param game used to make reference to MainGame
+     */
     public StartScreen(MainGame game){
         this.game = game;
         batch = game.getBatch();
         gameScreen = game.getGameScreen();
     }
-
+    /**
+     * Method which is called when screen is shown. In this method create references to variables.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -54,7 +82,10 @@ public class StartScreen implements Screen {
 
         createButtons();
     }
-
+    /**
+     * Method which is called everytime frame is rendered.
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.8f, 0.3f, 0.3f, 1);
@@ -69,35 +100,50 @@ public class StartScreen implements Screen {
         stage.getViewport().apply();
         stage.draw();
     }
-
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
         fonts.getFontViewport().update(width, height, true);
     }
-
+    /**
+     * Method that is called when game is paused.
+     */
     @Override
     public void pause() {
 
     }
-
+    /**
+     * Method that is called when game is resumed.
+     */
     @Override
     public void resume() {
 
     }
-
+    /**
+     * Method that is called when game is hidden.
+     */
     @Override
     public void hide() {
 
     }
-
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
         stage.dispose();
         batch.dispose();
     }
 
+    /**
+     * Creates the 3 buttons for the different screens depending on language.
+     */
     private void createButtons() {
         Texture playButtonIdle, playButtonPressed,settingsButtonIdle, settingsButtonPressed, creditsButtonIdle, creditsButtonPressed;
 

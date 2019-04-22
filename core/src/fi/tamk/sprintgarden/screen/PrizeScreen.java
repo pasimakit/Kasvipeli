@@ -17,23 +17,52 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fi.tamk.sprintgarden.game.MainGame;
 import fi.tamk.sprintgarden.util.Fonts;
 
+/**
+ * Screen that is displayed when player reaches GOALSTEPS.
+ */
+
 public class PrizeScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
+    /**
+     * Background image.
+     */
     private Texture background;
+    /**
+     * Trophy image for background.
+     */
     private Texture trophy;
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * Fonts are stored in this object
+     */
     private Fonts fonts;
+    /**
+     * GameObjects are drawn on stage
+     */
     private Stage stage;
 
+    /**
+     * Constructor for PrizeScreen.
+     * @param game used to make reference to MainGame
+     */
     public PrizeScreen(MainGame game) {
         this.game = game;
         batch = game.getBatch();
     }
-
+    /**
+     * Method which is called when screen is shown. In this method create references to variables.
+     * When screen is shown goal is reached.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -53,7 +82,10 @@ public class PrizeScreen implements Screen {
 
         createButtons();
     }
-
+    /**
+     * Method which is called everytime frame is rendered. Display congratulations message.
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.8f, 0.3f, 0.3f, 1);
@@ -83,35 +115,50 @@ public class PrizeScreen implements Screen {
 
         stage.draw();
     }
-
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
         fonts.getFontViewport().update(width, height, true);
     }
-
+    /**
+     * Method that is called when game is paused. Game is saved.
+     */
     @Override
     public void pause() {
         game.toJson();
     }
-
+    /**
+     * Method that is called when game is resumed.
+     */
     @Override
     public void resume() {
 
     }
-
+    /**
+     * Method that is called when game is hidden. Game is saved.
+     */
     @Override
     public void hide() {
         game.toJson();
     }
-
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
         batch.dispose();
         stage.dispose();
     }
 
+    /**
+     * Creates ok button to go back to previous screen.
+     */
     private void createButtons() {
         Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_OK.png");
         Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_OK_PRESSED.png");

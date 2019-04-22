@@ -2,7 +2,6 @@ package fi.tamk.sprintgarden.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,31 +27,77 @@ import fi.tamk.sprintgarden.actor.MediumPlant;
 import fi.tamk.sprintgarden.actor.PlantingSpace;
 import fi.tamk.sprintgarden.actor.SlowPlant;
 
+/**
+ * Screen where garden is drawn and plants are grown.
+ */
 public class GameScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
-    private Texture background, arrowRight, arrowLeft;
+    /**
+     * Background image.
+     */
+    private Texture background;
+    /**
+     * Tutorial arrow to right.
+     */
+    private Texture arrowRight;
+    /**
+     * Tutorial arrow to Left
+     */
+    private Texture arrowLeft;
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * Screen where plant is chosen.
+     */
     private ChoosePlantScreen choosePlantScreen;
+    /**
+     * Screen where player can upgrade garden
+     */
     private MarketScreen marketScreen;
+    /**
+     * Screen where you can set options.
+     */
     private OptionsScreen optionsScreen;
-
+    /**
+     * GameObjects are drawn on stage
+     */
     private Stage stage;
+    /**
+     * Fonts are stored in this object
+     */
     private Fonts fonts;
 
+    /**
+     * List of PlantingSpaces.
+     */
     private ArrayList<PlantingSpace> plantingSpaceList = new ArrayList<PlantingSpace>();
+    /**
+     * PlantingSpace that was chosen for flower to be planted in.
+     */
     public PlantingSpace chosenPlantingSpace;
 
-    private float stateTime;
-
+    /**
+     * Constructor for GameScreen. Reference to MainGame and SpriteBatch.
+     * @param game reference for MainGame
+     */
     public GameScreen(MainGame game) {
         this.game = game;
         batch = game.getBatch();
     }
 
+    /**
+     * Method which is called when screen is shown. In this method create references to variables,
+     * and create objects and place them in correct places and load save.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -63,6 +108,9 @@ public class GameScreen implements Screen {
         background = game.getAssetManager().get("gamecanvas.png");
         bgViewPort = new FillViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 
+        arrowRight = game.getAssetManager().get("arrow_right.png");
+        arrowLeft = game.getAssetManager().get("arrow_left.png");
+
         fonts = new Fonts();
         fonts.createSmallestFont();
         fonts.createSmallFont();
@@ -71,7 +119,7 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        //luodaan kasvatuspaikat
+        //Create PlantingSpaces
         if (game.getMaxPlantingSpaceAmount() >= plantingSpaceList.size()) {
             for (int i = 0; i < game.getMaxPlantingSpaceAmount(); i++) {
                 if (plantingSpaceList.size() != game.getMaxPlantingSpaceAmount()) {
@@ -79,6 +127,7 @@ public class GameScreen implements Screen {
                 }
             }
         }
+        // Load saves
         loadPrefs();
 
         for (int i = 0; plantingSpaceList.size() > i; i++) {
@@ -89,7 +138,7 @@ public class GameScreen implements Screen {
 
         int plantingSpaceX = 21;
         int plantingSpaceY = 7;
-
+        // Place plantingspaces in correct spots
         for (PlantingSpace plantingSpace : plantingSpaceList) {
             if (plantingSpace.isUsable()) {
                 plantingSpace.setBounds(plantingSpaceX, plantingSpaceY, 58, 58);
@@ -111,21 +160,26 @@ public class GameScreen implements Screen {
             }
         }
         createButtons();
-        arrowRight = game.getAssetManager().get("arrow_right.png");
-        arrowLeft = game.getAssetManager().get("arrow_left.png");
+
     }
 
+    /**
+     * Method which is called everytime frame is rendered. In this method game checks if GOALSTEPS
+     * is reached. Checks if plantingSpace is clicked. Update flower texture based on growthcycle,
+     * and do the tutorial
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Is goal reached
         if(game.getStepCount() >= game.GOALSTEPS && !game.isGoalReached()){
             game.setScreen(new PrizeScreen(game));
         }
-
+        // Check if plantingspace is clicked
         for (PlantingSpace plantingSpace : plantingSpaceList) {
-            //onko kasvatuspaikkaa klikattu
             if (plantingSpace.isChoosePlantWindow()) {
                 plantingSpace.setChoosePlantWindow(false);
                 chosenPlantingSpace = plantingSpace;
@@ -135,7 +189,7 @@ public class GameScreen implements Screen {
                 }
             }
 
-            //kukan sijoitus ja kasvaminen
+            //Updating flower texture and progress and checking if flower is ready to be harvested
             if (plantingSpace.getPlantedFlower() != null) {
                 if (!plantingSpace.getPlantedFlower().isPlantHarvested()) {
                     plantingSpace.getPlantedFlower().updateGrowthBar(plantingSpace);
@@ -161,11 +215,14 @@ public class GameScreen implements Screen {
             }
         }
         game.setOldStepCount(game.getStepCount());
+
         stage.act(Gdx.graphics.getDeltaTime());
         bgViewPort.apply();
         batch.setProjectionMatrix(bgViewPort.getCamera().combined);
         batch.begin();
         batch.draw(background, 0, 0);
+
+        //Tutorial
         if(!game.isTutorialDone()){
             if(game.getCurrentPlantingSpaceAmount() == 0){
                 batch.draw(arrowRight, 193, 112);
@@ -188,6 +245,11 @@ public class GameScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
@@ -195,29 +257,44 @@ public class GameScreen implements Screen {
         fonts.getFontViewport().update(width, height, true);
     }
 
+    /**
+     * Method that is called when game is paused. Game is saved.
+     */
     @Override
     public void pause() {
         makePrefs();
         game.toJson();
     }
 
+    /**
+     * Method that is called when game is resumed.
+     */
     @Override
     public void resume() {
 
     }
 
+    /**
+     * Method that is called when game is hidden. Game is saved.
+     */
     @Override
     public void hide() {
         makePrefs();
         game.toJson();
     }
 
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
         stage.dispose();
         batch.dispose();
     }
 
+    /**
+     * Create market and options screen button.
+     */
     private void createButtons() {
         Texture marketButtonIdle = game.getAssetManager().get("BUTTONS/button_market.png");
         Texture marketButtonPressed = game.getAssetManager().get("BUTTONS/button_market_PRESSED.png");
@@ -253,12 +330,20 @@ public class GameScreen implements Screen {
             }
         });
     }
+
+    /**
+     * Class that is used for saving data in JSON file about PlantingSpaces.
+     */
     static class PlantingSpaceData{
         private boolean isUsable;
         private int growthTime;
         private int currentGrowthTime;
         private int currentTier;
     }
+
+    /**
+     * Saves data about PlantingSpaces using PlantingSpaceData.
+     */
 
     public void makePrefs() {
         Json json = new Json();
@@ -277,6 +362,10 @@ public class GameScreen implements Screen {
         json.setOutputType(JsonWriter.OutputType.json);
         file.writeString(json.prettyPrint(plantingSpaceDataList), false);
     }
+
+    /**
+     * Loads data about PlantingSpaces and places it.
+     */
 
     public void loadPrefs(){
         Json json = new Json();

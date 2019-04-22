@@ -21,30 +21,65 @@ import fi.tamk.sprintgarden.game.MainGame;
 import fi.tamk.sprintgarden.actor.MediumPlant;
 import fi.tamk.sprintgarden.actor.SlowPlant;
 
+/**
+ * Screen where you choose which plant you are planting.
+ */
+
 public class ChoosePlantScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
+    /**
+     * Background image.
+     */
     private Texture background;
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * GameObjects are drawn on stage
+     */
     private Stage stage;
-
+    /**
+     * Screen where game is played.
+     */
     private GameScreen gameScreen;
-
+    /**
+     * fastPlant is for display to be chosen.
+     */
     private FastPlant fastPlant;
+    /**
+     * mediumPlant is for display to be chosen.
+     */
     private MediumPlant mediumPlant;
+    /**
+     * slowPlant is for display to be chosen.
+     */
     private SlowPlant slowPlant;
-
+    /**
+     * Fonts are stored in this object
+     */
     private Fonts fonts;
 
+    /**
+     * Constructor for ChoosePlantScreen. Reference to MainGame, SpriteBatch and GameScreen.
+     * @param game used to make reference to MainGame
+     */
     public ChoosePlantScreen(MainGame game) {
         this.game = game;
         batch = game.getBatch();
         gameScreen = game.getGameScreen();
     }
-
+    /**
+     * Method which is called when screen is shown. In this method create references to variables,
+     * and create objects and place them in correct places.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -79,7 +114,11 @@ public class ChoosePlantScreen implements Screen {
         slowPlant.displayTexture();
         stage.addActor(slowPlant);
     }
-
+    /**
+     * Method which is called everytime frame is rendered. Check if goal is reached and draw info
+     * about Flowers that are about to be chosen.
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
@@ -111,37 +150,52 @@ public class ChoosePlantScreen implements Screen {
         stage.getViewport().apply();
         stage.draw();
     }
-
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
         fonts.getFontViewport().update(width, height, true);
     }
-
+    /**
+     * Method that is called when game is paused. Game is saved.
+     */
     @Override
     public void pause() {
         gameScreen.makePrefs();
         game.toJson();
     }
-
+    /**
+     * Method that is called when game is resumed.
+     */
     @Override
     public void resume() {
 
     }
-
+    /**
+     * Method that is called when game is hidden. Game is saved.
+     */
     @Override
     public void hide() {
         gameScreen.makePrefs();
         game.toJson();
     }
-
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
         stage.dispose();
         batch.dispose();
     }
 
+    /**
+     * Creates close button and select button based on language.
+     */
     private void createButtons(){
         Texture closeButtonIdle = game.getAssetManager().get("BUTTONS/button_close.png");
         Texture closeButtonPressed = game.getAssetManager().get("BUTTONS/button_close_PRESSED.png");

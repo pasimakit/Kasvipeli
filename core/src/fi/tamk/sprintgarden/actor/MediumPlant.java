@@ -5,7 +5,16 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import fi.tamk.sprintgarden.game.MainGame;
 
+/**
+ * Subclass of Flower that is middle version of fast and slow plant.
+ */
 public class MediumPlant extends Flower {
+
+    /**
+     * Constructor for MediumPlant. Sets needed values and textures and adds listener.
+     * @param tier tier of MediumPlant
+     * @param game to create game reference for assetManager
+     */
 
     public MediumPlant(int tier, MainGame game){
         super(game);
@@ -15,6 +24,9 @@ public class MediumPlant extends Flower {
         setGrowthTime(1500);
     }
 
+    /**
+     * Setup texture array based on tier of MediumPlant and coin value.
+     */
     public void setupTextures(){
         if(getCurrentTier() == 1){
             setPlantName(game.getLocalization().get("mediumPlant"));
@@ -43,8 +55,19 @@ public class MediumPlant extends Flower {
         }
     }
 
-
+    /**
+     * Listener for MediumPlant
+     */
     class PlayerListener extends InputListener {
+        /**
+         * Method for when MediumPlant is touched.
+         * @param event
+         * @param x
+         * @param y
+         * @param pointer
+         * @param button
+         * @return
+         */
         @Override
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             setPlantChosen(true);
@@ -55,7 +78,10 @@ public class MediumPlant extends Flower {
             return false;
         }
     }
-
+    /**
+     * Getter for plantChosen
+     * @return returns plantChosen
+     */
     public boolean isPlantChosen(){
         return super.isPlantChosen();
     }

@@ -24,35 +24,80 @@ import fi.tamk.sprintgarden.util.Fonts;
 import fi.tamk.sprintgarden.game.MainGame;
 import fi.tamk.sprintgarden.actor.MediumPlant;
 import fi.tamk.sprintgarden.actor.SlowPlant;
-
+/**
+ * Screen where you upgrade you garden.
+ */
 public class MarketScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
-    private Texture background, arrowLeft;
+    /**
+     * Background image.
+     */
+    private Texture background;
+    /**
+     * Tutorial arrow to Left
+     */
+    private Texture arrowLeft;
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * Fonts are stored in this object
+     */
     private Fonts fonts;
+    /**
+     * GameObjects are drawn on stage
+     */
     private Stage stage;
-
+    /**
+     * Screen where game is played.
+     */
     private GameScreen gameScreen;
-
+    /**
+     * slowPlant is for display when upgrading plants.
+     */
     private SlowPlant slowPlant;
+    /**
+     * mediumPlant is for display when upgrading plants.
+     */
     private MediumPlant mediumPlant;
+    /**
+     * fastPlant is for display when upgrading plants.
+     */
     private FastPlant fastPlant;
-
+    /**
+     * Prices for buying more PlantingSpaces.
+     */
     private int[] plantingSpacePricing = {10, 20, 40, 80, 350, 1000, 3000, 5000};
+    /**
+     * Prices for upgrading your flowers.
+     */
     private int[] plantTierPricing = {0, 400, 1000};
-
+    /**
+     * Display your progress on GOALSTEPS.
+     */
     private ProgressBar mileStoneBar;
 
+    /**
+     * Constructor for MarketScreen. Creates reference to MainGame, SpriteBatch and GameScreen.
+     * @param game used to make reference to MainGame
+     */
     public MarketScreen(MainGame game){
         this.game = game;
         batch = game.getBatch();
         gameScreen = game.getGameScreen();
     }
-
+    /**
+     * Method which is called when screen is shown. In this method create references to variables,
+     * and create objects and place them in correct places.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -92,7 +137,12 @@ public class MarketScreen implements Screen {
         mileStoneBar.setBounds(game.SCREEN_WIDTH- 70, 15, 20, 90);
         stage.addActor(mileStoneBar);
     }
-
+    /**
+     * Method which is called everytime frame is rendered. Check if goal is reached and if tutorial
+     * is not done. Draw text for prices and info about what you are buying. Also updating the
+     * progress on your milestoneBar.
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.3f, 0.7f, 1);
@@ -161,37 +211,52 @@ public class MarketScreen implements Screen {
         stage.getViewport().apply();
         stage.draw();
     }
-
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
         fonts.getFontViewport().update(width, height, true);
     }
-
+    /**
+     * Method that is called when game is paused. Game is saved.
+     */
     @Override
     public void pause() {
         gameScreen.makePrefs();
         game.toJson();
     }
-
+    /**
+     * Method that is called when game is hidden. Game is saved.
+     */
     @Override
     public void resume() {
 
     }
-
+    /**
+     * Method that is called when game is hidden. Game is saved.
+     */
     @Override
     public void hide() {
         gameScreen.makePrefs();
         game.toJson();
     }
-
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
         stage.dispose();
         batch.dispose();
     }
 
+    /**
+     * Create the mileStoneBar style and size.
+     */
     private void createMileStoneBar(){
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
 
@@ -221,7 +286,9 @@ public class MarketScreen implements Screen {
 
         mileStoneBar = new ProgressBar(0.0f, 1.0f, 0.0001f, true, progressBarStyle);
     }
-
+    /**
+     * Create close button, buy buttons based on language.
+     */
     private void createButtons(){
         Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
@@ -341,6 +408,10 @@ public class MarketScreen implements Screen {
         });
     }
 
+    /**
+     * Check which tier of flower is displayed on upgrade windows. If it is tier upgraded to highest
+     * tier it shows trophy as texture.
+     */
     private void checkFlowerTexture(){
         final Texture trophy = game.getAssetManager().get("tiertrophy.png");
 

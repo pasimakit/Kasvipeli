@@ -17,21 +17,43 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fi.tamk.sprintgarden.game.MainGame;
 
+/**
+ * Screen that shows the creators of the game.
+ */
 public class CreditsScreen implements Screen {
-
+    /**
+     * Used to draw every pixel in game.
+     */
     private SpriteBatch batch;
+    /**
+     * Reference to MainGame.
+     */
     final MainGame game;
-
+    /**
+     * Background image.
+     */
     private Texture background;
+    /**
+     * Viewport for background image.
+     */
     private Viewport bgViewPort;
-
+    /**
+     * GameObjects are drawn on stage
+     */
     private Stage stage;
 
+    /**
+     * Constructor for CreditsScreen. Reference to MainGame and SpriteBatch
+     * @param game used to make reference to MainGame
+     */
     public CreditsScreen(MainGame game) {
         this.game = game;
         batch = game.getBatch();
     }
-
+    /**
+     * Method which is called when screen is shown. In this method create references to variables,
+     * and create objects and place them in correct places.
+     */
     @Override
     public void show() {
         stage = new Stage(new FitViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT), batch);
@@ -44,7 +66,10 @@ public class CreditsScreen implements Screen {
         bgViewPort = new StretchViewport(game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
         createButtons();
     }
-
+    /**
+     * Method which is called everytime frame is rendered. Draw background.
+     * @param delta deltaTime
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.8f, 0.3f, 0.3f, 1);
@@ -57,33 +82,48 @@ public class CreditsScreen implements Screen {
         batch.end();
         stage.draw();
     }
-
+    /**
+     * Method that is called when screen is resized. Updates different viewports.
+     * @param width width after resizing
+     * @param height height after resizing
+     */
     @Override
     public void resize(int width, int height) {
         bgViewPort.update(width, height, true);
         stage.getViewport().update(width, height, true);
     }
-
+    /**
+     * Method that is called when game is paused.
+     */
     @Override
     public void pause() {
 
     }
-
+    /**
+     * Method that is called when game is resumed.
+     */
     @Override
     public void resume() {
 
     }
-
+    /**
+     * Method that is called when game is hidden.
+     */
     @Override
     public void hide() {
 
     }
-
+    /**
+     * Disposes things.
+     */
     @Override
     public void dispose() {
-
+        stage.dispose();
+        batch.dispose();
     }
-
+    /**
+     * Creates close button.
+     */
     private void createButtons() {
         Texture closeButtonIdle = new Texture(Gdx.files.internal("BUTTONS/button_close.png"));
         Texture closeButtonPressed = new Texture(Gdx.files.internal("BUTTONS/button_close_PRESSED.png"));
