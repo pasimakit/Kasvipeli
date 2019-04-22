@@ -75,11 +75,11 @@ public class MarketScreen implements Screen {
     /**
      * Prices for buying more PlantingSpaces.
      */
-    private int[] plantingSpacePricing = {10, 20, 40, 80, 350, 1000, 3000, 5000};
+    private int[] plantingSpacePricing = {10, 20, 40, 80, 500, 1500, 4000, 8000};
     /**
      * Prices for upgrading your flowers.
      */
-    private int[] plantTierPricing = {0, 400, 1000};
+    private int[] plantTierPricing = {0, 500, 2000};
     /**
      * Display your progress on GOALSTEPS.
      */
