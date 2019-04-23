@@ -583,6 +583,10 @@ public class MainGame extends Game{
         assetManager.load("BUTTONS/button_credits_ENG_PRESSED.png", Texture.class);
         assetManager.load("BUTTONS/button_credits_FIN.png", Texture.class);
         assetManager.load("BUTTONS/button_credits_FIN_PRESSED.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_FIN_DARK_PRESSED.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_FIN_DARK.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_ENG_DARK_PRESSED.png", Texture.class);
+        assetManager.load("BUTTONS/button_credits_ENG_DARK.png", Texture.class);
 
         assetManager.load("plants/slowPlant/plant3_stage3_tier2.png", Texture.class);
         assetManager.load("plants/slowPlant/plant3_stage3_tier3.png", Texture.class);

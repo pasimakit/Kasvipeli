@@ -137,7 +137,7 @@ public class CreditsScreen implements Screen {
             // This method is called whenever the actor is clicked. We override its behavior here.
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new StartScreen(game));
+                game.setScreen(game.getLastScreen());
             }
         });
     }

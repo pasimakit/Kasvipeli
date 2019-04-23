@@ -273,5 +273,28 @@ public class OptionsScreen implements Screen {
                 }
             }
         });
+
+        Texture creditsButtonIdle, creditsButtonPressed;
+
+        if(game.getLocale().getCountry().equals("FI")){
+            creditsButtonIdle = game.getAssetManager().get("BUTTONS/button_credits_FIN_DARK.png");
+            creditsButtonPressed = game.getAssetManager().get("BUTTONS/button_credits_FIN_DARK_PRESSED.png");
+        }else{
+            creditsButtonIdle = game.getAssetManager().get("BUTTONS/button_credits_ENG_DARK.png");
+            creditsButtonPressed = game.getAssetManager().get("BUTTONS/button_credits_ENG_DARK_PRESSED.png");
+        }
+
+        ImageButton creditsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsButtonIdle)), new TextureRegionDrawable(new TextureRegion(creditsButtonPressed)));
+
+        creditsButton.setPosition(150, game.SCREEN_HEIGHT-30);
+        stage.addActor(creditsButton);
+
+        creditsButton.addListener(new ChangeListener() {
+            // This method is called whenever the actor is clicked. We override its behavior here.
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new CreditsScreen(game));
+            }
+        });
     }
 }

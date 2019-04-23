@@ -3,6 +3,7 @@ package fi.tamk.sprintgarden;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -75,6 +76,7 @@ public class MyService extends Service implements SensorEventListener, StepListe
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                     .setPriority(NotificationCompat.PRIORITY_MIN)
+                    .setAutoCancel(true)
                     .build();
             startForeground(121, notification);
         }
