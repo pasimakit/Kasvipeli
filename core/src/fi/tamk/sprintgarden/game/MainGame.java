@@ -125,11 +125,11 @@ public class MainGame extends Game{
     /**
      * Sound volume for effects.
      */
-    private float effVolume = 0.5f;
+    private float effVolume = 0.3f;
     /**
      * Sound volume for music.
      */
-    private float musicVolume = 0.5f;
+    private float musicVolume = 0.1f;
     /**
      * Current localization.
      */
@@ -174,6 +174,7 @@ public class MainGame extends Game{
 	@Override
 	public void render () {
         musicBg.setVolume(musicVolume);
+        stepCount++;
         super.render();
 	}
 

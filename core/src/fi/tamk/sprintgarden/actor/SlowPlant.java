@@ -1,5 +1,6 @@
 package fi.tamk.sprintgarden.actor;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
@@ -69,8 +70,12 @@ public class SlowPlant extends Flower {
         public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             setPlantChosen(true);
 
-            if(isPlantFinished()){
+            if(isPlantFinished()) {
                 setPlantHarvested(true);
+                if (getStateTime() == 0) {
+                    Sound coinSound = game.getAssetManager().get("Sounds/coins.mp3");
+                    coinSound.play(game.getEffVolume());
+                }
             }
             return false;
         }
