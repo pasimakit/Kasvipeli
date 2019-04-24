@@ -174,7 +174,7 @@ public class MainGame extends Game{
 	@Override
 	public void render () {
         musicBg.setVolume(musicVolume);
-        stepCount++;
+        //stepCount++;
         super.render();
 	}
 

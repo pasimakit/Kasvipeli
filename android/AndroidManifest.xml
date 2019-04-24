@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="fi.tamk.sprintgarden.MyService"></service>
+        <service android:name="fi.tamk.sprintgarden.MyService"
+                 android:stopWithTask="true">
+        </service>
     </application>
 
 </manifest>

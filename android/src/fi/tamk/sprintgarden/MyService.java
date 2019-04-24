@@ -116,6 +116,15 @@ public class MyService extends Service implements SensorEventListener, StepListe
         super.onDestroy();
         saveSteps();
     }
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        System.out.println("onTaskRemoved called");
+        super.onTaskRemoved(rootIntent);
+        //do something you want
+        //stop service
+        this.stopSelf();
+        saveSteps();
+    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
