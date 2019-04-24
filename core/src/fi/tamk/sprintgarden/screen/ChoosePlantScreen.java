@@ -191,6 +191,7 @@ public class ChoosePlantScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
+        fonts.disposeFonts();
     }
 
     /**

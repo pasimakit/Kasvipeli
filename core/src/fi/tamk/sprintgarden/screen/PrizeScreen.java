@@ -154,6 +154,7 @@ public class PrizeScreen implements Screen {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        fonts.disposeFonts();
     }
 
     /**

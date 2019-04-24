@@ -290,6 +290,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
+        fonts.disposeFonts();
     }
 
     /**

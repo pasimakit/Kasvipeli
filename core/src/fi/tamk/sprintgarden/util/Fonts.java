@@ -153,4 +153,14 @@ public class Fonts {
     public BitmapFont getTitleFont() {
         return titleFont;
     }
+
+    public void disposeFonts(){
+        smallestFont.dispose();
+        smallFont.dispose();
+        mediumFont.dispose();
+        largeFont.dispose();
+        largestFont.dispose();
+        congratsFont.dispose();
+        titleFont.dispose();
+    }
 }

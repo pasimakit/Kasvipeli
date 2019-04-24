@@ -144,6 +144,7 @@ public class OptionsScreen implements Screen {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        fonts.disposeFonts();
     }
     /**
      * Create close button, language buttons for finnish and english and minus and plus buttons for
