@@ -14,6 +14,9 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 import fi.tamk.sprintgarden.game.MainGame;
 
+/**
+ * Creates the service that tracks the steps
+ */
 public class AndroidLauncher extends AndroidApplication {
 
 	private MainGame game;

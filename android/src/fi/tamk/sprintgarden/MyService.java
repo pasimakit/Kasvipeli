@@ -3,7 +3,6 @@ package fi.tamk.sprintgarden;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +23,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
 import fi.tamk.sprintgarden.util.GetSteps;
+
+/**
+ * Creates service that saves and loads steps while the
+ */
 
 public class MyService extends Service implements SensorEventListener, StepListener, GetSteps {
 
@@ -72,7 +75,7 @@ public class MyService extends Service implements SensorEventListener, StepListe
             notificationManager.createNotificationChannel(channel);
             Notification notification = new NotificationCompat.Builder(this,NOTIFICATION_Service_CHANNEL_ID)
                     .setContentTitle("Sprint Garden")
-                    .setContentText("Game is tracking your steps")
+                    .setContentText("Your flowers are growing.. Steps are being counted")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                     .setPriority(NotificationCompat.PRIORITY_MIN)
